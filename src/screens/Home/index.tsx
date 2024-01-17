@@ -8,7 +8,7 @@ export const Home = () => {
       <Box p={"cake"}>
         <InputText
           label={"teste"}
-          placeholder="Buscar uma música..."
+          placeholder="Buscar  música..."
           onChangeText={(value) => {
             console.log(value);
           }}
