@@ -13,7 +13,7 @@ const api = axios.create({
 });
 
 const deezer = {
-  getTops: async (limit: number) => {
+  getTops: async (limit: number = 10) => {
     try {
       return await deezer.getPlaylist("1111141961", limit);
     } catch (error) {

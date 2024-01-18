@@ -13,7 +13,7 @@ import {
 import { theme as themeDefault } from "@themes/default";
 import { Text } from "react-native";
 
-type TextVariantsTypes = "regular" | "medium";
+type TextVariantsTypes = "regular" | "bold";
 
 export interface TextProps
   extends TypographyProps<typeof themeDefault>,
@@ -27,10 +27,10 @@ const textVariants = variant<TextProps, TextVariantsTypes>({
   prop: "variant",
   variants: {
     regular: {
-      fontFamily: "Roboto",
+      fontFamily: "NunitoSansRegular",
     },
-    medium: {
-      fontFamily: "RobotoMedium",
+    bold: {
+      fontFamily: "NunitoSansBold",
       fontWeight: "bold",
     },
   },
@@ -40,7 +40,7 @@ export const Typography = styled(Text)<TextProps>`
   ${({ theme }) => ({
     color: theme.colors.textColor1,
     fontSize: 16,
-    fontFamily: "Roboto",
+    fontFamily: "NunitoSansRegular",
     fontWeight: "normal",
   })}
   ${margin}

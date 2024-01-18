@@ -25,8 +25,8 @@ export const theme = {
     lightOpacity1: "rgba(173,173,173,.1)",
   },
   fonts: {
-    medium: "Inter Medium",
-    regular: "Inter Regular",
+    bold: "NunitoSansBold",
+    regular: "NunitoSansRegular",
   },
   fontWeights: {
     normal: 400,

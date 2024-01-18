@@ -36,7 +36,9 @@ export const Home = () => {
       />
 
       <Box mt={"nano"} mb={"nano"}>
-        <Typography>Tops do momento</Typography>
+        <Typography fontSize={17} variant="bold">
+          Tops do momento
+        </Typography>
       </Box>
 
       <ScrollView>
