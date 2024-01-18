@@ -16,16 +16,17 @@ export const theme = {
     xxl: 80,
   },
   colors: {
-    primary: '#3b62e5',
-    textColor1: '#f3f7ff',
-    textColor2: '#848192',
-    base: '#0b081b',
+    primary: "#3b62e5",
+    textColor1: "#f3f7ff",
+    textColor2: "#a4a2ae",
+    textColor3: "#848192",
+    base: "#0b081b",
 
-    lightOpacity1: 'rgba(173,173,173,.1)',
+    lightOpacity1: "rgba(173,173,173,.1)",
   },
   fonts: {
-    medium: 'Inter Medium',
-    regular: 'Inter Regular',
+    medium: "Inter Medium",
+    regular: "Inter Regular",
   },
   fontWeights: {
     normal: 400,

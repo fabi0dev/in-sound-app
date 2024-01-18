@@ -1,21 +1,15 @@
 import styled from "styled-components";
-import {
-  ColorProps,
-  variant,
-} from "styled-system";
-import {  View } from "react-native";
+import { ColorProps, variant } from "styled-system";
+import { SafeAreaView, View } from "react-native";
 import { theme as themeDefault } from "@themes/default";
 
 export type ContainerTypes = "primary" | "outline";
 
-export interface ContainerProps 
-extends ColorProps<typeof themeDefault> {
+export interface ContainerProps extends ColorProps<typeof themeDefault> {
   variant?: ContainerTypes;
 }
 
-const containerVariants = variant<
-  ContainerProps
->({
+const containerVariants = variant<ContainerProps>({
   prop: "variant",
   variants: {
     primary: {
@@ -24,11 +18,11 @@ const containerVariants = variant<
   },
 });
 
-export const BoxContainer = styled(View)<ContainerProps>`
+export const BoxContainer = styled(SafeAreaView)<ContainerProps>`
   ${() => ({
-    padding: 10,
+    padding: 15,
     paddingTop: 30,
-    flex: 1
+    flex: 1,
   })}
   ${containerVariants}
 `;

@@ -7,7 +7,7 @@ import { theme } from "@themes/default";
 interface InputTextProps extends TextInputProps {
   label?: string;
   error?: string;
-  leftIcon?: string;
+  leftIcon?: JSX.Element;
   width?: number;
   heigth?: number;
   bg?: typeof theme.colors;
@@ -35,6 +35,7 @@ export const InputText: React.FC<InputTextProps> = ({
         alignItems={"center"}
         bg={bg || "lightOpacity1"}
       >
+        <Box ml={"nano"}>{leftIcon}</Box>
         <RTextInput
           px={"xxxs"}
           py={"nano"}
