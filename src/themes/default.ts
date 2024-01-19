@@ -16,13 +16,17 @@ export const theme = {
     xxl: 80,
   },
   colors: {
-    primary: "#3b62e5",
-    textColor1: "#f3f7ff",
+    primary: "#5bdaff",
+    primaryOpacity: "rgba(91,218,255, .2)",
+    textColor1: "#fff",
     textColor2: "#a4a2ae",
     textColor3: "#848192",
-    base: "#0b081b",
+    base: "#161616",
+    base2: "#262526",
 
     lightOpacity1: "rgba(173,173,173,.1)",
+    lightOpacity2: "rgba(173,173,173,.2)",
+    lightOpacity3: "rgba(173,173,173,.3)",
   },
   fonts: {
     bold: "NunitoSansBold",

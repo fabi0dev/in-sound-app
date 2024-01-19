@@ -33,6 +33,23 @@ import { theme } from "@themes/default";
 
 type BoxVariantsType = "page" | "main" | "containerLogin";
 
+export interface BoxProps
+  extends FlexboxProps<typeof theme>,
+    SpaceProps<typeof theme>,
+    PositionProps<typeof theme>,
+    ColorProps<typeof theme>,
+    BorderColorProps<typeof theme>,
+    BorderWidthProps<typeof theme>,
+    BorderStyleProps<typeof theme>,
+    SizeProps<typeof theme>,
+    WidthProps<typeof theme>,
+    HeightProps<typeof theme>,
+    ShadowProps,
+    BorderRadiusProps<typeof theme>,
+    DisplayProps<typeof theme> {
+  variant?: BoxVariantsType;
+}
+
 const boxVariant = variant<BoxProps, BoxVariantsType, "variant">({
   prop: "variant",
   key: "box",
@@ -52,23 +69,6 @@ const boxVariant = variant<BoxProps, BoxVariantsType, "variant">({
     },
   },
 });
-
-export interface BoxProps
-  extends FlexboxProps<typeof theme>,
-    SpaceProps<typeof theme>,
-    PositionProps<typeof theme>,
-    ColorProps<typeof theme>,
-    BorderColorProps<typeof theme>,
-    BorderWidthProps<typeof theme>,
-    BorderStyleProps<typeof theme>,
-    SizeProps<typeof theme>,
-    WidthProps<typeof theme>,
-    HeightProps<typeof theme>,
-    ShadowProps,
-    BorderRadiusProps<typeof theme>,
-    DisplayProps<typeof theme> {
-  variant?: BoxVariantsType;
-}
 
 export const Box = styled(View)<BoxProps>`
   ${boxVariant}

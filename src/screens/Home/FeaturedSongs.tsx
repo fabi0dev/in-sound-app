@@ -1,20 +1,26 @@
 import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
 import { theme } from "@themes/default";
+import { Dispatch, SetStateAction, useState } from "react";
 import { FlatList, Image, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { soundController } from "../../services/SoundController";
 
 interface FeaturedSongsProps {
   data: {
-    tracks: {
+    tracks?: {
       data: [];
     };
   };
+  soundCurrent: {};
+  setSoundCurrent: Dispatch<SetStateAction<{}>>;
 }
 
 interface ItemFeaturedProps {
   id: string;
   itemData: {
+    id: string;
+    preview: string;
     title_short: string;
     artist: {
       name: string;
@@ -26,10 +32,27 @@ interface ItemFeaturedProps {
   };
 }
 
-export const FeaturedSongs = ({ data }: FeaturedSongsProps): JSX.Element => {
+export const FeaturedSongs = ({
+  data,
+  soundCurrent,
+  setSoundCurrent,
+}: FeaturedSongsProps): JSX.Element => {
+  const [soundPlayer, setSoundPlayer] = useState({});
+
   const ItemFeatured = ({ itemData }: ItemFeaturedProps) => {
+    const play = async () => {
+      await soundController.setSoundCurrent(itemData, true);
+      setSoundCurrent(itemData);
+      setSoundPlayer(itemData);
+    };
+
     return (
-      <Box flexDirection={"row"} mb={"nano"}>
+      <Box
+        bg={itemData.id == soundPlayer.id ? "lightOpacity1" : ""}
+        flexDirection={"row"}
+        p={"prim"}
+        mb={"nano"}
+      >
         <Box mr={"cake"}>
           <Image
             source={{
@@ -43,23 +66,33 @@ export const FeaturedSongs = ({ data }: FeaturedSongsProps): JSX.Element => {
 
         <Box flexDirection={"row"}>
           <Box flexDirection={"column"} width={"60%"}>
-            <Box mb={"prim"}>
-              <Typography fontSize={15} ellipsizeMode="tail" numberOfLines={1}>
-                {itemData.title_short}
+            <TouchableOpacity onPress={() => play()}>
+              <Box mb={"prim"}>
+                <Typography
+                  color={
+                    itemData.id == soundPlayer.id ? "primary" : "textColor1"
+                  }
+                  fontSize={15}
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  variant="bold"
+                >
+                  {itemData.title_short}
+                </Typography>
+              </Box>
+              <Typography color={"textColor2"} fontSize={14}>
+                {itemData.artist.name}
               </Typography>
-            </Box>
-            <Typography color={"textColor2"} fontSize={14}>
-              {itemData.artist.name}
-            </Typography>
 
-            <Typography
-              color={"textColor3"}
-              fontSize={14}
-              ellipsizeMode="tail"
-              numberOfLines={1}
-            >
-              {itemData.album.title}
-            </Typography>
+              <Typography
+                color={"textColor3"}
+                fontSize={14}
+                ellipsizeMode="tail"
+                numberOfLines={1}
+              >
+                {itemData.album.title}
+              </Typography>
+            </TouchableOpacity>
           </Box>
 
           <Box
@@ -70,9 +103,9 @@ export const FeaturedSongs = ({ data }: FeaturedSongsProps): JSX.Element => {
           >
             <TouchableOpacity>
               <Icon
-                name="play-outline"
-                size={35}
-                color={theme.colors.textColor2}
+                name="heart-outline"
+                size={30}
+                color={theme.colors.textColor1}
               />
             </TouchableOpacity>
           </Box>
