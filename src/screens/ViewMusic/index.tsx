@@ -62,7 +62,7 @@ export const ViewMusic = () => {
         source={{ uri: dataSound?.album.cover_big }}
         resizeMode="cover"
         style={{ flex: 1 }}
-        opacity={0.3}
+        opacity={0.8}
         blurRadius={3}
       >
         <TopBar />

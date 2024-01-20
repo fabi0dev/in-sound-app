@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Audio } from "expo-av";
-import { useState } from "react";
 
 interface ISoundData {
   preview: string;
@@ -11,6 +10,7 @@ interface ISoundData {
   album: {
     title: string;
     cover_medium: string;
+    cover_small: string;
   };
 }
 
@@ -28,11 +28,10 @@ const soundController = {
     }
 
     try {
-      const { sound, status } = await Audio.Sound.createAsync({
+      const { sound } = await Audio.Sound.createAsync({
         uri: soundCurrent.preview,
       });
 
-      console.log("Playing Sound");
       await sound.playAsync();
       soundController.fnController = sound;
     } catch (e) {
@@ -42,7 +41,6 @@ const soundController = {
   pause: async () => {
     try {
       await soundController.fnController.pauseAsync();
-      console.log("pause Sound");
     } catch (e) {
       console.log(`cannot play the sound file`, e);
     }

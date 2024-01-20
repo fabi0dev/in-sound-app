@@ -16,13 +16,14 @@ export const theme = {
     xxl: 80,
   },
   colors: {
-    primary: "#5bdaff",
+    primary: "#14e9ff",
     primaryOpacity: "rgba(91,218,255, .2)",
     textColor1: "#fff",
     textColor2: "#a4a2ae",
-    textColor3: "#848192",
-    base: "#161616",
+    textColor3: "#8da6af",
+    base: "#191919",
     base2: "#262526",
+    base3: "#313542",
 
     lightOpacity1: "rgba(173,173,173,.1)",
     lightOpacity2: "rgba(173,173,173,.2)",

@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { FlatList, Image, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { soundController } from "../../services/SoundController";
+import { useNavigation } from "@react-navigation/native";
 
 interface FeaturedSongsProps {
   data: {
@@ -37,6 +38,7 @@ export const FeaturedSongs = ({
   soundCurrent,
   setSoundCurrent,
 }: FeaturedSongsProps): JSX.Element => {
+  const navigation = useNavigation();
   const [soundPlayer, setSoundPlayer] = useState({});
 
   const ItemFeatured = ({ itemData }: ItemFeaturedProps) => {
@@ -80,12 +82,12 @@ export const FeaturedSongs = ({
                   {itemData.title_short}
                 </Typography>
               </Box>
-              <Typography color={"textColor2"} fontSize={14}>
+              <Typography color={"textColor3"} fontSize={14}>
                 {itemData.artist.name}
               </Typography>
 
               <Typography
-                color={"textColor3"}
+                color={"textColor2"}
                 fontSize={14}
                 ellipsizeMode="tail"
                 numberOfLines={1}

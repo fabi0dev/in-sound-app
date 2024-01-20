@@ -6,10 +6,13 @@ import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
 
 export default function App() {
-  const [loaded] = useFonts({
+  const [loadedFonts] = useFonts({
     NunitoSansRegular: require("./src/assets/fonts/NunitoSans_7pt-Regular.ttf"),
     NunitoSansBold: require("./src/assets/fonts/NunitoSans_7pt-SemiBold.ttf"),
   });
+  if (loadedFonts !== true) {
+    return null;
+  }
 
   return (
     <ThemeProvider theme={DefaultTheme}>

@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 import { Box } from "../Box/Box";
 import { theme } from "@themes/default";
 import { Dimensions } from "react-native";
@@ -7,33 +7,29 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Typography } from "../";
 import { soundController } from "../../services/SoundController";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { BlurView } from "@react-native-community/blur";
+import AnimatedLottieView from "lottie-react-native";
 
 interface IPlayerBottom {
   soundCurrent: {};
-  setSoundCurrent: Dispatch<SetStateAction<{}>>;
 }
 
 interface IDataSound {
-  dataSound: {
-    preview: string;
-    title_short: string;
-    artist: {
-      name: string;
-    };
-    album: {
-      title: string;
-      cover_medium: string;
-    };
+  preview: string;
+  title_short: string;
+  artist: {
+    name: string;
+  };
+  album: {
+    title: string;
+    cover_small: string;
   };
 }
 
-export const PlayerBottom = ({
-  soundCurrent,
-  setSoundCurrent,
-}: IPlayerBottom) => {
+export const PlayerBottom = ({ soundCurrent }: IPlayerBottom) => {
   const navigation = useNavigation();
   const [dataSound, setDataSound] = useState<IDataSound>();
-  const [played, setPlayed] = useState(false);
+  const [played, setPlayed] = useState(dataSound ? true : false);
 
   const playerPause = async () => {
     if (!played) {
@@ -46,36 +42,42 @@ export const PlayerBottom = ({
   };
 
   const getDataSound = async () => {
-    let data = await soundController.getSoundCurrent();
-    setDataSound(data);
+    let data: IDataSound = await soundController.getSoundCurrent();
 
-    if (soundCurrent !== data) {
+    if (data !== dataSound) {
       setPlayed(true);
     }
+    setDataSound(data);
   };
 
   const checkStatus = async () => {
-    const statusSound = await soundController.getStatusAsync();
-    setPlayed(statusSound.isPlaying);
+    try {
+      setTimeout(async () => {
+        const statusSound = await soundController.getStatusAsync();
+        setPlayed(statusSound.isPlaying);
+      }, 200);
+    } catch (e) {}
   };
 
   useEffect(() => {
+    console.log("ok");
     getDataSound();
   }, [soundCurrent]);
 
   useFocusEffect(() => {
-    checkStatus();
+    if (navigation.isFocused()) {
+      checkStatus();
+    }
   });
 
   return (
     <Box
       width={Dimensions.get("window").width}
-      bg={"base2"}
+      bg={"base3"}
       position={"absolute"}
       bottom={0}
-      p={"qm"}
-      pl={"nano"}
-      pr={"nano"}
+      p={"nano"}
+      pt={"nano"}
       pb={"nano"}
       flexDirection={"row"}
       alignItems={"center"}
@@ -83,11 +85,20 @@ export const PlayerBottom = ({
     >
       <Box alignItems={"center"} flexDirection={"row"}>
         <Box mr={"cake"}>
-          <TouchableOpacity onPress={() => playerPause()}>
-            <Icon
-              name={played ? "pause-circle" : "play-circle"}
-              size={45}
-              color={theme.colors.textColor1}
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("ViewArtist", {
+                artist: dataSound?.artist,
+              })
+            }
+          >
+            <Image
+              width={45}
+              height={45}
+              source={{ uri: dataSound?.album.cover_small }}
+              style={{
+                borderRadius: 10,
+              }}
             />
           </TouchableOpacity>
         </Box>
@@ -96,33 +107,40 @@ export const PlayerBottom = ({
           <TouchableOpacity
             onPress={() => navigation.navigate("ViewMusic" as never)}
           >
-            <Typography
-              variant="bold"
-              fontSize={15}
-              ellipsizeMode="tail"
-              numberOfLines={1}
-            >
-              {dataSound?.title_short || ""}
-            </Typography>
+            <Box alignItems={"center"} flexDirection={"row"}>
+              <Typography
+                variant="bold"
+                fontSize={14}
+                ellipsizeMode="tail"
+                numberOfLines={1}
+                color={"primary"}
+              >
+                {dataSound?.title_short || ""}
+              </Typography>
+
+              <AnimatedLottieView
+                style={{
+                  width: 15,
+                  height: 15,
+                  marginTop: -3,
+                }}
+                source={require("@assets/animations/sound-equalizer.json")}
+                autoPlay
+                speed={played ? 1 : 0}
+              />
+            </Box>
             <Typography fontSize={12} color={"textColor2"}>
               {dataSound?.artist.name || ""}
             </Typography>
           </TouchableOpacity>
         </Box>
       </Box>
-      <Box flexDirection={"row"} justifyContent={"space-between"} width={100}>
-        <TouchableOpacity>
-          <Icon
-            name="heart-outline"
-            size={35}
-            color={theme.colors.textColor1}
-          />
-        </TouchableOpacity>
 
-        <TouchableOpacity>
+      <Box flexDirection={"row"} justifyContent={"space-between"}>
+        <TouchableOpacity onPress={() => playerPause()}>
           <Icon
-            name="play-skip-forward-outline"
-            size={35}
+            name={played ? "pause-circle" : "play-circle"}
+            size={45}
             color={theme.colors.textColor1}
           />
         </TouchableOpacity>

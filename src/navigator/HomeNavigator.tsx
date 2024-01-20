@@ -1,6 +1,8 @@
-import { Home, ViewMusic } from "../screens";
+import { Home, ViewMusic, ViewArtist, ViewPlaylist } from "../screens";
 
 export default {
   Home,
   ViewMusic,
+  ViewArtist,
+  ViewPlaylist,
 };

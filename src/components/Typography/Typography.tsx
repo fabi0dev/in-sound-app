@@ -13,7 +13,7 @@ import {
 import { theme as themeDefault } from "@themes/default";
 import { Text } from "react-native";
 
-type TextVariantsTypes = "regular" | "bold";
+type TextVariantsTypes = "regular" | "bold" | "title1" | "title2" | "title3";
 
 export interface TextProps
   extends TypographyProps<typeof themeDefault>,
@@ -32,6 +32,19 @@ const textVariants = variant<TextProps, TextVariantsTypes>({
     bold: {
       fontFamily: "NunitoSansBold",
       fontWeight: "bold",
+    },
+    title1: {
+      fontFamily: "NunitoSansBold",
+      fontWeight: "bold",
+      fontSize: 17,
+    },
+    title2: {
+      fontFamily: "NunitoSansRegular",
+      fontSize: 13,
+    },
+    title3: {
+      fontFamily: "NunitoSansRegular",
+      fontSize: 11,
     },
   },
 });

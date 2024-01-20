@@ -1,6 +1,7 @@
 import axios from "axios";
 import { RAPID_API_KEY } from "react-native-dotenv";
 
+//https://rapidapi.com/deezerdevs/api/deezer-1
 const api = axios.create({
   baseURL: "https://deezerdevs-deezer.p.rapidapi.com",
   validateStatus: (status) => {
@@ -13,11 +14,37 @@ const api = axios.create({
 });
 
 const deezer = {
+  search: async (q: string) => {
+    try {
+      const { data } = await api.get("search", {
+        params: {
+          q,
+        },
+      });
+
+      return data;
+    } catch (error) {
+      //error
+    }
+  },
+  getEditorialChart: async (genre: number = 0) => {
+    try {
+      const { data } = await api.get(
+        `https://api.deezer.com/editorial/${genre}/charts`
+      );
+
+      return data;
+    } catch (error) {
+      //error
+      console.log("error load editorial", error);
+    }
+  },
   getTops: async (limit: number = 10) => {
     try {
       return await deezer.getPlaylist("1111141961", limit);
     } catch (error) {
       //error
+      console.log("error in load getTops", error);
     }
   },
   getPlaylist: async (id: string, limit: number = 10) => {
@@ -31,19 +58,31 @@ const deezer = {
       return data;
     } catch (error) {
       //error
+      console.log("error load playlist", error);
     }
   },
-  search: async (q: string) => {
+  getArtist: async (id: string) => {
     try {
-      const { data } = await api.get("search", {
-        params: {
-          q,
-        },
-      });
+      const { data } = await api.get(`artist/${id}`);
 
       return data;
     } catch (error) {
       //error
+      console.log("error load artist getArtist", error);
+    }
+  },
+  getArtistTopTrack: async (id: string, limit = 50) => {
+    const request = axios.create({
+      baseURL: "https://api.deezer.com",
+    });
+
+    try {
+      const { data } = await request.get(`artist/${id}/top?limit=${limit}`);
+
+      return data;
+    } catch (error) {
+      //error
+      console.log("error load track artist", error);
     }
   },
 };
