@@ -62,7 +62,9 @@ const soundController = {
     return JSON.parse(item as string);
   },
   getStatusAsync: async () => {
-    return await soundController.fnController.getStatusAsync();
+    try {
+      return await soundController.fnController.getStatusAsync();
+    } catch (e) {}
   },
 };
 

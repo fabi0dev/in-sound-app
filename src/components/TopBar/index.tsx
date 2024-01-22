@@ -7,9 +7,10 @@ import { useNavigation } from "@react-navigation/native";
 
 interface ITopBar {
   title?: string;
+  goBack?: () => void;
 }
 
-export const TopBar = ({ title }: ITopBar) => {
+export const TopBar = ({ title, goBack }: ITopBar) => {
   const navigation = useNavigation();
 
   return (
@@ -19,9 +20,12 @@ export const TopBar = ({ title }: ITopBar) => {
       justifyContent={"space-between"}
       p={"prim"}
       mt={"xs"}
+      position={"absolute"}
+      top={0}
+      width={"100%"}
     >
       <Box>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={goBack ? goBack : () => navigation.goBack()}>
           <Icon
             name="chevron-back-outline"
             size={35}

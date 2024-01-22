@@ -7,7 +7,6 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Typography } from "../";
 import { soundController } from "../../services/SoundController";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { BlurView } from "@react-native-community/blur";
 import AnimatedLottieView from "lottie-react-native";
 
 interface IPlayerBottom {
@@ -54,13 +53,14 @@ export const PlayerBottom = ({ soundCurrent }: IPlayerBottom) => {
     try {
       setTimeout(async () => {
         const statusSound = await soundController.getStatusAsync();
-        setPlayed(statusSound.isPlaying);
+        if (statusSound) {
+          setPlayed(statusSound.isPlaying);
+        }
       }, 200);
     } catch (e) {}
   };
 
   useEffect(() => {
-    console.log("ok");
     getDataSound();
   }, [soundCurrent]);
 
@@ -70,10 +70,14 @@ export const PlayerBottom = ({ soundCurrent }: IPlayerBottom) => {
     }
   });
 
+  if (dataSound === null) {
+    return null;
+  }
+
   return (
     <Box
       width={Dimensions.get("window").width}
-      bg={"base3"}
+      bg={"base2"}
       position={"absolute"}
       bottom={0}
       p={"nano"}
@@ -81,6 +85,7 @@ export const PlayerBottom = ({ soundCurrent }: IPlayerBottom) => {
       pb={"nano"}
       flexDirection={"row"}
       alignItems={"center"}
+      alignSelf={"center"}
       justifyContent={"space-between"}
     >
       <Box alignItems={"center"} flexDirection={"row"}>

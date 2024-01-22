@@ -16,6 +16,8 @@ import { StatusBar } from "expo-status-bar";
 import { TopBar } from "@components/TopBar";
 import { deezer } from "../../services";
 import { PlayerBottom } from "@components/PlayerBottom";
+import AnimatedLottieView from "lottie-react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface IPlaylist {
   title: string;
@@ -24,8 +26,15 @@ interface IPlaylist {
   picture_small: string;
   picture_medium: string;
   picture_big: string;
+  picture_xl: string;
   tracklist: string;
-  nb_fan: number;
+  fans: number;
+  tracks: {
+    data: Array<{
+      id: string;
+      title: string;
+    }>;
+  };
 }
 
 interface ITrackArtist {
@@ -56,52 +65,59 @@ export const ViewPlaylist = ({ route }) => {
         <Box mr={"cake"} justifyContent={"center"}>
           <Typography fontSize={10}>{index + 1}.</Typography>
         </Box>
-        <Box mr={"cake"}>
-          <Image
-            source={{
-              uri: itemData.album.cover_medium,
-            }}
-            width={56}
-            height={56}
-            style={{ borderRadius: 10 }}
-          />
-        </Box>
 
-        <Box flexDirection={"row"}>
-          <Box justifyContent={"center"} flexDirection={"column"} width={"60%"}>
-            <TouchableOpacity onPress={() => play()}>
-              <Box mb={"prim"}>
+        <TouchableOpacity onPress={() => play()}>
+          <Box flexDirection={"row"}>
+            <Box mr={"cake"}>
+              <Image
+                source={{
+                  uri: itemData.album.cover_medium,
+                }}
+                width={56}
+                height={56}
+                style={{ borderRadius: 10 }}
+              />
+            </Box>
+
+            <Box flexDirection={"row"}>
+              <Box
+                justifyContent={"center"}
+                flexDirection={"column"}
+                width={"80%"}
+              >
+                <Box mb={"prim"}>
+                  <Typography
+                    fontSize={14}
+                    ellipsizeMode="tail"
+                    numberOfLines={1}
+                  >
+                    {itemData.title}
+                  </Typography>
+                </Box>
+
                 <Typography
-                  fontSize={14}
+                  color={"textColor2"}
+                  fontSize={12}
                   ellipsizeMode="tail"
                   numberOfLines={1}
                 >
-                  {itemData.title}
+                  {itemData.album.title}
                 </Typography>
               </Box>
-
-              <Typography
-                color={"textColor2"}
-                fontSize={12}
-                ellipsizeMode="tail"
-                numberOfLines={1}
-              >
-                {itemData.album.title}
-              </Typography>
-            </TouchableOpacity>
+            </Box>
           </Box>
+        </TouchableOpacity>
 
-          <Box
-            alignContent={"center"}
-            width={"35%"}
-            alignItems={"center"}
-            justifyContent={"center"}
-          >
-            <TouchableOpacity>
-              <Icon name="add" size={30} color={theme.colors.textColor1} />
-            </TouchableOpacity>
-          </Box>
-        </Box>
+        {/* <Box
+          alignContent={"center"}
+          width={"35%"}
+          alignItems={"center"}
+          justifyContent={"center"}
+        >
+          <TouchableOpacity>
+            <Icon name="add" size={30} color={theme.colors.textColor1} />
+          </TouchableOpacity>
+        </Box> */}
       </Box>
     );
   };
@@ -116,39 +132,67 @@ export const ViewPlaylist = ({ route }) => {
     <Container variant="clear">
       <StatusBar style="inverted" />
       <ImageBackground
-        source={{ uri: dataPlaylist?.picture_big }}
+        source={{ uri: dataPlaylist?.picture_xl }}
         resizeMode="cover"
         style={{
           width: windowWidth,
-          height: windowHeight / 3,
+          height: (windowHeight * 35) / 100,
         }}
-        opacity={0.5}
+        opacity={0.4}
       >
-        <TopBar />
-
-        <Box
-          flex={1}
-          justifyContent={"center"}
-          alignContent={"center"}
-          alignItems={"center"}
+        <LinearGradient
+          // Button Linear Gradient
+          colors={["transparent", "transparent", theme.colors.primaryOpacity]}
+          style={{
+            height: "100%",
+            justifyContent: "center",
+          }}
         >
-          <Typography variant="bold" fontSize={35}>
-            {dataPlaylist?.title}
-          </Typography>
+          <TopBar />
 
-          <Typography mt={"nano"} color={"textColor2"} variant="title2">
-            {dataPlaylist?.fans} fãs
-          </Typography>
-        </Box>
+          <Box
+            justifyContent={"center"}
+            alignContent={"center"}
+            alignItems={"center"}
+          >
+            <Typography variant="bold" fontSize={35}>
+              {dataPlaylist?.title}
+            </Typography>
+
+            <Typography mt={"nano"} color={"textColor2"} variant="title2">
+              {dataPlaylist?.fans} fãs
+            </Typography>
+          </Box>
+        </LinearGradient>
       </ImageBackground>
 
-      <Box p={"nano"}>
-        <Box mb={"nano"} alignItems={"center"}>
-          <Typography>Mais tocadas</Typography>
+      <Box width={"90%"} alignSelf={"center"} alignItems={"flex-end"} mt={-55}>
+        <TouchableOpacity>
+          <AnimatedLottieView
+            style={{
+              width: 120,
+              height: 120,
+            }}
+            source={require("@assets/animations/play.json")}
+            autoPlay
+            loop={false}
+          />
+        </TouchableOpacity>
+      </Box>
+
+      <Box p={"nano"} mt={-55}>
+        <Box mb={"nano"}>
+          <Typography mb={"prim"} variant="title1">
+            Playlist
+          </Typography>
+          <Typography variant="title2" color={"textColor2"}>
+            {dataPlaylist?.description}
+          </Typography>
         </Box>
-        {dataTrackArtist?.data && (
+
+        {dataPlaylist?.tracks.data && (
           <FlatList
-            data={dataTrackArtist?.data}
+            data={dataPlaylist?.tracks.data}
             renderItem={({ item, index }) => (
               <ItemTrack itemData={item} index={index} />
             )}

@@ -55,8 +55,6 @@ export const FeaturedTracks = ({
 
   return (
     <Box>
-      <Box>{!data?.tracks && <Typography>Nenhuma playlist</Typography>}</Box>
-
       <Box mt={"nano"} mb={"nano"}>
         <Typography marginBottom={"nano"} variant="title1">
           Músicas populares

@@ -1,16 +1,6 @@
 import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
-import { theme } from "@themes/default";
-import { Dispatch, SetStateAction, useState } from "react";
-import {
-  FlatList,
-  Image,
-  ImageBackground,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
-import { soundController } from "../../services/SoundController";
+import { Image, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 interface IPlaylists {
@@ -51,6 +41,7 @@ export const FeaturedPlaylists = ({
                       playlist,
                     })
                   }
+                  style={{ width: 120 }}
                 >
                   <Image
                     source={{
@@ -61,7 +52,12 @@ export const FeaturedPlaylists = ({
                     style={{ borderRadius: 10 }}
                   />
 
-                  <Typography mt={"nano"} variant="title2">
+                  <Typography
+                    mt={"nano"}
+                    variant="title2"
+                    ellipsizeMode="tail"
+                    numberOfLines={1}
+                  >
                     {playlist.title}
                   </Typography>
                 </TouchableOpacity>

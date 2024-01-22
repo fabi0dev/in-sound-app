@@ -20,7 +20,7 @@ const containerVariants = variant<ContainerProps>({
       backgroundColor: "base",
     },
     clear: {
-      backgroundColor: "base",
+      backgroundColor: "base2",
     },
   },
 });

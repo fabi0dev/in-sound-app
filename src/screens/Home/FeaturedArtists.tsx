@@ -1,8 +1,6 @@
 import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
 import { Image, ScrollView, TouchableOpacity } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
-import { soundController } from "../../services/SoundController";
 import { useNavigation } from "@react-navigation/native";
 
 interface IArtists {

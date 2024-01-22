@@ -47,7 +47,7 @@ const deezer = {
       console.log("error in load getTops", error);
     }
   },
-  getPlaylist: async (id: string, limit: number = 10) => {
+  getPlaylist: async (id: string, limit: number = 50) => {
     try {
       const { data } = await api.get(`playlist/${id}`, {
         params: {

@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import AnimatedLottieView from "lottie-react-native";
 
 interface IDataSound {
   preview: string;
@@ -109,6 +110,15 @@ export const ViewMusic = () => {
             </Box>
           </Box>
 
+          {/* <AnimatedLottieView
+            style={{
+              width: "100%",
+              position: "absolute",
+            }}
+            source={require("@assets/animations/equalizer.json")}
+            autoPlay
+            speed={isPlaying ? 0.5 : 0}
+          /> */}
           <Box
             width={windowWidth}
             bottom={0}
@@ -133,11 +143,27 @@ export const ViewMusic = () => {
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => playPause()}>
-                <Icon
-                  name={isPlaying ? "pause-circle" : "play-circle"}
-                  size={100}
-                  color={theme.colors.primary}
-                />
+                {isPlaying && (
+                  <AnimatedLottieView
+                    style={{
+                      width: 150,
+                    }}
+                    source={require("@assets/animations/pause.json")}
+                    autoPlay
+                    loop={false}
+                  />
+                )}
+
+                {!isPlaying && (
+                  <AnimatedLottieView
+                    style={{
+                      width: 150,
+                    }}
+                    source={require("@assets/animations/play.json")}
+                    autoPlay
+                    loop={false}
+                  />
+                )}
               </TouchableOpacity>
 
               <TouchableOpacity>

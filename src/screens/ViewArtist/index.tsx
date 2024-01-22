@@ -16,6 +16,7 @@ import { StatusBar } from "expo-status-bar";
 import { TopBar } from "@components/TopBar";
 import { deezer } from "../../services";
 import { PlayerBottom } from "@components/PlayerBottom";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface IDataArtist {
   name: string;
@@ -130,22 +131,31 @@ export const ViewArtist = ({ route }) => {
         }}
         opacity={0.5}
       >
-        <TopBar />
-
-        <Box
-          flex={1}
-          justifyContent={"center"}
-          alignContent={"center"}
-          alignItems={"center"}
+        <LinearGradient
+          // Button Linear Gradient
+          colors={["transparent", "transparent", theme.colors.primaryOpacity]}
+          style={{
+            height: "100%",
+            justifyContent: "center",
+          }}
         >
-          <Typography variant="bold" fontSize={35}>
-            {dataArtist?.name}
-          </Typography>
+          <TopBar />
 
-          <Typography mt={"nano"} color={"textColor2"} variant="title2">
-            {dataArtist?.nb_fan} fãs
-          </Typography>
-        </Box>
+          <Box
+            flex={1}
+            justifyContent={"center"}
+            alignContent={"center"}
+            alignItems={"center"}
+          >
+            <Typography variant="bold" fontSize={35}>
+              {dataArtist?.name}
+            </Typography>
+
+            <Typography mt={"nano"} color={"textColor2"} variant="title2">
+              {dataArtist?.nb_fan} fãs
+            </Typography>
+          </Box>
+        </LinearGradient>
       </ImageBackground>
 
       <Box p={"nano"}>
