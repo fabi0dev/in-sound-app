@@ -2,7 +2,7 @@ import { Box } from "@components/Box";
 import { Container } from "@components/Container";
 import { theme } from "@themes/default";
 import { useEffect, useState } from "react";
-import Icon from "react-native-vector-icons/Ionicons";
+import IconMaterial from "react-native-vector-icons/MaterialCommunityIcons";
 import { soundController } from "../../services/SoundController";
 import { Typography } from "@components/Typography";
 import {
@@ -29,6 +29,8 @@ interface IPlaylist {
   picture_xl: string;
   tracklist: string;
   fans: number;
+  nb_tracks: number;
+  description: string;
   tracks: {
     data: Array<{
       id: string;
@@ -159,6 +161,16 @@ export const ViewPlaylist = ({ route }) => {
               {dataPlaylist?.title}
             </Typography>
 
+            <Box width={"90%"} mb={"nano"}>
+              <Typography
+                textAlign={"center"}
+                variant="title2"
+                color={"textColor2"}
+              >
+                {dataPlaylist?.description}
+              </Typography>
+            </Box>
+
             <Typography mt={"nano"} color={"textColor2"} variant="title2">
               {dataPlaylist?.fans} fãs
             </Typography>
@@ -181,12 +193,15 @@ export const ViewPlaylist = ({ route }) => {
       </Box>
 
       <Box p={"nano"} mt={-55}>
-        <Box mb={"nano"}>
-          <Typography mb={"prim"} variant="title1">
-            Playlist
-          </Typography>
-          <Typography variant="title2" color={"textColor2"}>
-            {dataPlaylist?.description}
+        <Box mb={"nano"} flexDirection={"row"} alignItems={"center"}>
+          <IconMaterial
+            name="music-circle"
+            size={25}
+            color={theme.colors.primary}
+          />
+
+          <Typography ml={"cake"} variant="title2">
+            {dataPlaylist?.nb_tracks} Músicas
           </Typography>
         </Box>
 

@@ -63,8 +63,8 @@ export const ViewMusic = () => {
         source={{ uri: dataSound?.album.cover_big }}
         resizeMode="cover"
         style={{ flex: 1 }}
-        opacity={0.8}
-        blurRadius={3}
+        opacity={0.5}
+        blurRadius={5}
       >
         <TopBar />
 
@@ -110,15 +110,16 @@ export const ViewMusic = () => {
             </Box>
           </Box>
 
-          {/* <AnimatedLottieView
+          <AnimatedLottieView
             style={{
               width: "100%",
               position: "absolute",
+              elevation: -1,
             }}
             source={require("@assets/animations/equalizer.json")}
             autoPlay
-            speed={isPlaying ? 0.5 : 0}
-          /> */}
+            speed={isPlaying ? 0.3 : 0}
+          />
           <Box
             width={windowWidth}
             bottom={0}

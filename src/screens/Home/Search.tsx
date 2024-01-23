@@ -133,7 +133,13 @@ export const Search = ({
 
   const ItemArtist = ({ artist, key }) => {
     return (
-      <Box key={key} p={"prim"} mr="prim">
+      <Box
+        alignContent={"center"}
+        justifyContent={"center"}
+        key={key}
+        p={"prim"}
+        mr="prim"
+      >
         <TouchableOpacity
           onPress={() =>
             navigation.navigate("ViewArtist", {
@@ -145,13 +151,13 @@ export const Search = ({
             source={{
               uri: artist.picture_big,
             }}
-            width={80}
-            height={80}
-            style={{ borderRadius: 100 }}
+            width={65}
+            height={65}
+            style={{ borderRadius: 100, alignSelf: "center" }}
           />
-          <Box alignItems={"center"} width={80}>
+          <Box alignItems={"center"} width={70}>
             <Typography
-              mt={"nano"}
+              mt={"prim"}
               ellipsizeMode="tail"
               numberOfLines={1}
               variant="title3"
@@ -171,7 +177,7 @@ export const Search = ({
         justifyContent={"space-between"}
         alignContent={"center"}
         alignItems={"center"}
-        mb={"xxxs"}
+        mb={"xx"}
         mt={"xxxs"}
       >
         <Typography variant="title1">{title}</Typography>
@@ -192,8 +198,9 @@ export const Search = ({
   useEffect(() => {
     getPlaylist();
     getArtist();
-  }, []);
+  }, [dataSearch]);
 
+  console.log(dataArtist.data.length);
   return (
     <ScrollView>
       {descViewAll("Playlists", () => {
@@ -206,9 +213,10 @@ export const Search = ({
         })}
       </ScrollView>
 
-      {descViewAll("Artistas", () => {
-        console.log("Ver artistas");
-      })}
+      {dataArtist.data.length > 0 &&
+        descViewAll("Artistas", () => {
+          console.log("Ver artistas");
+        })}
 
       <ScrollView horizontal={true}>
         {dataArtist.data.map((artist: IArtists, key) => {
@@ -216,9 +224,10 @@ export const Search = ({
         })}
       </ScrollView>
 
-      {descViewAll("Musicas", () => {
-        console.log("Ver musicas");
-      })}
+      {dataSearch.data.length > 0 &&
+        descViewAll("Musicas", () => {
+          console.log("Ver musicas");
+        })}
 
       {dataSearch.data.map((track: IArtists, key) => {
         return <ItemTrack itemData={track} key={key} />;
@@ -233,6 +242,8 @@ export const Search = ({
           keyExtractor={(item) => item.id}
         />
       )} */}
+
+      <Box height={100}></Box>
     </ScrollView>
   );
 };

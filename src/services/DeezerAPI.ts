@@ -14,7 +14,7 @@ const api = axios.create({
 });
 
 const deezer = {
-  search: async (q: string, limit = 5) => {
+  search: async (q: string, limit = 25) => {
     try {
       const { data } = await api.get("search", {
         params: {
