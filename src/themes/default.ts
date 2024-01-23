@@ -17,7 +17,7 @@ export const theme = {
   },
   colors: {
     primary: "#15e8ff",
-    primaryOpacity: "rgba(91,218,255, .2)",
+    primaryOpacity: "rgba(91,218,255, .3)",
     textColor1: "#fff",
     textColor2: "#a4a2ae",
     textColor3: "#8da6af",

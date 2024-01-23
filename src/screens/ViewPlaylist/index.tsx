@@ -156,8 +156,10 @@ export const ViewPlaylist = ({ route }) => {
             justifyContent={"center"}
             alignContent={"center"}
             alignItems={"center"}
+            alignSelf={"center"}
+            width={"90%"}
           >
-            <Typography variant="bold" fontSize={35}>
+            <Typography textAlign={"center"} variant="bold" fontSize={32}>
               {dataPlaylist?.title}
             </Typography>
 
@@ -178,7 +180,7 @@ export const ViewPlaylist = ({ route }) => {
         </LinearGradient>
       </ImageBackground>
 
-      <Box width={"90%"} alignSelf={"center"} alignItems={"flex-end"} mt={-55}>
+      <Box width={"90%"} alignSelf={"center"} alignItems={"flex-end"} mt={-57}>
         <TouchableOpacity>
           <AnimatedLottieView
             style={{

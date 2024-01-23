@@ -62,7 +62,9 @@ export const ViewMusic = () => {
       <ImageBackground
         source={{ uri: dataSound?.album.cover_big }}
         resizeMode="cover"
-        style={{ flex: 1 }}
+        style={{
+          flex: 1,
+        }}
         opacity={0.5}
         blurRadius={5}
       >
@@ -127,7 +129,7 @@ export const ViewMusic = () => {
             alignItems={"center"}
             alignContent={"center"}
             justifyContent={"center"}
-            pb={"sm"}
+            mb={"sm"}
           >
             <Box
               width={windowWidth / 2}
@@ -138,7 +140,7 @@ export const ViewMusic = () => {
               <TouchableOpacity>
                 <Icon
                   name="play-skip-back-outline"
-                  size={40}
+                  size={35}
                   color={theme.colors.textColor1}
                 />
               </TouchableOpacity>
@@ -170,7 +172,7 @@ export const ViewMusic = () => {
               <TouchableOpacity>
                 <Icon
                   name="play-skip-forward-outline"
-                  size={40}
+                  size={35}
                   color={theme.colors.textColor1}
                 />
               </TouchableOpacity>
