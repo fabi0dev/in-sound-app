@@ -200,7 +200,6 @@ export const Search = ({
     getArtist();
   }, [dataSearch]);
 
-  console.log(dataArtist.data.length);
   return (
     <ScrollView>
       {descViewAll("Playlists", () => {

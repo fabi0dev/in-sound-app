@@ -64,7 +64,7 @@ export const Home = () => {
   }, [timeSearch]);
 
   useEffect(() => {
-    getTopMusics();
+    getTopMusics(true);
   }, []);
 
   return (
