@@ -160,7 +160,7 @@ export const ViewArtist = ({ route }) => {
 
       <Box p={"nano"}>
         <Box mb={"nano"} alignItems={"center"}>
-          <Typography>Mais tocadas</Typography>
+          <Typography variant="title1">Mais tocadas</Typography>
         </Box>
         {dataTrackArtist?.data && (
           <FlatList

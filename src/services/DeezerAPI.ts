@@ -14,17 +14,66 @@ const api = axios.create({
 });
 
 const deezer = {
-  search: async (q: string) => {
+  search: async (q: string, limit = 5) => {
     try {
       const { data } = await api.get("search", {
         params: {
           q,
+          limit,
         },
       });
 
       return data;
     } catch (error) {
       //error
+    }
+  },
+  searchPlaylist: async (q: string, limit = 10) => {
+    const request = axios.create({
+      baseURL: "https://api.deezer.com",
+    });
+
+    try {
+      const { data } = await request.get(`search/playlist`, {
+        params: { q, limit },
+      });
+
+      return data;
+    } catch (error) {
+      //error
+      console.log("error load search playlist", error);
+    }
+  },
+  searchAlbum: async (q: string, limit = 10) => {
+    const request = axios.create({
+      baseURL: "https://api.deezer.com",
+    });
+
+    try {
+      const { data } = await request.get(`search/album`, {
+        params: { q, limit },
+      });
+
+      return data;
+    } catch (error) {
+      //error
+      console.log("error load search album", error);
+    }
+  },
+  searchArtist: async (q: string, limit = 10) => {
+    const request = axios.create({
+      baseURL: "https://api.deezer.com",
+    });
+
+    try {
+      const { data } = await request.get(`search/artist`, {
+        params: { q, limit },
+      });
+
+      return data;
+    } catch (error) {
+      //error
+      console.log("error load search album", error);
     }
   },
   getEditorialChart: async (genre: number = 0) => {

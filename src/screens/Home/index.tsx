@@ -45,8 +45,6 @@ export const Home = () => {
     setLoading(true);
 
     timeSearch = setTimeout(async () => {
-      clearTimeout(timeSearch);
-
       if (textSearch !== "") {
         try {
           const data = await deezer.search(textSearch);
@@ -58,10 +56,13 @@ export const Home = () => {
 
       setLoading(false);
       return;
-    }, 1000);
+    }, 800);
   };
 
-  console.log(textSearch);
+  useEffect(() => {
+    return () => clearTimeout(timeSearch);
+  }, [timeSearch]);
+
   useEffect(() => {
     getTopMusics();
   }, []);
@@ -91,7 +92,6 @@ export const Home = () => {
               if (textSearch == "") {
                 setDataSearch("");
                 setDataSearch("");
-                console.log("jsu");
               }
             }}
           />
@@ -101,6 +101,7 @@ export const Home = () => {
           <Search
             setDataSearch={setDataSearch}
             dataSearch={dataSearch as never}
+            textSearch={textSearch}
           />
         )}
 

@@ -1,10 +1,11 @@
 import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
-import { FlatList, Image, ScrollView, TouchableOpacity } from "react-native";
+import { Image, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Dispatch, SetStateAction } from "react";
-import { FeaturedTracks } from "./FeaturedTracks";
-import { soundController } from "../../services";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { deezer, soundController } from "../../services";
+import Icon from "react-native-vector-icons/Ionicons";
+import { theme } from "@themes/default";
 
 interface IArtists {
   name: string;
@@ -13,8 +14,9 @@ interface IArtists {
 }
 
 interface ISearch {
+  textSearch: string;
   setDataSearch: Dispatch<SetStateAction<string>>;
-  data: {
+  dataSearch: {
     artists?: {
       data: Array<IArtists>;
       total: number;
@@ -22,27 +24,48 @@ interface ISearch {
   };
 }
 
-export const Search = ({ dataSearch, setDataSearch }: ISearch): JSX.Element => {
+export const Search = ({
+  textSearch,
+  setDataSearch,
+  dataSearch,
+}: ISearch): JSX.Element => {
   const navigation = useNavigation();
+  const [dataPlaylist, setDataPlaylist] = useState({
+    data: [],
+  });
+  const [dataArtist, setDataArtist] = useState({
+    data: [],
+  });
 
-  const ItemSearch = ({ itemData, index }) => {
+  const getPlaylist = async () => {
+    try {
+      const data = await deezer.searchPlaylist(textSearch);
+      setDataPlaylist(data);
+    } catch (e) {}
+  };
+
+  const getArtist = async () => {
+    try {
+      const data = await deezer.searchArtist(textSearch);
+      setDataArtist(data);
+    } catch (e) {}
+  };
+
+  const ItemTrack = ({ itemData, key }) => {
     const play = async () => {
       await soundController.setSoundCurrent(itemData, true);
       //setSoundCurrent(itemData);
     };
 
     return (
-      <Box flexDirection={"row"} p={"prim"} mb={"nano"}>
-        <Box mr={"cake"} justifyContent={"center"}>
-          <Typography fontSize={10}>{index + 1}.</Typography>
-        </Box>
+      <Box key={key} flexDirection={"row"} mb={"nano"}>
         <Box mr={"cake"}>
           <Image
             source={{
               uri: itemData.album.cover_medium,
             }}
-            width={56}
-            height={56}
+            width={50}
+            height={50}
             style={{ borderRadius: 10 }}
           />
         </Box>
@@ -66,7 +89,7 @@ export const Search = ({ dataSearch, setDataSearch }: ISearch): JSX.Element => {
                 ellipsizeMode="tail"
                 numberOfLines={1}
               >
-                {itemData.album.title}
+                {itemData.artist.name}
               </Typography>
             </TouchableOpacity>
           </Box>
@@ -75,21 +98,141 @@ export const Search = ({ dataSearch, setDataSearch }: ISearch): JSX.Element => {
     );
   };
 
-  return (
-    <Box>
-      <Typography variant="title1">Resultados</Typography>
-
-      <Box p={"nano"}>
-        {dataSearch.data && (
-          <FlatList
-            data={dataSearch.data}
-            renderItem={({ item, index }) => (
-              <ItemSearch itemData={item} index={index} />
-            )}
-            keyExtractor={(item) => item.id}
+  const ItemPlaylist = ({ playlist, key }) => {
+    return (
+      <Box key={key} pr={"xxxs"} pt={"none"}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("ViewPlaylist", {
+              playlist,
+            })
+          }
+          style={{ width: 100 }}
+        >
+          <Image
+            source={{
+              uri: playlist.picture_big,
+            }}
+            width={100}
+            height={100}
+            style={{ borderRadius: 10 }}
           />
-        )}
+
+          <Typography
+            mt={"nano"}
+            variant="title2"
+            ellipsizeMode="tail"
+            numberOfLines={1}
+          >
+            {playlist.title}
+          </Typography>
+        </TouchableOpacity>
       </Box>
-    </Box>
+    );
+  };
+
+  const ItemArtist = ({ artist, key }) => {
+    return (
+      <Box key={key} p={"prim"} mr="prim">
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("ViewArtist", {
+              artist,
+            })
+          }
+        >
+          <Image
+            source={{
+              uri: artist.picture_big,
+            }}
+            width={80}
+            height={80}
+            style={{ borderRadius: 100 }}
+          />
+          <Box alignItems={"center"} width={80}>
+            <Typography
+              mt={"nano"}
+              ellipsizeMode="tail"
+              numberOfLines={1}
+              variant="title3"
+            >
+              {artist.name}
+            </Typography>
+          </Box>
+        </TouchableOpacity>
+      </Box>
+    );
+  };
+
+  const descViewAll = (title: string, fn: () => void) => {
+    return (
+      <Box
+        flexDirection={"row"}
+        justifyContent={"space-between"}
+        alignContent={"center"}
+        alignItems={"center"}
+        mb={"xxxs"}
+        mt={"xxxs"}
+      >
+        <Typography variant="title1">{title}</Typography>
+        <TouchableOpacity onPress={fn}>
+          <Box flexDirection={"row"}>
+            <Typography variant="title2">Ver todos</Typography>
+            <Icon
+              name="chevron-forward"
+              size={18}
+              color={theme.colors.textColor1}
+            />
+          </Box>
+        </TouchableOpacity>
+      </Box>
+    );
+  };
+
+  useEffect(() => {
+    getPlaylist();
+    getArtist();
+  }, []);
+
+  return (
+    <ScrollView>
+      {descViewAll("Playlists", () => {
+        console.log("Ver playlist");
+      })}
+
+      <ScrollView horizontal={true}>
+        {dataPlaylist.data.map((track: IArtists, key) => {
+          return <ItemPlaylist playlist={track} key={key} />;
+        })}
+      </ScrollView>
+
+      {descViewAll("Artistas", () => {
+        console.log("Ver artistas");
+      })}
+
+      <ScrollView horizontal={true}>
+        {dataArtist.data.map((artist: IArtists, key) => {
+          return <ItemArtist artist={artist} key={key} />;
+        })}
+      </ScrollView>
+
+      {descViewAll("Musicas", () => {
+        console.log("Ver musicas");
+      })}
+
+      {dataSearch.data.map((track: IArtists, key) => {
+        return <ItemTrack itemData={track} key={key} />;
+      })}
+
+      {/* {dataSearch.data && (
+        <FlatList
+          data={dataSearch.data}
+          renderItem={({ item, index }) => (
+            <ItemSearch itemData={item} index={index} />
+          )}
+          keyExtractor={(item) => item.id}
+        />
+      )} */}
+    </ScrollView>
   );
 };
