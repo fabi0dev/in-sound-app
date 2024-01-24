@@ -52,14 +52,15 @@ export const FeaturedPlaylists = ({
                     style={{ borderRadius: 10 }}
                   />
 
-                  <Typography
-                    mt={"nano"}
-                    variant="title2"
-                    ellipsizeMode="tail"
-                    numberOfLines={1}
-                  >
-                    {playlist.title}
-                  </Typography>
+                  <Box mt={"prim"} alignItems={"center"}>
+                    <Typography
+                      variant="title2"
+                      ellipsizeMode="tail"
+                      numberOfLines={1}
+                    >
+                      {playlist.title}
+                    </Typography>
+                  </Box>
                 </TouchableOpacity>
               </Box>
             );

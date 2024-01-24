@@ -9,9 +9,10 @@ import { FeaturedPlaylists } from "./FeaturedPlaylists";
 import { FeaturedTracks } from "./FeaturedTracks";
 import { Search } from "./Search";
 import { FeaturedArtists } from "./FeaturedArtists";
-import { ActivityIndicator, ScrollView } from "react-native";
+import { ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
 import AnimatedLottieView from "lottie-react-native";
 import { theme } from "@themes/default";
+import Icon from "react-native-vector-icons/Ionicons";
 
 export const Home = () => {
   const [dataFeatured, setDataFeatured] = useState({});
@@ -105,10 +106,23 @@ export const Home = () => {
 
         {!loading && !dataSearch && textSearch === "" && (
           <Box>
-            <Box mb={"nano"}>
+            <Box
+              mb={"nano"}
+              flexDirection={"row"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
               <Typography variant="bold" fontSize={25}>
                 {helpers.getWelcome()}
               </Typography>
+
+              <TouchableOpacity>
+                <Icon
+                  name="settings-sharp"
+                  size={25}
+                  color={theme.colors.textColor1}
+                />
+              </TouchableOpacity>
             </Box>
 
             <FeaturedTracks data={dataFeatured} />

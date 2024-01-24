@@ -37,8 +37,6 @@ export const ViewMusic = () => {
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
   const sizeImgAlbum = (windowWidth * 60) / 100;
-  const [timeStatus, setTimeStatus] = useState("0:00");
-  const [timePercent, setTimePercent] = useState(0);
 
   const playerPause = async () => {
     if (!playing) {
@@ -48,16 +46,6 @@ export const ViewMusic = () => {
       await soundController.pause();
       dispatch(playPause(false));
     }
-
-    /* soundController.fnController.setOnPlaybackStatusUpdate((status) => {
-      const time = helpers.convertMlInTime(status.positionMillis);
-      const percent = helpers.getPercentTimeMusic(
-        status.durationMillis,
-        status.positionMillis
-      );
-      setTimeStatus(time);
-      setTimePercent(percent);
-    }); */
   };
 
   return (
@@ -104,18 +92,6 @@ export const ViewMusic = () => {
               </Typography>
             </Box>
           </Box>
-
-          {/* <Box alignItems={"center"} mt={"sm"} mb={"prim"}>
-            <Box>
-              <Box bg={"base"} height={6} width={(windowWidth / 100) * 60}>
-                <Box bg={"primary"} height={6} width={timePercent + "%"}></Box>
-              </Box>
-              <Box flexDirection={"row"} justifyContent={"space-between"}>
-                <Typography fontSize={10}>{timeStatus}</Typography>
-                <Typography fontSize={10}>0:29</Typography>
-              </Box>
-            </Box>
-          </Box> */}
 
           <ProgressBar />
 
