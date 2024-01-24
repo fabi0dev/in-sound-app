@@ -6,6 +6,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { deezer, soundController } from "../../services";
 import Icon from "react-native-vector-icons/Ionicons";
 import { theme } from "@themes/default";
+import { useDispatch, useSelector } from "react-redux";
+import { changeMusic, selectPlayerBottom } from "../../redux/playerBottomSlice";
 
 interface IArtists {
   name: string;
@@ -29,6 +31,9 @@ export const Search = ({
   setDataSearch,
   dataSearch,
 }: ISearch): JSX.Element => {
+  const dispatch = useDispatch();
+  const { sound } = useSelector(selectPlayerBottom);
+
   const navigation = useNavigation();
   const [dataPlaylist, setDataPlaylist] = useState({
     data: [],
@@ -51,18 +56,18 @@ export const Search = ({
     } catch (e) {}
   };
 
-  const ItemTrack = ({ itemData, key }) => {
+  const ItemTrack = ({ trackData }) => {
     const play = async () => {
-      await soundController.setSoundCurrent(itemData, true);
-      //setSoundCurrent(itemData);
+      dispatch(changeMusic(trackData));
+      await soundController.play(trackData.preview);
     };
 
     return (
-      <Box key={key} flexDirection={"row"} mb={"nano"}>
+      <Box flexDirection={"row"} mb={"nano"}>
         <Box mr={"cake"}>
           <Image
             source={{
-              uri: itemData.album.cover_medium,
+              uri: trackData.album.cover_medium,
             }}
             width={50}
             height={50}
@@ -78,8 +83,9 @@ export const Search = ({
                   fontSize={14}
                   ellipsizeMode="tail"
                   numberOfLines={1}
+                  color={sound.id == trackData.id ? "primary" : "textColor1"}
                 >
-                  {itemData.title}
+                  {trackData.title}
                 </Typography>
               </Box>
 
@@ -89,7 +95,7 @@ export const Search = ({
                 ellipsizeMode="tail"
                 numberOfLines={1}
               >
-                {itemData.artist.name}
+                {trackData.artist.name}
               </Typography>
             </TouchableOpacity>
           </Box>
@@ -98,9 +104,9 @@ export const Search = ({
     );
   };
 
-  const ItemPlaylist = ({ playlist, key }) => {
+  const ItemPlaylist = ({ playlist }) => {
     return (
-      <Box key={key} pr={"xxxs"} pt={"none"}>
+      <Box pr={"xxxs"} pt={"none"}>
         <TouchableOpacity
           onPress={() =>
             navigation.navigate("ViewPlaylist", {
@@ -131,12 +137,11 @@ export const Search = ({
     );
   };
 
-  const ItemArtist = ({ artist, key }) => {
+  const ItemArtist = ({ artist }) => {
     return (
       <Box
         alignContent={"center"}
         justifyContent={"center"}
-        key={key}
         p={"prim"}
         mr="prim"
       >
@@ -229,7 +234,7 @@ export const Search = ({
         })}
 
       {dataSearch.data.map((track: IArtists, key) => {
-        return <ItemTrack itemData={track} key={key} />;
+        return <ItemTrack trackData={track} key={key} />;
       })}
 
       {/* {dataSearch.data && (

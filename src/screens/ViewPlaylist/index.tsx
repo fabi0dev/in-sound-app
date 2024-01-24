@@ -18,6 +18,8 @@ import { deezer } from "../../services";
 import { PlayerBottom } from "@components/PlayerBottom";
 import AnimatedLottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useDispatch, useSelector } from "react-redux";
+import { changeMusic, selectPlayerBottom } from "../../redux/playerBottomSlice";
 
 interface IPlaylist {
   title: string;
@@ -39,14 +41,10 @@ interface IPlaylist {
   };
 }
 
-interface ITrackArtist {
-  title: string;
-}
-
 export const ViewPlaylist = ({ route }) => {
+  const dispatch = useDispatch();
+  const { sound } = useSelector(selectPlayerBottom);
   const [dataPlaylist, setDataPlaylist] = useState<IPlaylist>();
-  const [dataTrackArtist, setDataTrackArtist] = useState<ITrackArtist>();
-  const [soundCurrent, setSoundCurrent] = useState({});
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
   const { params } = route;
@@ -56,10 +54,10 @@ export const ViewPlaylist = ({ route }) => {
     setDataPlaylist(data);
   };
 
-  const ItemTrack = ({ itemData, index }) => {
+  const ItemTrack = ({ trackData, index }) => {
     const play = async () => {
-      await soundController.setSoundCurrent(itemData, true);
-      setSoundCurrent(itemData);
+      dispatch(changeMusic(trackData));
+      await soundController.play(trackData.preview);
     };
 
     return (
@@ -73,7 +71,7 @@ export const ViewPlaylist = ({ route }) => {
             <Box mr={"cake"}>
               <Image
                 source={{
-                  uri: itemData.album.cover_medium,
+                  uri: trackData.album.cover_medium,
                 }}
                 width={56}
                 height={56}
@@ -92,8 +90,9 @@ export const ViewPlaylist = ({ route }) => {
                     fontSize={14}
                     ellipsizeMode="tail"
                     numberOfLines={1}
+                    color={sound.id == trackData.id ? "primary" : "textColor1"}
                   >
-                    {itemData.title}
+                    {trackData.title}
                   </Typography>
                 </Box>
 
@@ -103,23 +102,12 @@ export const ViewPlaylist = ({ route }) => {
                   ellipsizeMode="tail"
                   numberOfLines={1}
                 >
-                  {itemData.album.title}
+                  {trackData.album.title}
                 </Typography>
               </Box>
             </Box>
           </Box>
         </TouchableOpacity>
-
-        {/* <Box
-          alignContent={"center"}
-          width={"35%"}
-          alignItems={"center"}
-          justifyContent={"center"}
-        >
-          <TouchableOpacity>
-            <Icon name="add" size={30} color={theme.colors.textColor1} />
-          </TouchableOpacity>
-        </Box> */}
       </Box>
     );
   };
@@ -211,14 +199,14 @@ export const ViewPlaylist = ({ route }) => {
           <FlatList
             data={dataPlaylist?.tracks.data}
             renderItem={({ item, index }) => (
-              <ItemTrack itemData={item} index={index} />
+              <ItemTrack trackData={item} index={index} />
             )}
             keyExtractor={(item) => item.id}
           />
         )}
       </Box>
 
-      <PlayerBottom soundCurrent={soundCurrent} />
+      <PlayerBottom />
     </Container>
   );
 };

@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { deezer, helpers, storage } from "../../services";
 import { Typography } from "@components/Typography";
 import { PlayerBottom } from "@components/PlayerBottom";
-import { useNavigation } from "@react-navigation/native";
 import { FeaturedPlaylists } from "./FeaturedPlaylists";
 import { FeaturedTracks } from "./FeaturedTracks";
 import { Search } from "./Search";
@@ -16,7 +15,6 @@ import { theme } from "@themes/default";
 
 export const Home = () => {
   const [dataFeatured, setDataFeatured] = useState({});
-  const [soundCurrent, setSoundCurrent] = useState({});
   const [dataSearch, setDataSearch] = useState("");
   const [textSearch, setTextSearch] = useState("");
   const [loading, setLoading] = useState(false);
@@ -64,7 +62,7 @@ export const Home = () => {
   }, [timeSearch]);
 
   useEffect(() => {
-    getTopMusics(true);
+    getTopMusics();
   }, []);
 
   return (
@@ -113,11 +111,7 @@ export const Home = () => {
               </Typography>
             </Box>
 
-            <FeaturedTracks
-              soundCurrent={soundCurrent}
-              setSoundCurrent={setSoundCurrent}
-              data={dataFeatured}
-            />
+            <FeaturedTracks data={dataFeatured} />
 
             <FeaturedPlaylists data={dataFeatured} />
             <FeaturedArtists data={dataFeatured} />
@@ -133,7 +127,7 @@ export const Home = () => {
         )}
       </ScrollView>
 
-      <PlayerBottom soundCurrent={soundCurrent} />
+      <PlayerBottom />
     </Container>
   );
 };

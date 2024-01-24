@@ -1,7 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Audio } from "expo-av";
+import { helpers } from "./Helpers";
 
 interface ISoundData {
+  id: string;
   preview: string;
   title_short: string;
   artist: {
@@ -16,24 +18,31 @@ interface ISoundData {
 
 const soundController = {
   fnController: {},
-  play: async () => {
-    const soundCurrent = await soundController.getSoundCurrent();
-
-    if (soundController.fnController != undefined) {
-      soundController.pause();
+  uri: "",
+  setUri: (uri: string) => {
+    soundController.uri = uri;
+  },
+  play: async (uri: string = "") => {
+    if (uri !== "") {
+      soundController.uri = uri;
     }
 
-    if (soundCurrent == null) {
+    if (soundController.uri == "") {
       return;
     }
 
+    if (soundController.fnController?.unloadAsync != undefined) {
+      await soundController.fnController?.pauseAsync();
+      await soundController.fnController?.unloadAsync();
+    }
+
     try {
-      const { sound } = await Audio.Sound.createAsync({
-        uri: soundCurrent.preview,
+      const playSound = await Audio.Sound.createAsync({
+        uri: soundController.uri,
       });
 
-      await sound.playAsync();
-      soundController.fnController = sound;
+      await playSound.sound.playAsync();
+      soundController.fnController = playSound.sound;
     } catch (e) {
       console.log(`cannot play the sound file`, e);
     }

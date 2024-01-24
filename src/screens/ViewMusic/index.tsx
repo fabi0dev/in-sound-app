@@ -1,7 +1,7 @@
 import { Box } from "@components/Box";
 import { Container } from "@components/Container";
 import { theme } from "@themes/default";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import { soundController } from "../../services/SoundController";
 import { Typography } from "@components/Typography";
@@ -14,6 +14,10 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import AnimatedLottieView from "lottie-react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { playPause, selectPlayerBottom } from "../../redux/playerBottomSlice";
+import { helpers } from "../../services";
+import { ProgressBar } from "./ProgressBar";
 
 interface IDataSound {
   preview: string;
@@ -28,39 +32,40 @@ interface IDataSound {
 }
 
 export const ViewMusic = () => {
-  const [dataSound, setDataSound] = useState<IDataSound>();
-  const [isPlaying, setIsPlaying] = useState(false);
+  const dispatch = useDispatch();
+  const { sound, playing } = useSelector(selectPlayerBottom);
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
   const sizeImgAlbum = (windowWidth * 60) / 100;
+  const [timeStatus, setTimeStatus] = useState("0:00");
+  const [timePercent, setTimePercent] = useState(0);
 
-  const playPause = async () => {
-    if (!isPlaying) {
+  const playerPause = async () => {
+    if (!playing) {
       await soundController.play();
-      setIsPlaying(true);
+      dispatch(playPause(true));
     } else {
       await soundController.pause();
-      setIsPlaying(false);
+      dispatch(playPause(false));
     }
-  };
 
-  const getDataMusic = async () => {
-    const data = await soundController.getSoundCurrent();
-    const statusSound = await soundController.getStatusAsync();
-    setDataSound(data);
-    setIsPlaying(statusSound.isPlaying);
+    /* soundController.fnController.setOnPlaybackStatusUpdate((status) => {
+      const time = helpers.convertMlInTime(status.positionMillis);
+      const percent = helpers.getPercentTimeMusic(
+        status.durationMillis,
+        status.positionMillis
+      );
+      setTimeStatus(time);
+      setTimePercent(percent);
+    }); */
   };
-
-  useEffect(() => {
-    getDataMusic();
-  }, []);
 
   return (
     <Container variant="clear">
       <StatusBar style="inverted" />
 
       <ImageBackground
-        source={{ uri: dataSound?.album.cover_big }}
+        source={{ uri: sound?.album.cover_big }}
         resizeMode="cover"
         style={{
           flex: 1,
@@ -76,7 +81,7 @@ export const ViewMusic = () => {
               width={sizeImgAlbum}
               height={sizeImgAlbum}
               source={{
-                uri: dataSound?.album.cover_big,
+                uri: sound?.album.cover_big,
               }}
               style={{
                 borderRadius: sizeImgAlbum,
@@ -90,27 +95,29 @@ export const ViewMusic = () => {
           <Box alignItems={"center"} mt={"nano"}>
             <Box>
               <Typography textAlign={"center"} variant="bold" fontSize={20}>
-                {dataSound?.title}
+                {sound?.title}
               </Typography>
             </Box>
             <Box mt={"cake"}>
               <Typography fontSize={14} color={"textColor1"}>
-                {dataSound?.artist.name}
+                {sound?.artist.name}
               </Typography>
             </Box>
           </Box>
 
-          <Box alignItems={"center"} mt={"sm"} mb={"prim"}>
+          {/* <Box alignItems={"center"} mt={"sm"} mb={"prim"}>
             <Box>
               <Box bg={"base"} height={6} width={(windowWidth / 100) * 60}>
-                <Box bg={"primary"} height={6} width={"50%"}></Box>
+                <Box bg={"primary"} height={6} width={timePercent + "%"}></Box>
               </Box>
               <Box flexDirection={"row"} justifyContent={"space-between"}>
-                <Typography fontSize={10}>0:00</Typography>
+                <Typography fontSize={10}>{timeStatus}</Typography>
                 <Typography fontSize={10}>0:29</Typography>
               </Box>
             </Box>
-          </Box>
+          </Box> */}
+
+          <ProgressBar />
 
           <AnimatedLottieView
             style={{
@@ -120,7 +127,7 @@ export const ViewMusic = () => {
             }}
             source={require("@assets/animations/equalizer.json")}
             autoPlay
-            speed={isPlaying ? 0.3 : 0}
+            speed={playing ? 0.3 : 0}
           />
           <Box
             width={windowWidth}
@@ -145,8 +152,8 @@ export const ViewMusic = () => {
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => playPause()}>
-                {isPlaying && (
+              <TouchableOpacity onPress={() => playerPause()}>
+                {playing && (
                   <AnimatedLottieView
                     style={{
                       width: 150,
@@ -157,7 +164,7 @@ export const ViewMusic = () => {
                   />
                 )}
 
-                {!isPlaying && (
+                {!playing && (
                   <AnimatedLottieView
                     style={{
                       width: 150,

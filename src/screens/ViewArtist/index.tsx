@@ -17,6 +17,8 @@ import { TopBar } from "@components/TopBar";
 import { deezer } from "../../services";
 import { PlayerBottom } from "@components/PlayerBottom";
 import { LinearGradient } from "expo-linear-gradient";
+import { useDispatch, useSelector } from "react-redux";
+import { changeMusic, selectPlayerBottom } from "../../redux/playerBottomSlice";
 
 interface IDataArtist {
   name: string;
@@ -34,9 +36,10 @@ interface ITrackArtist {
 }
 
 export const ViewArtist = ({ route }) => {
+  const dispatch = useDispatch();
+  const { sound } = useSelector(selectPlayerBottom);
   const [dataArtist, setDataArtist] = useState<IDataArtist>();
   const [dataTrackArtist, setDataTrackArtist] = useState<ITrackArtist>();
-  const [soundCurrent, setSoundCurrent] = useState({});
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
   const { params } = route;
@@ -51,10 +54,10 @@ export const ViewArtist = ({ route }) => {
     setDataTrackArtist(data);
   };
 
-  const ItemTrack = ({ itemData, index }) => {
+  const ItemTrack = ({ trackData, index }) => {
     const play = async () => {
-      await soundController.setSoundCurrent(itemData, true);
-      setSoundCurrent(itemData);
+      dispatch(changeMusic(trackData));
+      await soundController.play(trackData.preview);
     };
 
     return (
@@ -65,7 +68,7 @@ export const ViewArtist = ({ route }) => {
         <Box mr={"cake"}>
           <Image
             source={{
-              uri: itemData.album.cover_medium,
+              uri: trackData.album.cover_medium,
             }}
             width={56}
             height={56}
@@ -81,8 +84,9 @@ export const ViewArtist = ({ route }) => {
                   fontSize={14}
                   ellipsizeMode="tail"
                   numberOfLines={1}
+                  color={sound.id == trackData.id ? "primary" : "textColor1"}
                 >
-                  {itemData.title}
+                  {trackData.title}
                 </Typography>
               </Box>
 
@@ -92,7 +96,7 @@ export const ViewArtist = ({ route }) => {
                 ellipsizeMode="tail"
                 numberOfLines={1}
               >
-                {itemData.album.title}
+                {trackData.album.title}
               </Typography>
             </TouchableOpacity>
           </Box>
@@ -166,14 +170,14 @@ export const ViewArtist = ({ route }) => {
           <FlatList
             data={dataTrackArtist?.data}
             renderItem={({ item, index }) => (
-              <ItemTrack itemData={item} index={index} />
+              <ItemTrack trackData={item} index={index} />
             )}
             keyExtractor={(item) => item.id}
           />
         )}
       </Box>
 
-      <PlayerBottom soundCurrent={soundCurrent} />
+      <PlayerBottom />
     </Container>
   );
 };

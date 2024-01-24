@@ -4,6 +4,8 @@ import { theme as DefaultTheme, theme } from "@themes/default";
 import Navigator from "./src/navigator";
 import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
+import { Provider } from "react-redux";
+import store from "./src/redux/store";
 
 export default function App() {
   const [loadedFonts] = useFonts({
@@ -16,8 +18,10 @@ export default function App() {
 
   return (
     <ThemeProvider theme={DefaultTheme}>
-      <StatusBar backgroundColor={theme.colors.base} style="light" />
-      <Navigator defaultNavigator={"Home"} />
+      <Provider store={store}>
+        <StatusBar backgroundColor={theme.colors.base} style="light" />
+        <Navigator defaultNavigator={"Home"} />
+      </Provider>
     </ThemeProvider>
   );
 }
