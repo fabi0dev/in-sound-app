@@ -1,5 +1,4 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import musicSlice from "./playerBottomSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   FLUSH,
@@ -12,14 +11,20 @@ import {
   persistStore,
 } from "redux-persist";
 
+import musicSlice from "./playerBottomSlice";
+import playlistSlice from "./playlistSlice";
+import favoritesSlice from "./favoritesSlice";
+
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  safelist: ["music"],
+  safelist: ["music", "playlist", "favorite"],
 };
 
 const reducers = combineReducers({
   music: musicSlice,
+  playlist: playlistSlice,
+  favorites: favoritesSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

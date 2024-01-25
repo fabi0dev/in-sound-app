@@ -2,7 +2,7 @@ import { Box } from "@components/Box";
 import { Container } from "@components/Container";
 import { InputText } from "@components/InputText";
 import { useEffect, useState } from "react";
-import { deezer, helpers, storage } from "../../services";
+import { deezer, helpers, soundController, storage } from "../../services";
 import { Typography } from "@components/Typography";
 import { PlayerBottom } from "@components/PlayerBottom";
 import { FeaturedPlaylists } from "./FeaturedPlaylists";
@@ -12,9 +12,13 @@ import { FeaturedArtists } from "./FeaturedArtists";
 import { ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
 import AnimatedLottieView from "lottie-react-native";
 import { theme } from "@themes/default";
-import Icon from "react-native-vector-icons/Ionicons";
+import Icon from "react-native-vector-icons/AntDesign";
+import { useSelector } from "react-redux";
+import { selectPlayerBottom } from "../../redux/playerBottomSlice";
+import { FeaturedFavorites } from "./FeaturedFavorites";
 
 export const Home = () => {
+  const { sound } = useSelector(selectPlayerBottom);
   const [dataFeatured, setDataFeatured] = useState({});
   const [dataSearch, setDataSearch] = useState("");
   const [textSearch, setTextSearch] = useState("");
@@ -63,6 +67,10 @@ export const Home = () => {
   }, [timeSearch]);
 
   useEffect(() => {
+    if (soundController.uri == "" && sound.preview !== "") {
+      soundController.uri = sound.preview;
+    }
+
     getTopMusics();
   }, []);
 
@@ -97,11 +105,7 @@ export const Home = () => {
         </Box>
 
         {dataSearch && (
-          <Search
-            setDataSearch={setDataSearch}
-            dataSearch={dataSearch as never}
-            textSearch={textSearch}
-          />
+          <Search dataSearch={dataSearch as never} textSearch={textSearch} />
         )}
 
         {!loading && !dataSearch && textSearch === "" && (
@@ -118,15 +122,15 @@ export const Home = () => {
 
               <TouchableOpacity>
                 <Icon
-                  name="settings-sharp"
-                  size={25}
+                  name="menufold"
+                  size={20}
                   color={theme.colors.textColor1}
                 />
               </TouchableOpacity>
             </Box>
 
+            <FeaturedFavorites />
             <FeaturedTracks data={dataFeatured} />
-
             <FeaturedPlaylists data={dataFeatured} />
             <FeaturedArtists data={dataFeatured} />
 

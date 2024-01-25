@@ -1,7 +1,8 @@
 import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
-import { Image, ScrollView, TouchableOpacity } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { PicturePlaylist } from "@components/PicturePlaylist";
 
 interface IPlaylists {
   title: string;
@@ -41,18 +42,10 @@ export const FeaturedPlaylists = ({
                       playlist,
                     })
                   }
-                  style={{ width: 120 }}
                 >
-                  <Image
-                    source={{
-                      uri: playlist.picture_big,
-                    }}
-                    width={120}
-                    height={120}
-                    style={{ borderRadius: 10 }}
-                  />
+                  <PicturePlaylist uri={playlist.picture_big} size="medium" />
 
-                  <Box mt={"prim"} alignItems={"center"}>
+                  <Box mt={"prim"} alignItems={"center"} width={120}>
                     <Typography
                       variant="title2"
                       ellipsizeMode="tail"

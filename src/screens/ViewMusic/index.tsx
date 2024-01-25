@@ -1,7 +1,6 @@
 import { Box } from "@components/Box";
 import { Container } from "@components/Container";
 import { theme } from "@themes/default";
-import { useEffect, useRef, useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import { soundController } from "../../services/SoundController";
 import { Typography } from "@components/Typography";
@@ -15,25 +14,28 @@ import {
 import { StatusBar } from "expo-status-bar";
 import AnimatedLottieView from "lottie-react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { playPause, selectPlayerBottom } from "../../redux/playerBottomSlice";
-import { helpers } from "../../services";
+import {
+  changeMusic,
+  playPause,
+  selectPlayerBottom,
+} from "../../redux/playerBottomSlice";
+import { selectPlaylist } from "../../redux/playlistSlice";
 import { ProgressBar } from "./ProgressBar";
-
-interface IDataSound {
-  preview: string;
-  title: string;
-  artist: {
-    name: string;
-  };
-  album: {
-    title: string;
-    cover_big: string;
-  };
-}
+import { useNavigation } from "@react-navigation/native";
+import {
+  addTrack,
+  removeTrack,
+  selectFavorites,
+} from "../../redux/favoritesSlice";
 
 export const ViewMusic = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
+
   const { sound, playing } = useSelector(selectPlayerBottom);
+  const playlist = useSelector(selectPlaylist);
+  const { tracks } = useSelector(selectFavorites);
+
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
   const sizeImgAlbum = (windowWidth * 60) / 100;
@@ -46,6 +48,54 @@ export const ViewMusic = () => {
       await soundController.pause();
       dispatch(playPause(false));
     }
+  };
+
+  const changeNewMusic = async (obj) => {
+    dispatch(changeMusic(obj));
+    await soundController.play(obj.preview);
+  };
+
+  const prevMusic = async () => {
+    playlist.tracks.data.map(async (item, key) => {
+      try {
+        if (item.id == sound.id) {
+          const prevObj = playlist.tracks.data[key - 1];
+          if (typeof prevObj !== undefined) {
+            await changeNewMusic(prevObj);
+          }
+        }
+      } catch (e) {}
+    });
+  };
+
+  const nextMusic = async () => {
+    playlist.tracks.data.map(async (item, key) => {
+      try {
+        if (item.id == sound.id) {
+          const nextObj = playlist.tracks.data[key + 1];
+          if (typeof nextObj !== undefined) {
+            await changeNewMusic(nextObj);
+          }
+        }
+      } catch (e) {}
+    });
+  };
+
+  const favMusic = async () => {
+    if (!favCheck()) {
+      dispatch(addTrack(sound));
+    } else {
+      dispatch(removeTrack(sound));
+    }
+  };
+
+  const favCheck = () => {
+    const isFav = tracks.data.filter((item: ITrack) => item.id == sound.id);
+
+    if (isFav.length > 0) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -87,13 +137,11 @@ export const ViewMusic = () => {
               </Typography>
             </Box>
             <Box mt={"cake"}>
-              <Typography fontSize={14} color={"textColor1"}>
+              <Typography variant="title2" color={"primary"}>
                 {sound?.artist.name}
               </Typography>
             </Box>
           </Box>
-
-          <ProgressBar />
 
           <AnimatedLottieView
             style={{
@@ -105,6 +153,35 @@ export const ViewMusic = () => {
             autoPlay
             speed={playing ? 0.3 : 0}
           />
+
+          <Box
+            width={windowWidth}
+            alignItems={"center"}
+            alignContent={"center"}
+            justifyContent={"center"}
+            mt={"xx"}
+          >
+            <Box
+              width={100}
+              justifyContent={"space-between"}
+              flexDirection={"row"}
+            >
+              <TouchableOpacity onPress={() => navigation.navigate("Playlist")}>
+                <Icon name="list" size={25} color={theme.colors.textColor1} />
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => favMusic()}>
+                <Icon
+                  name={favCheck() ? "heart" : "heart-outline"}
+                  size={25}
+                  color={theme.colors.textColor1}
+                />
+              </TouchableOpacity>
+            </Box>
+          </Box>
+
+          <ProgressBar />
+
           <Box
             width={windowWidth}
             bottom={0}
@@ -115,12 +192,11 @@ export const ViewMusic = () => {
             mb={"sm"}
           >
             <Box
-              width={windowWidth / 2}
               alignItems={"center"}
               flexDirection={"row"}
               justifyContent={"space-between"}
             >
-              <TouchableOpacity>
+              <TouchableOpacity onPress={prevMusic}>
                 <Icon
                   name="play-skip-back-outline"
                   size={35}
@@ -152,7 +228,7 @@ export const ViewMusic = () => {
                 )}
               </TouchableOpacity>
 
-              <TouchableOpacity>
+              <TouchableOpacity onPress={nextMusic}>
                 <Icon
                   name="play-skip-forward-outline"
                   size={35}

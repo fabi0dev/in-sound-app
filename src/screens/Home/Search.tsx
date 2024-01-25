@@ -8,6 +8,8 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { theme } from "@themes/default";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMusic, selectPlayerBottom } from "../../redux/playerBottomSlice";
+import { PicturePlaylist } from "@components/PicturePlaylist";
+import { PictureTrack } from "@components/PictureTrack";
 
 interface IArtists {
   name: string;
@@ -17,7 +19,6 @@ interface IArtists {
 
 interface ISearch {
   textSearch: string;
-  setDataSearch: Dispatch<SetStateAction<string>>;
   dataSearch: {
     artists?: {
       data: Array<IArtists>;
@@ -26,11 +27,7 @@ interface ISearch {
   };
 }
 
-export const Search = ({
-  textSearch,
-  setDataSearch,
-  dataSearch,
-}: ISearch): JSX.Element => {
+export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
   const dispatch = useDispatch();
   const { sound } = useSelector(selectPlayerBottom);
 
@@ -65,13 +62,10 @@ export const Search = ({
     return (
       <Box flexDirection={"row"} mb={"nano"}>
         <Box mr={"cake"}>
-          <Image
-            source={{
-              uri: trackData.album.cover_medium,
-            }}
-            width={50}
-            height={50}
-            style={{ borderRadius: 10 }}
+          <PictureTrack
+            current={sound.id == trackData.id}
+            uri={trackData.album.cover_medium}
+            size="small"
           />
         </Box>
 
@@ -115,14 +109,7 @@ export const Search = ({
           }
           style={{ width: 100 }}
         >
-          <Image
-            source={{
-              uri: playlist.picture_big,
-            }}
-            width={100}
-            height={100}
-            style={{ borderRadius: 10 }}
-          />
+          <PicturePlaylist uri={playlist.picture_big} size="small" />
 
           <Typography
             mt={"nano"}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ThemeProvider } from "styled-components/native";
 import { theme as DefaultTheme, theme } from "@themes/default";
 import Navigator from "./src/navigator";

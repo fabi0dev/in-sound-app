@@ -30,15 +30,7 @@ export const TopBar = () => {
         <Typography>Tocando agora</Typography>
       </Box>
 
-      <Box>
-        <TouchableOpacity>
-          <Icon
-            name="heart-outline"
-            size={30}
-            color={theme.colors.textColor1}
-          />
-        </TouchableOpacity>
-      </Box>
+      <Box></Box>
     </Box>
   );
 };

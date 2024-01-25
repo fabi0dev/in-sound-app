@@ -1,14 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions } from "react-native";
 import { soundController } from "../../services/SoundController";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectPlayerBottom } from "../../redux/playerBottomSlice";
 import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
 import { helpers } from "../../services";
 
 export const ProgressBar = () => {
-  const dispatch = useDispatch();
   const { playing, sound } = useSelector(selectPlayerBottom);
   const [timeStatus, setTimeStatus] = useState("0:00");
   const [timeTotal, setTimeTotal] = useState("0:00");
@@ -16,22 +15,24 @@ export const ProgressBar = () => {
   const windowWidth = Dimensions.get("window").width;
 
   const getProgress = () => {
-    soundController.fnController.setOnPlaybackStatusUpdate((status) => {
-      const time = helpers.convertMlInTime(status.positionMillis);
-      const percent = helpers.getPercentTimeMusic(
-        status.durationMillis,
-        status.positionMillis
-      );
-      setTimeStatus(time);
-      setTimePercent(percent);
-      setTimeTotal(helpers.convertMlInTime(status.durationMillis));
-    });
+    if (playing) {
+      soundController.fnController.setOnPlaybackStatusUpdate((status) => {
+        const time = helpers.convertMlInTime(status.positionMillis);
+        const percent = helpers.getPercentTimeMusic(
+          status.durationMillis,
+          status.positionMillis
+        );
+        setTimeStatus(time);
+        setTimePercent(percent);
+        setTimeTotal(helpers.convertMlInTime(status.durationMillis));
+      });
+    }
   };
 
   useEffect(() => {
     getProgress();
     return () => {};
-  }, [playing]);
+  }, [playing, sound]);
 
   return (
     <Box>

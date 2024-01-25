@@ -19,6 +19,7 @@ import { PlayerBottom } from "@components/PlayerBottom";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMusic, selectPlayerBottom } from "../../redux/playerBottomSlice";
+import { PictureTrack } from "@components/PictureTrack";
 
 interface IDataArtist {
   name: string;
@@ -66,13 +67,10 @@ export const ViewArtist = ({ route }) => {
           <Typography fontSize={10}>{index + 1}.</Typography>
         </Box>
         <Box mr={"cake"}>
-          <Image
-            source={{
-              uri: trackData.album.cover_medium,
-            }}
-            width={56}
-            height={56}
-            style={{ borderRadius: 10 }}
+          <PictureTrack
+            current={sound.id == trackData.id}
+            uri={trackData.album.cover_medium}
+            size="small"
           />
         </Box>
 
@@ -115,8 +113,6 @@ export const ViewArtist = ({ route }) => {
       </Box>
     );
   };
-
-  const init = async () => {};
 
   useEffect(() => {
     getDataArtist(params.artist.id);

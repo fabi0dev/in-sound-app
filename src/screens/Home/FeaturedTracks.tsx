@@ -1,12 +1,11 @@
 import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
-import { theme } from "@themes/default";
-import { Image, ImageBackground, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { soundController } from "../../services/SoundController";
 import { useNavigation } from "@react-navigation/native";
 import { changeMusic, selectPlayerBottom } from "../../redux/playerBottomSlice";
 import { useDispatch, useSelector } from "react-redux";
-import AnimatedLottieView from "lottie-react-native";
+import { PictureTrack } from "@components/PictureTrack";
 
 interface ITracks {
   id: string;
@@ -64,31 +63,13 @@ export const FeaturedTracks = ({ data }: IFeaturedTracks): JSX.Element => {
               <Box width={120} key={key} mb={"cake"}>
                 <TouchableOpacity onPress={() => play(track)}>
                   <Box alignItems={"center"} justifyContent={"center"}>
-                    <ImageBackground
-                      source={{
-                        uri: track.artist.picture_medium,
-                      }}
-                      borderRadius={10}
-                      style={{
-                        width: 120,
-                        height: 120,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                      opacity={sound.id == track.id ? 0.5 : 1}
-                    >
-                      {sound.id == track.id && (
-                        <AnimatedLottieView
-                          style={{
-                            width: 30,
-                            height: 30,
-                          }}
-                          source={require("@assets/animations/sound-equalizer.json")}
-                          autoPlay
-                          speed={playing ? 1 : 0}
-                        />
-                      )}
-                    </ImageBackground>
+                    <PictureTrack
+                      current={sound.id == track.id}
+                      uri={track.artist.picture_medium}
+                      size="medium"
+                      animationCurrent={true}
+                    />
+
                     <Box alignItems={"center"}>
                       <Typography
                         ellipsizeMode="tail"

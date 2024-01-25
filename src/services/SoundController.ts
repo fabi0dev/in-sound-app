@@ -1,7 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Audio } from "expo-av";
-import { helpers } from "./Helpers";
-
 interface ISoundData {
   id: string;
   preview: string;
@@ -17,8 +15,8 @@ interface ISoundData {
 }
 
 const soundController = {
-  fnController: {},
   uri: "",
+  fnController: {},
   setUri: (uri: string) => {
     soundController.uri = uri;
   },

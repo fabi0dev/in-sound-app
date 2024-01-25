@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 interface ISound {
   id: string;
   preview: string;

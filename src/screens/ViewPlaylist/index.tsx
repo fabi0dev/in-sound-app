@@ -8,7 +8,6 @@ import { Typography } from "@components/Typography";
 import {
   Dimensions,
   FlatList,
-  Image,
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
@@ -20,8 +19,16 @@ import AnimatedLottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMusic, selectPlayerBottom } from "../../redux/playerBottomSlice";
+import { PictureTrack } from "@components/PictureTrack";
+import { changePlaylist } from "../../redux/playlistSlice";
 
+interface Itrack {
+  id: string;
+  title: string;
+  preview: string;
+}
 interface IPlaylist {
+  id: string;
   title: string;
   link: string;
   picture: string;
@@ -34,10 +41,7 @@ interface IPlaylist {
   nb_tracks: number;
   description: string;
   tracks: {
-    data: Array<{
-      id: string;
-      title: string;
-    }>;
+    data: Array<Itrack>;
   };
 }
 
@@ -54,28 +58,32 @@ export const ViewPlaylist = ({ route }) => {
     setDataPlaylist(data);
   };
 
-  const ItemTrack = ({ trackData, index }) => {
-    const play = async () => {
-      dispatch(changeMusic(trackData));
-      await soundController.play(trackData.preview);
-    };
+  const play = async (trackData) => {
+    dispatch(changeMusic(trackData));
+    await soundController.play(trackData.preview);
+  };
 
+  const playPlaylist = async () => {
+    if (typeof dataPlaylist?.tracks.data[0] !== undefined) {
+      await play(dataPlaylist?.tracks.data[0]);
+      dispatch(changePlaylist(dataPlaylist));
+    }
+  };
+
+  const ItemTrack = ({ trackData, index }) => {
     return (
       <Box flexDirection={"row"} p={"prim"} mb={"nano"}>
         <Box mr={"cake"} justifyContent={"center"}>
           <Typography fontSize={10}>{index + 1}.</Typography>
         </Box>
 
-        <TouchableOpacity onPress={() => play()}>
+        <TouchableOpacity onPress={() => play(trackData)}>
           <Box flexDirection={"row"}>
             <Box mr={"cake"}>
-              <Image
-                source={{
-                  uri: trackData.album.cover_medium,
-                }}
-                width={56}
-                height={56}
-                style={{ borderRadius: 10 }}
+              <PictureTrack
+                current={sound.id == trackData.id}
+                uri={trackData.album.cover_medium}
+                size="small"
               />
             </Box>
 
@@ -111,8 +119,6 @@ export const ViewPlaylist = ({ route }) => {
       </Box>
     );
   };
-
-  const init = async () => {};
 
   useEffect(() => {
     getPlaylist(params.playlist.id);
@@ -169,7 +175,7 @@ export const ViewPlaylist = ({ route }) => {
       </ImageBackground>
 
       <Box width={"90%"} alignSelf={"center"} alignItems={"flex-end"} mt={-57}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => playPlaylist()}>
           <AnimatedLottieView
             style={{
               width: 120,
