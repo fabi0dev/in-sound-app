@@ -1,12 +1,11 @@
 import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
 import { ScrollView, TouchableOpacity } from "react-native";
-import { soundController } from "../../services/SoundController";
-import { useNavigation } from "@react-navigation/native";
+import { soundController } from "@services/index";
 import { useDispatch, useSelector } from "react-redux";
 import { PictureTrack } from "@components/PictureTrack";
-import { changeMusic, selectPlayerBottom } from "../../redux/playerBottomSlice";
-import { selectFavorites } from "../../redux/favoritesSlice";
+import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
+import { selectFavorites } from "@redux/favoritesSlice";
 
 interface ITracks {
   id: string;
@@ -31,7 +30,7 @@ export const FeaturedFavorites = (): JSX.Element => {
 
   const play = async (trackData: ITracks) => {
     dispatch(changeMusic(trackData));
-    await soundController.play(trackData.preview);
+    await soundController.load(trackData.preview);
   };
 
   return (

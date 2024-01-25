@@ -4,7 +4,7 @@ import { theme } from "@themes/default";
 import { useEffect, useState } from "react";
 import IconMaterial from "react-native-vector-icons/MaterialCommunityIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import { soundController } from "../../services/SoundController";
+import { soundController, deezer } from "@services/index";
 import { Typography } from "@components/Typography";
 import {
   Dimensions,
@@ -14,14 +14,13 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { TopBar } from "@components/TopBar";
-import { deezer } from "../../services";
 import { PlayerBottom } from "@components/PlayerBottom";
 import AnimatedLottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
-import { changeMusic, selectPlayerBottom } from "../../redux/playerBottomSlice";
+import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
 import { PictureTrack } from "@components/PictureTrack";
-import { changePlaylist } from "../../redux/playlistSlice";
+import { changePlaylist } from "@redux/playlistSlice";
 
 interface Itrack {
   id: string;
@@ -61,7 +60,7 @@ export const ViewPlaylist = ({ route }) => {
 
   const play = async (trackData) => {
     dispatch(changeMusic(trackData));
-    await soundController.play(trackData.preview);
+    await soundController.load(trackData.preview);
   };
 
   const playPlaylist = async () => {
@@ -192,7 +191,7 @@ export const ViewPlaylist = ({ route }) => {
         </LinearGradient>
       </ImageBackground>
 
-      <Box bg="base" p={"nano"}>
+      <Box p={"nano"}>
         <Box
           width={"100%"}
           alignSelf={"center"}

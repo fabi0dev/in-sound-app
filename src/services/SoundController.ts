@@ -1,18 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Audio } from "expo-av";
-interface ISoundData {
-  id: string;
-  preview: string;
-  title_short: string;
-  artist: {
-    name: string;
-  };
-  album: {
-    title: string;
-    cover_medium: string;
-    cover_small: string;
-  };
-}
 
 const soundController = {
   uri: "",
@@ -20,14 +6,8 @@ const soundController = {
   setUri: (uri: string) => {
     soundController.uri = uri;
   },
-  play: async (uri: string = "") => {
-    if (uri !== "") {
-      soundController.uri = uri;
-    }
-
-    if (soundController.uri == "") {
-      return;
-    }
+  load: async (uri: string) => {
+    soundController.uri = uri;
 
     if (soundController.fnController?.unloadAsync != undefined) {
       await soundController.fnController?.pauseAsync();
@@ -35,43 +15,36 @@ const soundController = {
     }
 
     try {
-      const playSound = await Audio.Sound.createAsync({
+      const { sound, status } = await Audio.Sound.createAsync({
         uri: soundController.uri,
       });
 
-      await playSound.sound.playAsync();
-      soundController.fnController = playSound.sound;
+      console.log(status);
+
+      await sound.playAsync();
+      soundController.fnController = sound;
+    } catch (e) {
+      console.log(`cannot play the sound file`, e);
+    }
+  },
+
+  play: async () => {
+    try {
+      if (typeof soundController.fnController.playAsync !== undefined) {
+        await soundController.fnController.playAsync();
+      }
     } catch (e) {
       console.log(`cannot play the sound file`, e);
     }
   },
   pause: async () => {
     try {
-      await soundController.fnController.pauseAsync();
+      if (typeof soundController.fnController.pauseAsync !== undefined) {
+        await soundController.fnController.pauseAsync();
+      }
     } catch (e) {
-      console.log(`cannot play the sound file`, e);
+      console.log(`cannot pause the sound file`, e);
     }
-  },
-  setSoundCurrent: async (soundData: ISoundData, play = false) => {
-    const storage = await AsyncStorage.setItem(
-      `SoundCurrent`,
-      JSON.stringify(soundData)
-    );
-
-    if (play) {
-      soundController.play();
-    }
-
-    return storage;
-  },
-  getSoundCurrent: async (): Promise<ISoundData> => {
-    const item = await AsyncStorage.getItem(`SoundCurrent`);
-    return JSON.parse(item as string);
-  },
-  getStatusAsync: async () => {
-    try {
-      return await soundController.fnController.getStatusAsync();
-    } catch (e) {}
   },
 };
 

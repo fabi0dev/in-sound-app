@@ -3,7 +3,7 @@ import { Box } from "../Box/Box";
 import { ImageBackground } from "react-native";
 import AnimatedLottieView from "lottie-react-native";
 import { useSelector } from "react-redux";
-import { selectPlayerBottom } from "../../redux/playerBottomSlice";
+import { selectPlayerBottom } from "@redux/playerBottomSlice";
 
 interface IPictureTrack {
   uri: string;

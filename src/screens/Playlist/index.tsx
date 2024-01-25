@@ -4,9 +4,9 @@ import { PictureTrack } from "@components/PictureTrack";
 import { TopBar } from "@components/TopBar";
 import { Typography } from "@components/Typography";
 import { useDispatch, useSelector } from "react-redux";
-import { changeMusic, selectPlayerBottom } from "../../redux/playerBottomSlice";
-import { soundController } from "../../services";
-import { selectPlaylist } from "../../redux/playlistSlice";
+import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
+import { soundController } from "@services/index";
+import { selectPlaylist } from "@redux/playlistSlice";
 import { FlatList, TouchableOpacity } from "react-native";
 
 export const Playlist = () => {
@@ -17,7 +17,7 @@ export const Playlist = () => {
   const ItemTrack = ({ trackData, index }) => {
     const play = async () => {
       dispatch(changeMusic(trackData));
-      await soundController.play(trackData.preview);
+      await soundController.load(trackData.preview);
     };
 
     return (

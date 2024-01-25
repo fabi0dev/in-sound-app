@@ -1,9 +1,9 @@
 import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
 import { TouchableOpacity } from "react-native";
-import { soundController } from "../../services/SoundController";
+import { soundController } from "@services/index";
 import { useNavigation } from "@react-navigation/native";
-import { changeMusic, selectPlayerBottom } from "../../redux/playerBottomSlice";
+import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { PictureTrack } from "@components/PictureTrack";
 
@@ -39,7 +39,7 @@ export const FeaturedTracks = ({ data }: IFeaturedTracks): JSX.Element => {
 
   const play = async (trackData: ITracks) => {
     dispatch(changeMusic(trackData));
-    await soundController.play(trackData.preview);
+    await soundController.load(trackData.preview);
   };
 
   return (

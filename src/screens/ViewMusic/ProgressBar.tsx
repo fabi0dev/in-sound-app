@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Dimensions } from "react-native";
-import { soundController } from "../../services/SoundController";
+import { soundController, helpers } from "@services/index";
 import { useSelector } from "react-redux";
-import { selectPlayerBottom } from "../../redux/playerBottomSlice";
+import { selectPlayerBottom } from "@redux/playerBottomSlice";
 import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
-import { helpers } from "../../services";
 
 export const ProgressBar = () => {
   const { playing, sound } = useSelector(selectPlayerBottom);
@@ -16,16 +15,21 @@ export const ProgressBar = () => {
 
   const getProgress = () => {
     if (playing) {
-      soundController.fnController.setOnPlaybackStatusUpdate((status) => {
-        const time = helpers.convertMlInTime(status.positionMillis);
-        const percent = helpers.getPercentTimeMusic(
-          status.durationMillis,
-          status.positionMillis
-        );
-        setTimeStatus(time);
-        setTimePercent(percent);
-        setTimeTotal(helpers.convertMlInTime(status.durationMillis));
-      });
+      if (
+        typeof soundController.fnController.setOnPlaybackStatusUpdate !==
+        undefined
+      ) {
+        soundController.fnController.setOnPlaybackStatusUpdate((status) => {
+          const time = helpers.convertMlInTime(status.positionMillis);
+          const percent = helpers.getPercentTimeMusic(
+            status.durationMillis,
+            status.positionMillis
+          );
+          setTimeStatus(time);
+          setTimePercent(percent);
+          setTimeTotal(helpers.convertMlInTime(status.durationMillis));
+        });
+      }
     }
   };
 

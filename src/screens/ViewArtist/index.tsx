@@ -3,7 +3,7 @@ import { Container } from "@components/Container";
 import { theme } from "@themes/default";
 import { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
-import { soundController } from "../../services/SoundController";
+import { soundController } from "@services/index";
 import { Typography } from "@components/Typography";
 import {
   Dimensions,
@@ -14,11 +14,11 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { TopBar } from "@components/TopBar";
-import { deezer } from "../../services";
+import { deezer } from "@services/index";
 import { PlayerBottom } from "@components/PlayerBottom";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
-import { changeMusic, selectPlayerBottom } from "../../redux/playerBottomSlice";
+import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
 import { PictureTrack } from "@components/PictureTrack";
 
 interface IDataArtist {
@@ -58,7 +58,7 @@ export const ViewArtist = ({ route }) => {
   const ItemTrack = ({ trackData, index }) => {
     const play = async () => {
       dispatch(changeMusic(trackData));
-      await soundController.play(trackData.preview);
+      await soundController.load(trackData.preview);
     };
 
     return (

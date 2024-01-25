@@ -3,11 +3,11 @@ import { Typography } from "@components/Typography";
 import { Image, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { deezer, soundController } from "../../services";
+import { deezer, soundController } from "@services/index";
 import Icon from "react-native-vector-icons/Ionicons";
 import { theme } from "@themes/default";
 import { useDispatch, useSelector } from "react-redux";
-import { changeMusic, selectPlayerBottom } from "../../redux/playerBottomSlice";
+import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
 import { PicturePlaylist } from "@components/PicturePlaylist";
 import { PictureTrack } from "@components/PictureTrack";
 
@@ -56,7 +56,7 @@ export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
   const ItemTrack = ({ trackData }) => {
     const play = async () => {
       dispatch(changeMusic(trackData));
-      await soundController.play(trackData.preview);
+      await soundController.load(trackData.preview);
     };
 
     return (

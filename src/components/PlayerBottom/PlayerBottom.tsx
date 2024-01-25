@@ -5,11 +5,11 @@ import { theme } from "@themes/default";
 import { Dimensions } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Typography } from "../";
-import { soundController } from "../../services/SoundController";
+import { soundController } from "@services/index";
 import { useNavigation } from "@react-navigation/native";
 import AnimatedLottieView from "lottie-react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { playPause, selectPlayerBottom } from "../../redux/playerBottomSlice";
+import { playPause, selectPlayerBottom } from "@redux/playerBottomSlice";
 
 export const PlayerBottom = () => {
   const navigation = useNavigation();

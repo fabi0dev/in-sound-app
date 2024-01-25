@@ -2,7 +2,7 @@ import { Box } from "@components/Box";
 import { Container } from "@components/Container";
 import { theme } from "@themes/default";
 import Icon from "react-native-vector-icons/Ionicons";
-import { soundController } from "../../services/SoundController";
+import { soundController } from "@services/index";
 import { Typography } from "@components/Typography";
 import { TopBar } from "./TopBar";
 import {
@@ -18,15 +18,11 @@ import {
   changeMusic,
   playPause,
   selectPlayerBottom,
-} from "../../redux/playerBottomSlice";
-import { selectPlaylist } from "../../redux/playlistSlice";
+} from "@redux/playerBottomSlice";
+import { selectPlaylist } from "@redux/playlistSlice";
 import { ProgressBar } from "./ProgressBar";
 import { useNavigation } from "@react-navigation/native";
-import {
-  addTrack,
-  removeTrack,
-  selectFavorites,
-} from "../../redux/favoritesSlice";
+import { addTrack, removeTrack, selectFavorites } from "@redux/favoritesSlice";
 
 export const ViewMusic = () => {
   const dispatch = useDispatch();
@@ -42,7 +38,7 @@ export const ViewMusic = () => {
 
   const playerPause = async () => {
     if (!playing) {
-      await soundController.play();
+      await soundController.load();
       dispatch(playPause(true));
     } else {
       await soundController.pause();
@@ -52,7 +48,7 @@ export const ViewMusic = () => {
 
   const changeNewMusic = async (obj) => {
     dispatch(changeMusic(obj));
-    await soundController.play(obj.preview);
+    await soundController.load(obj.preview);
   };
 
   const prevMusic = async () => {
@@ -211,6 +207,7 @@ export const ViewMusic = () => {
                     source={require("@assets/animations/pause.json")}
                     autoPlay
                     loop={false}
+                    speed={0}
                   />
                 )}
 

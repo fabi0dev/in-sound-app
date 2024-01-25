@@ -2,7 +2,6 @@ import { Box } from "@components/Box";
 import { Container } from "@components/Container";
 import { InputText } from "@components/InputText";
 import { useEffect, useState } from "react";
-import { deezer, helpers, soundController, storage } from "../../services";
 import { Typography } from "@components/Typography";
 import { PlayerBottom } from "@components/PlayerBottom";
 import { FeaturedPlaylists } from "./FeaturedPlaylists";
@@ -14,8 +13,9 @@ import AnimatedLottieView from "lottie-react-native";
 import { theme } from "@themes/default";
 import Icon from "react-native-vector-icons/AntDesign";
 import { useSelector } from "react-redux";
-import { selectPlayerBottom } from "../../redux/playerBottomSlice";
+import { selectPlayerBottom } from "@redux/playerBottomSlice";
 import { FeaturedFavorites } from "./FeaturedFavorites";
+import { storage, helpers, deezer, soundController } from "@services/index";
 
 export const Home = () => {
   const { sound } = useSelector(selectPlayerBottom);
