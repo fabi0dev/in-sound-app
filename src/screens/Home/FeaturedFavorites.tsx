@@ -37,9 +37,11 @@ export const FeaturedFavorites = (): JSX.Element => {
   return (
     <Box>
       <Box mt={"nano"} mb={"nano"}>
-        <Typography marginBottom={"nano"} variant="title1">
-          Suas favoritas
-        </Typography>
+        {tracks?.data.length > 0 && (
+          <Typography marginBottom={"nano"} variant="title1">
+            Suas favoritas
+          </Typography>
+        )}
 
         <ScrollView horizontal={true}>
           <Box

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { Image, ImageBackground, TouchableOpacity } from "react-native";
 import { Box } from "../Box/Box";
 import { theme } from "@themes/default";
@@ -43,11 +43,17 @@ export const PlayerBottom = () => {
       <ImageBackground
         source={{ uri: sound?.album.cover_medium }}
         resizeMode="cover"
-        opacity={0.1}
-        blurRadius={4}
+        opacity={0.4}
+        blurRadius={10}
         style={{ width: "100%" }}
       >
-        <Box p={"nano"} pt={"nano"} pb={"nano"} flexDirection={"row"}>
+        <Box
+          p={"nano"}
+          pt={"cake"}
+          pb={"cake"}
+          justifyContent={"space-between"}
+          flexDirection={"row"}
+        >
           <Box alignItems={"center"} flexDirection={"row"}>
             <Box mr={"cake"}>
               <TouchableOpacity

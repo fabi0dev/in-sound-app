@@ -108,8 +108,7 @@ export const ViewMusic = () => {
         style={{
           flex: 1,
         }}
-        opacity={0.5}
-        blurRadius={5}
+        blurRadius={50}
       >
         <TopBar />
 
@@ -147,7 +146,6 @@ export const ViewMusic = () => {
             style={{
               width: "100%",
               position: "absolute",
-              elevation: -1,
             }}
             source={require("@assets/animations/equalizer.json")}
             autoPlay
@@ -198,8 +196,8 @@ export const ViewMusic = () => {
             >
               <TouchableOpacity onPress={prevMusic}>
                 <Icon
-                  name="play-skip-back-outline"
-                  size={35}
+                  name="play-skip-back"
+                  size={30}
                   color={theme.colors.textColor1}
                 />
               </TouchableOpacity>
@@ -230,8 +228,8 @@ export const ViewMusic = () => {
 
               <TouchableOpacity onPress={nextMusic}>
                 <Icon
-                  name="play-skip-forward-outline"
-                  size={35}
+                  name="play-skip-forward"
+                  size={30}
                   color={theme.colors.textColor1}
                 />
               </TouchableOpacity>

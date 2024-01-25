@@ -3,6 +3,7 @@ import { Container } from "@components/Container";
 import { theme } from "@themes/default";
 import { useEffect, useState } from "react";
 import IconMaterial from "react-native-vector-icons/MaterialCommunityIcons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { soundController } from "../../services/SoundController";
 import { Typography } from "@components/Typography";
 import {
@@ -73,12 +74,11 @@ export const ViewPlaylist = ({ route }) => {
   const ItemTrack = ({ trackData, index }) => {
     return (
       <Box flexDirection={"row"} p={"prim"} mb={"nano"}>
-        <Box mr={"cake"} justifyContent={"center"}>
-          <Typography fontSize={10}>{index + 1}.</Typography>
-        </Box>
-
         <TouchableOpacity onPress={() => play(trackData)}>
           <Box flexDirection={"row"}>
+            <Box justifyContent={"center"} mr={"nano"}>
+              <Typography variant="title3">{index + 1}</Typography>
+            </Box>
             <Box mr={"cake"}>
               <PictureTrack
                 current={sound.id == trackData.id}
@@ -167,49 +167,63 @@ export const ViewPlaylist = ({ route }) => {
               </Typography>
             </Box>
 
-            <Typography mt={"nano"} color={"textColor2"} variant="title2">
-              {dataPlaylist?.fans} fãs
-            </Typography>
+            <Box mb={"nano"} flexDirection={"row"} alignItems={"center"}>
+              <IconMaterial
+                name="music-circle"
+                size={14}
+                color={theme.colors.textColor1}
+              />
+
+              <Typography ml={"prim"} mr={"nano"} variant="title3">
+                {dataPlaylist?.nb_tracks} Músicas
+              </Typography>
+
+              <AntDesign
+                name="like1"
+                size={12}
+                color={theme.colors.textColor1}
+              />
+
+              <Typography ml={"prim"} mr={"nano"} variant="title3">
+                {dataPlaylist?.fans} fãs
+              </Typography>
+            </Box>
           </Box>
         </LinearGradient>
       </ImageBackground>
 
-      <Box width={"90%"} alignSelf={"center"} alignItems={"flex-end"} mt={-57}>
-        <TouchableOpacity onPress={() => playPlaylist()}>
-          <AnimatedLottieView
-            style={{
-              width: 120,
-              height: 120,
-            }}
-            source={require("@assets/animations/play.json")}
-            autoPlay
-            loop={false}
-          />
-        </TouchableOpacity>
-      </Box>
-
-      <Box p={"nano"} mt={-55}>
-        <Box mb={"nano"} flexDirection={"row"} alignItems={"center"}>
-          <IconMaterial
-            name="music-circle"
-            size={25}
-            color={theme.colors.primary}
-          />
-
-          <Typography ml={"cake"} variant="title2">
-            {dataPlaylist?.nb_tracks} Músicas
-          </Typography>
+      <Box bg="base" p={"nano"}>
+        <Box
+          width={"100%"}
+          alignSelf={"center"}
+          alignItems={"flex-end"}
+          position={"absolute"}
+          mt={-57}
+        >
+          <TouchableOpacity onPress={() => playPlaylist()}>
+            <AnimatedLottieView
+              style={{
+                width: 120,
+                height: 120,
+              }}
+              source={require("@assets/animations/play.json")}
+              autoPlay
+              loop={false}
+            />
+          </TouchableOpacity>
         </Box>
 
-        {dataPlaylist?.tracks.data && (
-          <FlatList
-            data={dataPlaylist?.tracks.data}
-            renderItem={({ item, index }) => (
-              <ItemTrack trackData={item} index={index} />
-            )}
-            keyExtractor={(item) => item.id}
-          />
-        )}
+        <Box>
+          {dataPlaylist?.tracks.data && (
+            <FlatList
+              data={dataPlaylist?.tracks.data}
+              renderItem={({ item, index }) => (
+                <ItemTrack trackData={item} index={index} />
+              )}
+              keyExtractor={(item) => item.id}
+            />
+          )}
+        </Box>
       </Box>
 
       <PlayerBottom />
