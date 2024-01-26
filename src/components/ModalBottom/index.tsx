@@ -1,7 +1,8 @@
 import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
-import { Modal as ModalReact } from "react-native";
+import { Modal as ModalReact, TouchableWithoutFeedback } from "react-native";
 import React from "react";
+import { BlurView } from "expo-blur";
 
 interface IModal {
   title?: string;
@@ -23,7 +24,15 @@ export const ModalBottom = ({
       transparent={true}
       visible={visible}
     >
-      <Box flex={1} justifyContent={"flex-end"}>
+      <TouchableWithoutFeedback onPress={() => onClose()}>
+        <BlurView
+          style={{ height: "100%", width: "100%", position: "absolute" }}
+          tint="dark"
+          intensity={10}
+        />
+      </TouchableWithoutFeedback>
+
+      <Box position={"absolute"} width={"100%"} flex={1} bottom={0}>
         <Box bg={"base2"}>
           <Box p={"nano"} alignItems={"center"}>
             <Typography variant="title2">{title}</Typography>

@@ -35,64 +35,64 @@ export const FeaturedFavorites = (): JSX.Element => {
 
   return (
     <Box>
-      <Box mt={"nano"} mb={"nano"}>
-        {tracks?.data.length > 0 && (
+      {tracks?.data.length > 0 && (
+        <Box mt={"nano"} mb={"nano"}>
           <Typography marginBottom={"nano"} variant="title1">
             Suas favoritas
           </Typography>
-        )}
 
-        <ScrollView horizontal={true}>
-          <Box
-            flexDirection={"row"}
-            flexWrap={"wrap"}
-            justifyContent={"space-between"}
-          >
-            {tracks?.data.map((track: ITracks, key) => {
-              if (key >= 6) {
-                return;
-              }
+          <ScrollView horizontal={true}>
+            <Box
+              flexDirection={"row"}
+              flexWrap={"wrap"}
+              justifyContent={"space-between"}
+            >
+              {tracks?.data.map((track: ITracks, key) => {
+                if (key >= 6) {
+                  return;
+                }
 
-              return (
-                <Box width={85} key={key} mb={"cake"}>
-                  <TouchableOpacity onPress={() => play(track)}>
-                    <Box alignItems={"center"} justifyContent={"center"}>
-                      <PictureTrack
-                        current={sound.id == track.id}
-                        uri={track.album.cover_medium}
-                        size="small"
-                        animationCurrent={true}
-                      />
+                return (
+                  <Box width={85} key={key} mb={"cake"}>
+                    <TouchableOpacity onPress={() => play(track)}>
+                      <Box alignItems={"center"} justifyContent={"center"}>
+                        <PictureTrack
+                          current={sound.id == track.id}
+                          uri={track.album.cover_medium}
+                          size="small"
+                          animationCurrent={true}
+                        />
 
-                      <Box alignItems={"center"}>
-                        <Typography
-                          ellipsizeMode="tail"
-                          numberOfLines={1}
-                          mt={"prim"}
-                          variant="title2"
-                          color={
-                            sound.id == track.id ? "primary" : "textColor1"
-                          }
-                        >
-                          {track.title}
-                        </Typography>
+                        <Box alignItems={"center"}>
+                          <Typography
+                            ellipsizeMode="tail"
+                            numberOfLines={1}
+                            mt={"prim"}
+                            variant="title2"
+                            color={
+                              sound.id == track.id ? "primary" : "textColor1"
+                            }
+                          >
+                            {track.title}
+                          </Typography>
 
-                        <Typography
-                          mt={"prim"}
-                          color={"textColor2"}
-                          variant="title3"
-                        >
-                          {track.artist.name}
-                        </Typography>
+                          <Typography
+                            mt={"prim"}
+                            color={"textColor2"}
+                            variant="title3"
+                          >
+                            {track.artist.name}
+                          </Typography>
+                        </Box>
                       </Box>
-                    </Box>
-                  </TouchableOpacity>
-                </Box>
-              );
-            })}
-          </Box>
-        </ScrollView>
-      </Box>
+                    </TouchableOpacity>
+                  </Box>
+                );
+              })}
+            </Box>
+          </ScrollView>
+        </Box>
+      )}
     </Box>
   );
 };

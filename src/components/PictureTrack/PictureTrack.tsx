@@ -36,7 +36,7 @@ export const PictureTrack: React.FC<IPictureTrack> = ({
         source={{
           uri,
         }}
-        borderRadius={10}
+        borderRadius={5}
         style={{
           width: sizeImg,
           height: sizeImg,

@@ -2,7 +2,6 @@ import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
 import { TouchableOpacity } from "react-native";
 import { soundController } from "@services/index";
-import { useNavigation } from "@react-navigation/native";
 import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { PictureTrack } from "@components/PictureTrack";
@@ -33,9 +32,8 @@ interface IFeaturedTracks {
 }
 
 export const FeaturedTracks = ({ data }: IFeaturedTracks): JSX.Element => {
-  const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { sound, playing } = useSelector(selectPlayerBottom);
+  const { sound } = useSelector(selectPlayerBottom);
 
   const play = async (trackData: ITracks) => {
     dispatch(changeMusic(trackData));
@@ -62,21 +60,21 @@ export const FeaturedTracks = ({ data }: IFeaturedTracks): JSX.Element => {
             return (
               <Box width={120} key={key} mb={"cake"}>
                 <TouchableOpacity onPress={() => play(track)}>
-                  <Box alignItems={"center"} justifyContent={"center"}>
+                  <Box justifyContent={"center"}>
                     <PictureTrack
-                      current={sound.id == track.id}
+                      current={sound?.id == track.id}
                       uri={track.artist.picture_medium}
                       size="medium"
                       animationCurrent={true}
                     />
 
-                    <Box alignItems={"center"}>
+                    <Box>
                       <Typography
                         ellipsizeMode="tail"
                         numberOfLines={1}
                         mt={"prim"}
                         variant="title2"
-                        color={sound.id == track.id ? "primary" : "textColor1"}
+                        color={sound?.id == track.id ? "primary" : "textColor1"}
                       >
                         {track.title}
                       </Typography>

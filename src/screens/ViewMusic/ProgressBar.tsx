@@ -5,8 +5,11 @@ import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
 import Slider from "@react-native-community/slider";
 import { theme } from "@themes/default";
+import { useDispatch } from "react-redux";
+import { playPause } from "@redux/playerBottomSlice";
 
 export const ProgressBar = () => {
+  const dispatch = useDispatch();
   const [timeStatus, setTimeStatus] = useState({
     total: "0:00",
     current: "0:00",
@@ -19,6 +22,8 @@ export const ProgressBar = () => {
       let status = await soundController.fnController.getStatusAsync();
       const equivalent = (status.durationMillis * percent) / 100;
       soundController.fnController.setPositionAsync(equivalent);
+      soundController.play();
+      dispatch(playPause(true));
     }
   };
 
@@ -61,10 +66,7 @@ export const ProgressBar = () => {
             maximumTrackTintColor={theme.colors.base}
             thumbTintColor={theme.colors.primary}
             value={timePercent}
-            onValueChange={(value) => {
-              console.log(value);
-              setPositionTrack(value);
-            }}
+            onValueChange={(value) => setPositionTrack(value)}
           />
 
           <Box flexDirection={"row"} justifyContent={"space-between"}>

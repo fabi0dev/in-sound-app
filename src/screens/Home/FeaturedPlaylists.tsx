@@ -45,7 +45,7 @@ export const FeaturedPlaylists = ({
                 >
                   <PicturePlaylist uri={playlist.picture_big} size="medium" />
 
-                  <Box mt={"prim"} alignItems={"center"} width={120}>
+                  <Box mt={"prim"} width={120}>
                     <Typography
                       variant="title2"
                       ellipsizeMode="tail"

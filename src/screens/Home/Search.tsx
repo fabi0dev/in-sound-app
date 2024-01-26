@@ -42,6 +42,7 @@ export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
   const getPlaylist = async () => {
     try {
       const data = await deezer.searchPlaylist(textSearch);
+      console.log(data);
       setDataPlaylist(data);
     } catch (e) {}
   };
@@ -173,21 +174,12 @@ export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
         mt={"xxxs"}
       >
         <Typography variant="title1">{title}</Typography>
-        <TouchableOpacity onPress={fn}>
-          <Box flexDirection={"row"}>
-            <Typography variant="title2">Ver todos</Typography>
-            <Icon
-              name="chevron-forward"
-              size={18}
-              color={theme.colors.textColor1}
-            />
-          </Box>
-        </TouchableOpacity>
       </Box>
     );
   };
 
   useEffect(() => {
+    console.log("ok");
     getPlaylist();
     getArtist();
   }, [dataSearch]);

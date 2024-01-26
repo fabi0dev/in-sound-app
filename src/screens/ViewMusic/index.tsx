@@ -2,14 +2,13 @@ import { Box } from "@components/Box";
 import { Container } from "@components/Container";
 import { theme } from "@themes/default";
 import Icon from "react-native-vector-icons/Ionicons";
-import { helpers, soundController } from "@services/index";
+import { soundController } from "@services/index";
 import { Typography } from "@components/Typography";
 import { TopBar } from "./TopBar";
 import {
   Dimensions,
   Image,
   ImageBackground,
-  Modal,
   TouchableOpacity,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
@@ -39,7 +38,7 @@ export const ViewMusic = () => {
 
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
-  const sizeImgAlbum = (windowWidth * 60) / 100;
+  const sizeImgAlbum = (windowWidth * 55) / 100;
 
   const playerPause = async () => {
     if (!playing) {
@@ -69,20 +68,40 @@ export const ViewMusic = () => {
     });
   };
 
-  const nextMusic = async (trackRef = "") => {
-    playlist.tracks.data.map(async (track, key) => {
-      try {
-        if (track.id == (trackRef || sound.id)) {
-          const nextTrack = playlist.tracks.data[key + 1];
-          if (typeof nextTrack !== undefined) {
-            await changeNewMusic(nextTrack);
-          } else {
-            await soundController.pause();
-            dispatch(playPause(false));
-          }
-        }
-      } catch (e) {}
+  const isLastMusic = () => {
+    let isLast = false;
+
+    playlist.tracks.data.map((track, key) => {
+      if (track.id == sound.id) {
+        isLast = key + 1 >= playlist.tracks.data.length;
+      }
     });
+
+    return isLast;
+  };
+
+  const nextMusic = async (trackRef = "") => {
+    if (!isLastMusic()) {
+      playlist.tracks.data.map(async (track, key) => {
+        try {
+          if (track.id == (trackRef || sound.id)) {
+            const newPos = key + 1;
+            const nextTrack = playlist.tracks.data[newPos];
+
+            if (newPos >= playlist.tracks.data.length) {
+              return;
+            }
+
+            if (typeof nextTrack !== undefined) {
+              await changeNewMusic(nextTrack);
+            } else {
+              await soundController.pause();
+              dispatch(playPause(false));
+            }
+          }
+        } catch (e) {}
+      });
+    }
   };
 
   const favMusic = async () => {
@@ -144,7 +163,7 @@ export const ViewMusic = () => {
               style={{
                 borderRadius: sizeImgAlbum,
                 borderWidth: 10,
-                borderColor: theme.colors.lightOpacity1,
+                borderColor: theme.colors.lightOpacity2,
                 marginTop: -(windowHeight / 5),
               }}
             />
@@ -186,13 +205,13 @@ export const ViewMusic = () => {
               flexDirection={"row"}
             >
               <TouchableOpacity onPress={() => navigation.navigate("Playlist")}>
-                <Icon name="list" size={25} color={theme.colors.textColor1} />
+                <Icon name="list" size={30} color={theme.colors.textColor1} />
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => favMusic()}>
                 <Icon
                   name={favCheck() ? "heart" : "heart-outline"}
-                  size={25}
+                  size={30}
                   color={theme.colors.textColor1}
                 />
               </TouchableOpacity>
@@ -200,7 +219,7 @@ export const ViewMusic = () => {
               <TouchableOpacity onPress={() => addInPlaylist()}>
                 <Icon
                   name={checkAddInPlaylist() ? "checkmark-sharp" : "add"}
-                  size={25}
+                  size={30}
                   color={theme.colors.textColor1}
                 />
               </TouchableOpacity>
@@ -222,11 +241,12 @@ export const ViewMusic = () => {
               alignItems={"center"}
               flexDirection={"row"}
               justifyContent={"space-between"}
+              width={"60%"}
             >
               <TouchableOpacity onPress={prevMusic}>
                 <Icon
                   name="play-skip-back"
-                  size={30}
+                  size={40}
                   color={theme.colors.textColor1}
                 />
               </TouchableOpacity>
@@ -259,8 +279,12 @@ export const ViewMusic = () => {
               <TouchableOpacity onPress={() => nextMusic()}>
                 <Icon
                   name="play-skip-forward"
-                  size={30}
-                  color={theme.colors.textColor1}
+                  size={40}
+                  color={
+                    !isLastMusic()
+                      ? theme.colors.textColor1
+                      : theme.colors.textColor2
+                  }
                 />
               </TouchableOpacity>
             </Box>

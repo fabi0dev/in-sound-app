@@ -15,6 +15,7 @@ import {
   selectPlayerBottom,
 } from "@redux/playerBottomSlice";
 import { selectPlaylist } from "@redux/playlistSlice";
+import { BlurView } from "expo-blur";
 
 interface IPlayerBottom {
   autoControlTrack?: boolean;
@@ -35,7 +36,14 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
     playlist.tracks.data.map(async (track, key) => {
       try {
         if (track.id == sound.id) {
-          const nextTrack = playlist.tracks.data[key + 1];
+          const newPos = key + 1;
+          const nextTrack = playlist.tracks.data[newPos];
+
+          if (newPos >= playlist.tracks.data.length) {
+            dispatch(playPause(false));
+            return;
+          }
+
           if (typeof nextTrack !== undefined) {
             await changeNewMusic(nextTrack);
           } else {
@@ -57,7 +65,7 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
     }
   };
 
-  if (sound.preview === "") {
+  if (sound == undefined || sound?.preview === "") {
     return null;
   }
 
@@ -77,11 +85,11 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
 
           if (percent == 100) {
             clearInterval(interval);
-            nextMusic();
+            await nextMusic();
           }
         }
       }
-    }, 500);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [sound]);
@@ -89,7 +97,6 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
   return (
     <Box
       width={Dimensions.get("window").width}
-      bg={"base2"}
       position={"absolute"}
       bottom={0}
       alignItems={"center"}
@@ -99,80 +106,82 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
       <ImageBackground
         source={{ uri: sound?.album.cover_medium }}
         resizeMode="cover"
-        opacity={0.4}
-        blurRadius={10}
+        opacity={0.8}
+        blurRadius={50}
         style={{ width: "100%" }}
       >
-        <Box
-          p={"nano"}
-          pt={"cake"}
-          pb={"cake"}
-          justifyContent={"space-between"}
-          flexDirection={"row"}
-        >
-          <Box alignItems={"center"} flexDirection={"row"}>
-            <Box mr={"cake"}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("ViewArtist", {
-                    artist: sound?.artist,
-                  })
-                }
-              >
-                <Image
-                  width={45}
-                  height={45}
-                  source={{ uri: sound?.album.cover_small }}
-                  style={{
-                    borderRadius: 10,
-                  }}
+        <BlurView tint="dark" intensity={10}>
+          <Box
+            p={"nano"}
+            pt={"cake"}
+            pb={"cake"}
+            justifyContent={"space-between"}
+            flexDirection={"row"}
+          >
+            <Box alignItems={"center"} flexDirection={"row"}>
+              <Box mr={"cake"}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("ViewArtist", {
+                      artist: sound?.artist,
+                    })
+                  }
+                >
+                  <Image
+                    width={45}
+                    height={45}
+                    source={{ uri: sound?.album.cover_medium }}
+                    style={{
+                      borderRadius: 10,
+                    }}
+                  />
+                </TouchableOpacity>
+              </Box>
+
+              <Box width={"70%"}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("ViewMusic" as never)}
+                >
+                  <Box alignItems={"center"} flexDirection={"row"}>
+                    <Typography
+                      variant="bold"
+                      fontSize={14}
+                      ellipsizeMode="tail"
+                      numberOfLines={1}
+                      color={"primary"}
+                    >
+                      {sound?.title_short || ""}
+                    </Typography>
+
+                    <AnimatedLottieView
+                      style={{
+                        width: 15,
+                        height: 15,
+                        marginTop: -3,
+                      }}
+                      source={require("@assets/animations/sound-equalizer.json")}
+                      autoPlay
+                      speed={playing ? 1 : 0}
+                    />
+                  </Box>
+                  <Typography fontSize={12} color={"textColor2"}>
+                    {sound?.artist.name || ""}
+                  </Typography>
+                </TouchableOpacity>
+              </Box>
+            </Box>
+
+            <Box flexDirection={"row"}>
+              <TouchableOpacity onPress={() => playerPause()}>
+                <Icon
+                  name={playing ? "pause-circle" : "play-circle"}
+                  size={45}
+                  color={theme.colors.textColor1}
                 />
               </TouchableOpacity>
             </Box>
-
-            <Box width={"70%"}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate("ViewMusic" as never)}
-              >
-                <Box alignItems={"center"} flexDirection={"row"}>
-                  <Typography
-                    variant="bold"
-                    fontSize={14}
-                    ellipsizeMode="tail"
-                    numberOfLines={1}
-                    color={"primary"}
-                  >
-                    {sound?.title_short || ""}
-                  </Typography>
-
-                  <AnimatedLottieView
-                    style={{
-                      width: 15,
-                      height: 15,
-                      marginTop: -3,
-                    }}
-                    source={require("@assets/animations/sound-equalizer.json")}
-                    autoPlay
-                    speed={playing ? 1 : 0}
-                  />
-                </Box>
-                <Typography fontSize={12} color={"textColor2"}>
-                  {sound?.artist.name || ""}
-                </Typography>
-              </TouchableOpacity>
-            </Box>
           </Box>
-
-          <Box flexDirection={"row"}>
-            <TouchableOpacity onPress={() => playerPause()}>
-              <Icon
-                name={playing ? "pause-circle" : "play-circle"}
-                size={45}
-                color={theme.colors.textColor1}
-              />
-            </TouchableOpacity>
-          </Box>
-        </Box>
+        </BlurView>
       </ImageBackground>
     </Box>
   );

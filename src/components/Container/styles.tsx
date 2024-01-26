@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ColorProps, SpaceProps, variant } from "styled-system";
-import { SafeAreaView, View } from "react-native";
+import { View } from "react-native";
 import { theme as themeDefault } from "@themes/default";
 
 export type ContainerTypes = "primary" | "clear";
@@ -25,7 +25,7 @@ const containerVariants = variant<ContainerProps>({
   },
 });
 
-export const BoxContainer = styled(SafeAreaView)<ContainerProps>`
+export const BoxContainer = styled(View)<ContainerProps>`
   ${() => ({
     flex: 1,
   })}

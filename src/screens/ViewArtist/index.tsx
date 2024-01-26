@@ -19,6 +19,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
 import { PictureTrack } from "@components/PictureTrack";
+import {
+  addTrackInPlaylist,
+  removeTrackPlaylist,
+  selectPlaylist,
+} from "@redux/playlistSlice";
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 interface IDataArtist {
   name: string;
@@ -38,6 +44,8 @@ interface ITrackArtist {
 export const ViewArtist = ({ route }) => {
   const dispatch = useDispatch();
   const { sound } = useSelector(selectPlayerBottom);
+  const playlist = useSelector(selectPlaylist);
+
   const [dataArtist, setDataArtist] = useState<IDataArtist>();
   const [dataTrackArtist, setDataTrackArtist] = useState<ITrackArtist>();
   const windowHeight = Dimensions.get("window").height;
@@ -52,6 +60,23 @@ export const ViewArtist = ({ route }) => {
   const getTrackList = async (id: string) => {
     const data = await deezer.getArtistTopTrack(id);
     setDataTrackArtist(data);
+  };
+
+  const checkAddInPlaylist = (id) => {
+    const isAdd = playlist.tracks.data.filter((item) => id == item.id);
+
+    if (isAdd.length > 0) {
+      return true;
+    }
+    return false;
+  };
+
+  const addInPlaylist = (id) => {
+    if (!checkAddInPlaylist(id)) {
+      dispatch(addTrackInPlaylist(sound));
+    } else {
+      dispatch(removeTrackPlaylist(sound));
+    }
   };
 
   const ItemTrack = ({ trackData, index }) => {
@@ -104,8 +129,14 @@ export const ViewArtist = ({ route }) => {
             alignItems={"center"}
             justifyContent={"center"}
           >
-            <TouchableOpacity>
-              <Icon name="add" size={30} color={theme.colors.textColor1} />
+            <TouchableOpacity onPress={() => addInPlaylist(trackData.id)}>
+              <Icon
+                name={
+                  checkAddInPlaylist(trackData.id) ? "checkmark-sharp" : "add"
+                }
+                size={25}
+                color={theme.colors.textColor1}
+              />
             </TouchableOpacity>
           </Box>
         </Box>
@@ -150,16 +181,29 @@ export const ViewArtist = ({ route }) => {
               {dataArtist?.name}
             </Typography>
 
-            <Typography mt={"nano"} color={"textColor2"} variant="title2">
-              {dataArtist?.nb_fan} fãs
-            </Typography>
+            <Box
+              mt={"nano"}
+              mb={"nano"}
+              flexDirection={"row"}
+              alignItems={"center"}
+            >
+              <AntDesign
+                name="like1"
+                size={12}
+                color={theme.colors.textColor1}
+              />
+
+              <Typography ml={"prim"} mr={"nano"} variant="title3">
+                {dataArtist?.nb_fan} fãs
+              </Typography>
+            </Box>
           </Box>
         </LinearGradient>
       </ImageBackground>
 
       <Box p={"nano"}>
         <Box mb={"nano"} alignItems={"center"}>
-          <Typography variant="title1">Mais tocadas</Typography>
+          <Typography variant="title2">Mais ouvidas</Typography>
         </Box>
         {dataTrackArtist?.data && (
           <FlatList
