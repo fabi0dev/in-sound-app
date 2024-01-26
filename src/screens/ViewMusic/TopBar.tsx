@@ -14,7 +14,7 @@ export const TopBar = () => {
       alignItems={"center"}
       justifyContent={"space-between"}
       p={"prim"}
-      mt={"xs"}
+      mt={"xx"}
     >
       <Box>
         <TouchableOpacity onPress={() => navigation.goBack()}>

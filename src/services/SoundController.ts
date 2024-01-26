@@ -1,8 +1,9 @@
-import { Audio } from "expo-av";
+import { AVPlaybackStatus, Audio } from "expo-av";
+import { Sound } from "expo-av/build/Audio";
 
 const soundController = {
   uri: "",
-  fnController: {},
+  fnController: <Sound>{},
   setUri: (uri: string) => {
     soundController.uri = uri;
   },
@@ -15,11 +16,9 @@ const soundController = {
     }
 
     try {
-      const { sound, status } = await Audio.Sound.createAsync({
+      const { sound } = await Audio.Sound.createAsync({
         uri: soundController.uri,
       });
-
-      console.log(status);
 
       await sound.playAsync();
       soundController.fnController = sound;
@@ -27,7 +26,6 @@ const soundController = {
       console.log(`cannot play the sound file`, e);
     }
   },
-
   play: async () => {
     try {
       if (typeof soundController.fnController.playAsync !== undefined) {

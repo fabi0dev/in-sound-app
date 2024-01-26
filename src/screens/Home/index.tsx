@@ -67,10 +67,6 @@ export const Home = () => {
   }, [timeSearch]);
 
   useEffect(() => {
-    if (soundController.uri == "" && sound.preview !== "") {
-      soundController.uri = sound.preview;
-    }
-
     getTopMusics();
   }, []);
 
@@ -145,7 +141,7 @@ export const Home = () => {
         )}
       </ScrollView>
 
-      <PlayerBottom />
+      <PlayerBottom autoControlTrack={true} />
     </Container>
   );
 };

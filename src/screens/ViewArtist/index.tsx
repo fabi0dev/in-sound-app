@@ -8,7 +8,6 @@ import { Typography } from "@components/Typography";
 import {
   Dimensions,
   FlatList,
-  Image,
   ImageBackground,
   TouchableOpacity,
 } from "react-native";

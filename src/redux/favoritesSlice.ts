@@ -48,12 +48,6 @@ export const slice = createSlice({
         (item: ITrack) => item.id != payload.id
       );
 
-      if (data.length == 0) {
-        return {
-          ...state,
-        };
-      }
-
       return {
         ...state,
         tracks: {

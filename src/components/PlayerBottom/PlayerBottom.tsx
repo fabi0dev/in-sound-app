@@ -1,20 +1,51 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, ImageBackground, TouchableOpacity } from "react-native";
-import { Box } from "../Box/Box";
+import { Box } from "../";
+import { Typography } from "../";
 import { theme } from "@themes/default";
 import { Dimensions } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Typography } from "../";
-import { soundController } from "@services/index";
+import { helpers, soundController } from "@services/index";
 import { useNavigation } from "@react-navigation/native";
 import AnimatedLottieView from "lottie-react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { playPause, selectPlayerBottom } from "@redux/playerBottomSlice";
+import {
+  changeMusic,
+  playPause,
+  selectPlayerBottom,
+} from "@redux/playerBottomSlice";
+import { selectPlaylist } from "@redux/playlistSlice";
 
-export const PlayerBottom = () => {
+interface IPlayerBottom {
+  autoControlTrack?: boolean;
+}
+
+export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { playing, sound } = useSelector(selectPlayerBottom);
+  const playlist = useSelector(selectPlaylist);
+
+  const changeNewMusic = async (track) => {
+    dispatch(changeMusic(track));
+    await soundController.load(track.preview);
+  };
+
+  const nextMusic = async () => {
+    playlist.tracks.data.map(async (track, key) => {
+      try {
+        if (track.id == sound.id) {
+          const nextTrack = playlist.tracks.data[key + 1];
+          if (typeof nextTrack !== undefined) {
+            await changeNewMusic(nextTrack);
+          } else {
+            await soundController.pause();
+            dispatch(playPause(false));
+          }
+        }
+      } catch (e) {}
+    });
+  };
 
   const playerPause = async () => {
     if (!playing) {
@@ -29,6 +60,31 @@ export const PlayerBottom = () => {
   if (sound.preview === "") {
     return null;
   }
+
+  useEffect(() => {
+    let interval = setInterval(async () => {
+      if (
+        soundController.fnController.getStatusAsync !== undefined &&
+        autoControlTrack == true
+      ) {
+        let status = await soundController.fnController.getStatusAsync();
+
+        if (status.isLoaded) {
+          const percent = helpers.getPercentTimeMusic(
+            status.durationMillis,
+            status.positionMillis
+          );
+
+          if (percent == 100) {
+            clearInterval(interval);
+            nextMusic();
+          }
+        }
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [sound]);
 
   return (
     <Box

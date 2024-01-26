@@ -5,3 +5,4 @@ export * from "./InputText";
 export * from "./Container";
 export * from "./PicturePlaylist";
 export * from "./PictureTrack";
+export * from "./ModalBottom";
