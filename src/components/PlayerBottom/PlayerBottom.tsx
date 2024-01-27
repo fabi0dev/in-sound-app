@@ -15,7 +15,6 @@ import {
   selectPlayerBottom,
 } from "@redux/playerBottomSlice";
 import { selectPlaylist } from "@redux/playlistSlice";
-import { BlurView } from "expo-blur";
 
 interface IPlayerBottom {
   autoControlTrack?: boolean;
@@ -37,6 +36,7 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
       try {
         if (track.id == sound.id) {
           const newPos = key + 1;
+          const firstTrack = playlist.tracks.data[0];
           const nextTrack = playlist.tracks.data[newPos];
 
           if (newPos >= playlist.tracks.data.length) {
@@ -46,6 +46,8 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
 
           if (typeof nextTrack !== undefined) {
             await changeNewMusic(nextTrack);
+          } else if (firstTrack !== undefined) {
+            await changeNewMusic(firstTrack);
           } else {
             await soundController.pause();
             dispatch(playPause(false));
@@ -106,82 +108,74 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
       <ImageBackground
         source={{ uri: sound?.album.cover_medium }}
         resizeMode="cover"
-        opacity={0.8}
-        blurRadius={50}
+        opacity={1}
+        blurRadius={100}
         style={{ width: "100%" }}
       >
-        <BlurView tint="dark" intensity={10}>
-          <Box
-            p={"nano"}
-            pt={"cake"}
-            pb={"cake"}
-            justifyContent={"space-between"}
-            flexDirection={"row"}
-          >
-            <Box alignItems={"center"} flexDirection={"row"}>
-              <Box mr={"cake"}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("ViewArtist", {
-                      artist: sound?.artist,
-                    })
-                  }
-                >
-                  <Image
-                    width={45}
-                    height={45}
-                    source={{ uri: sound?.album.cover_medium }}
-                    style={{
-                      borderRadius: 10,
-                    }}
-                  />
-                </TouchableOpacity>
-              </Box>
-
-              <Box width={"70%"}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("ViewMusic" as never)}
-                >
-                  <Box alignItems={"center"} flexDirection={"row"}>
-                    <Typography
-                      variant="bold"
-                      fontSize={14}
-                      ellipsizeMode="tail"
-                      numberOfLines={1}
-                      color={"primary"}
-                    >
-                      {sound?.title_short || ""}
-                    </Typography>
-
-                    <AnimatedLottieView
-                      style={{
-                        width: 15,
-                        height: 15,
-                        marginTop: -3,
-                      }}
-                      source={require("@assets/animations/sound-equalizer.json")}
-                      autoPlay
-                      speed={playing ? 1 : 0}
-                    />
-                  </Box>
-                  <Typography fontSize={12} color={"textColor2"}>
-                    {sound?.artist.name || ""}
-                  </Typography>
-                </TouchableOpacity>
-              </Box>
-            </Box>
-
-            <Box flexDirection={"row"}>
-              <TouchableOpacity onPress={() => playerPause()}>
-                <Icon
-                  name={playing ? "pause-circle" : "play-circle"}
-                  size={45}
-                  color={theme.colors.textColor1}
+        <Box p={"cake"} justifyContent={"space-between"} flexDirection={"row"}>
+          <Box alignItems={"center"} flexDirection={"row"}>
+            <Box mr={"cake"}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("ViewArtist", {
+                    artist: sound?.artist,
+                  })
+                }
+              >
+                <Image
+                  width={45}
+                  height={45}
+                  source={{ uri: sound?.album.cover_medium }}
+                  style={{
+                    borderRadius: 10,
+                  }}
                 />
               </TouchableOpacity>
             </Box>
+
+            <Box width={"75%"}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("ViewMusic" as never)}
+              >
+                <Box alignItems={"center"} flexDirection={"row"}>
+                  <Typography
+                    variant="bold"
+                    fontSize={14}
+                    ellipsizeMode="tail"
+                    numberOfLines={1}
+                    color={"primary"}
+                  >
+                    {sound?.title_short || ""}
+                  </Typography>
+
+                  <AnimatedLottieView
+                    style={{
+                      width: 15,
+                      height: 15,
+                      marginTop: -3,
+                    }}
+                    source={require("@assets/animations/sound-equalizer.json")}
+                    autoPlay
+                    speed={playing ? 1 : 0}
+                  />
+                </Box>
+                <Typography fontSize={12} color={"textColor1"}>
+                  {sound?.artist.name || ""}
+                </Typography>
+              </TouchableOpacity>
+            </Box>
           </Box>
-        </BlurView>
+
+          <Box flexDirection={"row"} width={"15%"}>
+            <TouchableOpacity onPress={() => playerPause()}>
+              <Icon
+                name={playing ? "pause-circle" : "play-circle"}
+                size={45}
+                color={theme.colors.textColor1}
+              />
+            </TouchableOpacity>
+          </Box>
+        </Box>
       </ImageBackground>
     </Box>
   );

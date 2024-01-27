@@ -36,7 +36,7 @@ export const FeaturedFavorites = (): JSX.Element => {
   return (
     <Box>
       {tracks?.data.length > 0 && (
-        <Box mt={"nano"} mb={"nano"}>
+        <Box mt={"nano"}>
           <Typography marginBottom={"nano"} variant="title1">
             Suas favoritas
           </Typography>
@@ -53,24 +53,24 @@ export const FeaturedFavorites = (): JSX.Element => {
                 }
 
                 return (
-                  <Box width={85} key={key} mb={"cake"}>
+                  <Box width={90} key={key} mb={"cake"}>
                     <TouchableOpacity onPress={() => play(track)}>
-                      <Box alignItems={"center"} justifyContent={"center"}>
+                      <Box justifyContent={"center"}>
                         <PictureTrack
-                          current={sound.id == track.id}
+                          current={sound?.id == track.id}
                           uri={track.album.cover_medium}
-                          size="small"
+                          size="medium-small"
                           animationCurrent={true}
                         />
 
-                        <Box alignItems={"center"}>
+                        <Box width={75}>
                           <Typography
                             ellipsizeMode="tail"
                             numberOfLines={1}
                             mt={"prim"}
                             variant="title2"
                             color={
-                              sound.id == track.id ? "primary" : "textColor1"
+                              sound?.id == track.id ? "primary" : "textColor1"
                             }
                           >
                             {track.title}

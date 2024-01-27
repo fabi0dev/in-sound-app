@@ -22,8 +22,6 @@ export const TopBar = ({ title, goBack, optionFn }: ITopBar) => {
       justifyContent={"space-between"}
       p={"prim"}
       mt={"xs"}
-      pl={"nano"}
-      pr={"nano"}
       position={"absolute"}
       top={0}
       left={0}
@@ -33,7 +31,7 @@ export const TopBar = ({ title, goBack, optionFn }: ITopBar) => {
         <TouchableOpacity onPress={goBack ? goBack : () => navigation.goBack()}>
           <Ionicons
             name="chevron-back-outline"
-            size={35}
+            size={40}
             color={theme.colors.textColor1}
           />
         </TouchableOpacity>
@@ -45,13 +43,15 @@ export const TopBar = ({ title, goBack, optionFn }: ITopBar) => {
 
       <Box>
         {typeof optionFn == "function" && (
-          <TouchableOpacity onPress={optionFn}>
-            <Ionicons
-              name="ellipsis-vertical-outline"
-              size={22}
-              color={theme.colors.textColor1}
-            />
-          </TouchableOpacity>
+          <Box mr={"nano"}>
+            <TouchableOpacity onPress={optionFn}>
+              <Ionicons
+                name="ellipsis-horizontal"
+                size={22}
+                color={theme.colors.textColor1}
+              />
+            </TouchableOpacity>
+          </Box>
         )}
       </Box>
     </Box>

@@ -4,44 +4,42 @@ import { ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { PicturePlaylist } from "@components/PicturePlaylist";
 
-interface IPlaylists {
+interface IAlbums {
   title: string;
   tracklist: string;
-  picture_big: string;
+  cover_medium: string;
 }
-interface IFeaturedPlaylists {
+interface IFeaturedAlbums {
   data: {
-    playlists?: {
-      data: Array<IPlaylists>;
+    albums?: {
+      data: Array<IAlbums>;
       total: number;
     };
   };
 }
 
-export const FeaturedPlaylists = ({
-  data,
-}: IFeaturedPlaylists): JSX.Element => {
+export const FeaturedAlbums = ({ data }: IFeaturedAlbums): JSX.Element => {
   const navigation = useNavigation();
 
   return (
     <Box>
       <Box mt={"xs"} mb={"xx"}>
         <Typography marginBottom={"nano"} variant="title1">
-          Playlists
+          Albuns
         </Typography>
 
         <ScrollView horizontal={true}>
-          {data?.playlists?.data.map((playlist: IPlaylists, key) => {
+          {data?.albums?.data.map((album: IAlbums, key) => {
             return (
               <Box key={key} pr={"xxxs"} pt={"none"}>
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate("ViewPlaylist", {
-                      playlist,
+                    navigation.navigate("ViewAlbum", {
+                      album,
                     })
                   }
                 >
-                  <PicturePlaylist uri={playlist.picture_big} size="medium" />
+                  <PicturePlaylist uri={album.cover_medium} size="medium" />
 
                   <Box mt={"prim"} width={120}>
                     <Typography
@@ -49,7 +47,7 @@ export const FeaturedPlaylists = ({
                       ellipsizeMode="tail"
                       numberOfLines={1}
                     >
-                      {playlist.title}
+                      {album.title}
                     </Typography>
                   </Box>
                 </TouchableOpacity>

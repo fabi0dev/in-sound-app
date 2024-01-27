@@ -21,8 +21,8 @@ export const theme = {
     textColor1: "#fff",
     textColor2: "#a4a2ae",
     textColor3: "#8da6af",
-    base: "#1c2426",
-    base2: "#0f0f11",
+    base: "#0e101b",
+    base2: "#0b0c10",
 
     lightOpacity1: "rgba(173,173,173,.1)",
     lightOpacity2: "rgba(173,173,173,.2)",

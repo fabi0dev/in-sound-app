@@ -9,7 +9,7 @@ interface IPictureTrack {
   uri: string;
   current: boolean;
   animationCurrent?: boolean;
-  size: "small" | "medium";
+  size: "small" | "medium-small" | "medium";
 }
 
 export const PictureTrack: React.FC<IPictureTrack> = ({
@@ -25,6 +25,9 @@ export const PictureTrack: React.FC<IPictureTrack> = ({
   switch (size) {
     case "small":
       sizeImg = 56;
+      break;
+    case "medium-small":
+      sizeImg = 75;
       break;
     case "medium":
       sizeImg = 110;

@@ -15,6 +15,7 @@ export const ProgressBar = () => {
     current: "0:00",
   });
   const [timePercent, setTimePercent] = useState(0);
+  const [slideValue, setSlideValue] = useState(0);
   const windowWidth = Dimensions.get("window").width;
 
   const setPositionTrack = async (percent: number) => {
@@ -66,7 +67,8 @@ export const ProgressBar = () => {
             maximumTrackTintColor={theme.colors.base}
             thumbTintColor={theme.colors.primary}
             value={timePercent}
-            onValueChange={(value) => setPositionTrack(value)}
+            onValueChange={(value) => setSlideValue(value)}
+            onTouchEnd={() => setPositionTrack(slideValue)}
           />
 
           <Box flexDirection={"row"} justifyContent={"space-between"}>

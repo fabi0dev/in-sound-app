@@ -22,11 +22,9 @@ export const FeaturedArtists = ({ data }: IFeaturedArtists): JSX.Element => {
 
   return (
     <Box>
-      <Box>{!data?.artists && <Typography>Nenhuma playlist</Typography>}</Box>
-
       <Box mt={"xs"} mb={"xx"}>
         <Typography marginBottom={"nano"} variant="title1">
-          Artistas
+          Artistas em destaque
         </Typography>
 
         <ScrollView horizontal={true}>
@@ -44,16 +42,16 @@ export const FeaturedArtists = ({ data }: IFeaturedArtists): JSX.Element => {
                     source={{
                       uri: artist.picture_big,
                     }}
-                    width={80}
-                    height={80}
+                    width={135}
+                    height={135}
                     style={{ borderRadius: 100 }}
                   />
-                  <Box alignItems={"center"} width={80}>
+                  <Box alignItems={"center"} width={120}>
                     <Typography
                       mt={"nano"}
                       ellipsizeMode="tail"
                       numberOfLines={1}
-                      variant="title3"
+                      variant="title2"
                     >
                       {artist.name}
                     </Typography>

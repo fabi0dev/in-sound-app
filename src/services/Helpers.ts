@@ -3,16 +3,12 @@ const helpers = {
     const d = new Date();
     const hour = d.getHours();
 
-    if (hour >= 18 || hour <= 5) {
-      return "Olá, boa noite!";
-    }
-
-    if (hour >= 6 || hour <= 11) {
-      return "Olá, bom dia!";
-    }
-
-    if (hour >= 12 || hour <= 17) {
-      return "Olá, boa tarde!";
+    if ((hour >= 0 && hour <= 5) || (hour >= 18 && hour <= 23)) {
+      return "Olá, Boa noite!";
+    } else if (hour >= 6 && hour < 12) {
+      return "Olá, Bom dia!";
+    } else if (hour >= 12 && hour < 18) {
+      return "Olá, Boa tarde!";
     }
   },
   convertMlInTime: (ml: number) => {

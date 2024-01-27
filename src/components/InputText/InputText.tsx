@@ -8,6 +8,7 @@ interface InputTextProps extends TextInputProps {
   label?: string;
   error?: string;
   leftIcon?: JSX.Element;
+  rightIcon?: JSX.Element;
   width?: number;
   heigth?: number;
   bg?: typeof theme.colors;
@@ -19,6 +20,7 @@ export const InputText: React.FC<InputTextProps> = ({
   label,
   error,
   leftIcon,
+  rightIcon,
   width,
   heigth,
   onFocus,
@@ -50,6 +52,7 @@ export const InputText: React.FC<InputTextProps> = ({
           }}
           {...props}
         />
+        <Box mr={"nano"}>{rightIcon}</Box>
       </Box>
     </Box>
   );

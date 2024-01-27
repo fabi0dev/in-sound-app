@@ -134,6 +134,34 @@ const deezer = {
       console.log("error load track artist", error);
     }
   },
+  getGenre: async () => {
+    const request = axios.create({
+      baseURL: "https://api.deezer.com",
+    });
+
+    try {
+      const { data } = await request.get(`genre`);
+
+      return data;
+    } catch (error) {
+      //error
+      console.log("error load genre", error);
+    }
+  },
+  getAlbum: async (id: number) => {
+    const request = axios.create({
+      baseURL: "https://api.deezer.com",
+    });
+
+    try {
+      const { data } = await request.get(`album/${id}`);
+
+      return data;
+    } catch (error) {
+      //error
+      console.log("error load genre", error);
+    }
+  },
 };
 
 export { deezer };

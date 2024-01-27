@@ -9,6 +9,7 @@ import { PictureTrack } from "@components/PictureTrack";
 interface ITracks {
   id: string;
   title: string;
+  title_short: string;
   preview: string;
   title_short: string;
   artist: {
@@ -53,36 +54,34 @@ export const FeaturedTracks = ({ data }: IFeaturedTracks): JSX.Element => {
           justifyContent={"space-between"}
         >
           {data?.tracks?.data.map((track: ITracks, key) => {
-            if (key >= 6) {
-              return;
-            }
-
             return (
-              <Box width={120} key={key} mb={"cake"}>
+              <Box key={key} mb={"cake"}>
                 <TouchableOpacity onPress={() => play(track)}>
-                  <Box justifyContent={"center"}>
-                    <PictureTrack
-                      current={sound?.id == track.id}
-                      uri={track.artist.picture_medium}
-                      size="medium"
-                      animationCurrent={true}
-                    />
+                  <Box flexDirection={"row"}>
+                    <Box mr={"cake"}>
+                      <PictureTrack
+                        current={sound?.id == track.id}
+                        uri={track.album.cover_medium}
+                        size="small"
+                        animationCurrent={true}
+                      />
+                    </Box>
 
-                    <Box>
+                    <Box width={"80%"}>
                       <Typography
                         ellipsizeMode="tail"
                         numberOfLines={1}
                         mt={"prim"}
-                        variant="title2"
+                        variant="titleMusic"
                         color={sound?.id == track.id ? "primary" : "textColor1"}
                       >
-                        {track.title}
+                        {track.title !== "" ? track.title : track.title_short}
                       </Typography>
 
                       <Typography
                         mt={"prim"}
                         color={"textColor2"}
-                        variant="title3"
+                        variant="title2"
                       >
                         {track.artist.name}
                       </Typography>

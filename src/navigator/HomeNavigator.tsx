@@ -3,7 +3,9 @@ import {
   ViewMusic,
   ViewArtist,
   ViewPlaylist,
+  ViewAlbum,
   Playlist,
+  ViewGenre,
 } from "../screens";
 
 export default {
@@ -11,5 +13,7 @@ export default {
   ViewMusic,
   ViewArtist,
   ViewPlaylist,
+  ViewAlbum,
   Playlist,
+  ViewGenre,
 };

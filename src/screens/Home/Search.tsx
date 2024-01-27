@@ -42,7 +42,6 @@ export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
   const getPlaylist = async () => {
     try {
       const data = await deezer.searchPlaylist(textSearch);
-      console.log(data);
       setDataPlaylist(data);
     } catch (e) {}
   };
@@ -61,18 +60,18 @@ export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
     };
 
     return (
-      <Box flexDirection={"row"} mb={"nano"}>
-        <Box mr={"cake"}>
-          <PictureTrack
-            current={sound.id == trackData.id}
-            uri={trackData.album.cover_medium}
-            size="small"
-          />
-        </Box>
+      <TouchableOpacity onPress={() => play()}>
+        <Box flexDirection={"row"} mb={"nano"}>
+          <Box mr={"cake"}>
+            <PictureTrack
+              current={sound.id == trackData.id}
+              uri={trackData.album.cover_medium}
+              size="small"
+            />
+          </Box>
 
-        <Box flexDirection={"row"}>
-          <Box justifyContent={"center"} flexDirection={"column"}>
-            <TouchableOpacity onPress={() => play()}>
+          <Box flexDirection={"row"}>
+            <Box justifyContent={"center"} flexDirection={"column"}>
               <Box mb={"prim"}>
                 <Typography
                   fontSize={14}
@@ -92,10 +91,10 @@ export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
               >
                 {trackData.artist.name}
               </Typography>
-            </TouchableOpacity>
+            </Box>
           </Box>
         </Box>
-      </Box>
+      </TouchableOpacity>
     );
   };
 
@@ -179,7 +178,6 @@ export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
   };
 
   useEffect(() => {
-    console.log("ok");
     getPlaylist();
     getArtist();
   }, [dataSearch]);

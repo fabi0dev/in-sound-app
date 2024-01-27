@@ -58,9 +58,9 @@ export const ViewPlaylist = ({ route }) => {
     setDataPlaylist(data);
   };
 
-  const play = async (trackData) => {
-    dispatch(changeMusic(trackData));
-    await soundController.load(trackData.preview);
+  const play = async (track) => {
+    dispatch(changeMusic(track));
+    await soundController.load(track.preview);
   };
 
   const playPlaylist = async () => {
@@ -86,12 +86,8 @@ export const ViewPlaylist = ({ route }) => {
               />
             </Box>
 
-            <Box flexDirection={"row"}>
-              <Box
-                justifyContent={"center"}
-                flexDirection={"column"}
-                width={"80%"}
-              >
+            <Box width={"75%"} flexDirection={"row"}>
+              <Box justifyContent={"center"} flexDirection={"column"}>
                 <Box mb={"prim"}>
                   <Typography
                     fontSize={14}
@@ -126,92 +122,84 @@ export const ViewPlaylist = ({ route }) => {
   return (
     <Container variant="clear">
       <StatusBar style="inverted" />
+
       <ImageBackground
         source={{ uri: dataPlaylist?.picture_xl }}
         resizeMode="cover"
         style={{
           width: windowWidth,
-          height: (windowHeight * 35) / 100,
+          height: (windowHeight * 40) / 100,
         }}
         opacity={0.4}
       >
         <LinearGradient
           // Button Linear Gradient
-          colors={["transparent", "transparent", theme.colors.primaryOpacity]}
+          colors={["transparent", theme.colors.primaryOpacity]}
           style={{
             height: "100%",
-            justifyContent: "center",
+            justifyContent: "flex-end",
           }}
         >
           <TopBar />
 
           <Box
-            justifyContent={"center"}
-            alignContent={"center"}
-            alignItems={"center"}
-            alignSelf={"center"}
-            width={"90%"}
+            flexDirection={"row"}
+            justifyContent={"space-between"}
+            pl={"nano"}
+            pr={"nano"}
           >
-            <Typography textAlign={"center"} variant="bold" fontSize={32}>
-              {dataPlaylist?.title}
-            </Typography>
-
-            <Box width={"90%"} mb={"nano"}>
-              <Typography
-                textAlign={"center"}
-                variant="title2"
-                color={"textColor2"}
-              >
-                {dataPlaylist?.description}
+            <Box width={"80%"}>
+              <Typography variant="bold" fontSize={32}>
+                {dataPlaylist?.title}
               </Typography>
+
+              <Box mb={"nano"}>
+                <Typography variant="title2">
+                  {dataPlaylist?.description}
+                </Typography>
+              </Box>
+
+              <Box mb={"nano"} flexDirection={"row"} alignItems={"center"}>
+                <IconMaterial
+                  name="music-circle"
+                  size={14}
+                  color={theme.colors.primary}
+                />
+
+                <Typography ml={"prim"} mr={"nano"} variant="title3">
+                  {dataPlaylist?.nb_tracks} Músicas
+                </Typography>
+
+                <AntDesign
+                  name="like1"
+                  size={12}
+                  color={theme.colors.textColor1}
+                />
+
+                <Typography ml={"prim"} mr={"nano"} variant="title3">
+                  {dataPlaylist?.fans} fãs
+                </Typography>
+              </Box>
             </Box>
 
-            <Box mb={"nano"} flexDirection={"row"} alignItems={"center"}>
-              <IconMaterial
-                name="music-circle"
-                size={14}
-                color={theme.colors.textColor1}
-              />
-
-              <Typography ml={"prim"} mr={"nano"} variant="title3">
-                {dataPlaylist?.nb_tracks} Músicas
-              </Typography>
-
-              <AntDesign
-                name="like1"
-                size={12}
-                color={theme.colors.textColor1}
-              />
-
-              <Typography ml={"prim"} mr={"nano"} variant="title3">
-                {dataPlaylist?.fans} fãs
-              </Typography>
+            <Box alignSelf={"flex-end"}>
+              <TouchableOpacity onPress={() => playPlaylist()}>
+                <AnimatedLottieView
+                  style={{
+                    width: 100,
+                    height: 100,
+                  }}
+                  source={require("@assets/animations/play.json")}
+                  autoPlay
+                  loop={false}
+                />
+              </TouchableOpacity>
             </Box>
           </Box>
         </LinearGradient>
       </ImageBackground>
 
       <Box p={"nano"}>
-        <Box
-          width={"100%"}
-          alignSelf={"center"}
-          alignItems={"flex-end"}
-          position={"absolute"}
-          mt={-57}
-        >
-          <TouchableOpacity onPress={() => playPlaylist()}>
-            <AnimatedLottieView
-              style={{
-                width: 120,
-                height: 120,
-              }}
-              source={require("@assets/animations/play.json")}
-              autoPlay
-              loop={false}
-            />
-          </TouchableOpacity>
-        </Box>
-
         <Box>
           {dataPlaylist?.tracks.data && (
             <FlatList

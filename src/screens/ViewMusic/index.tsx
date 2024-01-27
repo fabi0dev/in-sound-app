@@ -2,6 +2,7 @@ import { Box } from "@components/Box";
 import { Container } from "@components/Container";
 import { theme } from "@themes/default";
 import Icon from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { soundController } from "@services/index";
 import { Typography } from "@components/Typography";
 import { TopBar } from "./TopBar";
@@ -154,19 +155,27 @@ export const ViewMusic = () => {
 
         <Box justifyContent={"center"} flex={1}>
           <Box mt={"nano"} alignItems={"center"}>
-            <Image
-              width={sizeImgAlbum}
-              height={sizeImgAlbum}
-              source={{
-                uri: sound?.album.cover_big,
-              }}
-              style={{
-                borderRadius: sizeImgAlbum,
-                borderWidth: 10,
-                borderColor: theme.colors.lightOpacity2,
-                marginTop: -(windowHeight / 5),
-              }}
-            />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("ViewArtist", {
+                  artist: sound?.artist,
+                })
+              }
+            >
+              <Image
+                width={sizeImgAlbum}
+                height={sizeImgAlbum}
+                source={{
+                  uri: sound?.album.cover_big,
+                }}
+                style={{
+                  borderRadius: sizeImgAlbum,
+                  borderWidth: 10,
+                  borderColor: theme.colors.lightOpacity2,
+                  marginTop: -(windowHeight / 5),
+                }}
+              />
+            </TouchableOpacity>
           </Box>
 
           <Box alignItems={"center"} mt={"nano"}>
@@ -175,22 +184,13 @@ export const ViewMusic = () => {
                 {sound?.title}
               </Typography>
             </Box>
+
             <Box mt={"cake"}>
               <Typography variant="title2" color={"primary"}>
                 {sound?.artist.name}
               </Typography>
             </Box>
           </Box>
-
-          <AnimatedLottieView
-            style={{
-              width: "100%",
-              position: "absolute",
-            }}
-            source={require("@assets/animations/equalizer.json")}
-            autoPlay
-            speed={playing ? 0.3 : 0}
-          />
 
           <Box
             width={windowWidth}
@@ -205,7 +205,11 @@ export const ViewMusic = () => {
               flexDirection={"row"}
             >
               <TouchableOpacity onPress={() => navigation.navigate("Playlist")}>
-                <Icon name="list" size={30} color={theme.colors.textColor1} />
+                <MaterialCommunityIcons
+                  name="playlist-music-outline"
+                  size={30}
+                  color={theme.colors.textColor1}
+                />
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => favMusic()}>
