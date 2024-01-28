@@ -28,6 +28,7 @@ import {
 import IconMaterial from "react-native-vector-icons/MaterialCommunityIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import AnimatedLottieView from "lottie-react-native";
+import { ItemTrack } from "@components/ItemTrack";
 
 interface IDataArtist {
   name: string;
@@ -53,6 +54,8 @@ export const ViewArtist = ({ route }) => {
 
   const [dataArtist, setDataArtist] = useState<IDataArtist>();
   const [dataTrackArtist, setDataTrackArtist] = useState<ITrackArtist>({
+    title: "",
+    preview: "",
     data: [],
   });
   const windowHeight = Dimensions.get("window").height;
@@ -69,7 +72,7 @@ export const ViewArtist = ({ route }) => {
     setDataTrackArtist(data);
   };
 
-  const checkAddInPlaylist = (id) => {
+  /* const checkAddInPlaylist = (id) => {
     if (playlist !== undefined) {
       const isAdd = playlist.tracks.data.filter((item) => id == item.id);
 
@@ -86,7 +89,7 @@ export const ViewArtist = ({ route }) => {
     } else {
       dispatch(removeTrackPlaylist(track));
     }
-  };
+  }; */
 
   const play = async (track) => {
     dispatch(changeMusic(track));
@@ -105,60 +108,6 @@ export const ViewArtist = ({ route }) => {
         })
       );
     }
-  };
-
-  const ItemTrack = ({ trackData }) => {
-    return (
-      <Box flexDirection={"row"} p={"prim"} mb={"nano"}>
-        <Box
-          width={"100%"}
-          flexDirection={"row"}
-          justifyContent={"space-between"}
-        >
-          <Box pb={"nano"} width={(windowWidth * 85) / 100}>
-            <TouchableOpacity onPress={() => play(trackData)}>
-              <Box justifyContent={"center"}>
-                <Box mb={"prim"}>
-                  <Typography
-                    variant="titleMusic"
-                    ellipsizeMode="tail"
-                    numberOfLines={1}
-                    color={sound.id == trackData.id ? "primary" : "textColor1"}
-                  >
-                    {trackData.title}
-                  </Typography>
-                </Box>
-
-                <Typography
-                  color={"textColor2"}
-                  fontSize={12}
-                  ellipsizeMode="tail"
-                  numberOfLines={1}
-                >
-                  {trackData.artist.name}
-                </Typography>
-              </Box>
-            </TouchableOpacity>
-          </Box>
-
-          <Box
-            alignContent={"center"}
-            alignItems={"center"}
-            justifyContent={"center"}
-          >
-            <TouchableOpacity onPress={() => addInPlaylist(trackData)}>
-              <Icon
-                name={
-                  checkAddInPlaylist(trackData.id) ? "checkmark-sharp" : "add"
-                }
-                size={35}
-                color={theme.colors.textColor1}
-              />
-            </TouchableOpacity>
-          </Box>
-        </Box>
-      </Box>
-    );
   };
 
   useEffect(() => {
@@ -249,7 +198,7 @@ export const ViewArtist = ({ route }) => {
           {dataTrackArtist?.data && (
             <FlatList
               data={dataTrackArtist?.data}
-              renderItem={({ item, index }) => <ItemTrack trackData={item} />}
+              renderItem={({ item }) => <ItemTrack trackData={item} />}
               keyExtractor={(item) => item.id}
             />
           )}

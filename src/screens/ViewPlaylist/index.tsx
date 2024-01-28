@@ -17,15 +17,25 @@ import { TopBar } from "@components/TopBar";
 import { PlayerBottom } from "@components/PlayerBottom";
 import AnimatedLottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useDispatch, useSelector } from "react-redux";
-import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
-import { PictureTrack } from "@components/PictureTrack";
+import { useDispatch } from "react-redux";
+import { changeMusic } from "@redux/playerBottomSlice";
 import { changePlaylist } from "@redux/playlistSlice";
+import { ItemTrack } from "@components/ItemTrack";
 
 interface Itrack {
   id: string;
   title: string;
   preview: string;
+  title_short: string;
+  artist: {
+    name: string;
+    picture_medium: string;
+  };
+  album: {
+    title: string;
+    cover_medium: string;
+    cover_small: string;
+  };
 }
 interface IPlaylist {
   id: string;
@@ -47,7 +57,6 @@ interface IPlaylist {
 
 export const ViewPlaylist = ({ route }) => {
   const dispatch = useDispatch();
-  const { sound } = useSelector(selectPlayerBottom);
   const [dataPlaylist, setDataPlaylist] = useState<IPlaylist>();
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
@@ -68,51 +77,6 @@ export const ViewPlaylist = ({ route }) => {
       await play(dataPlaylist?.tracks.data[0]);
       dispatch(changePlaylist(dataPlaylist));
     }
-  };
-
-  const ItemTrack = ({ trackData, index }) => {
-    return (
-      <Box flexDirection={"row"} p={"prim"} mb={"nano"}>
-        <TouchableOpacity onPress={() => play(trackData)}>
-          <Box flexDirection={"row"}>
-            <Box justifyContent={"center"} mr={"nano"}>
-              <Typography variant="title3">{index + 1}</Typography>
-            </Box>
-            <Box mr={"cake"}>
-              <PictureTrack
-                current={sound.id == trackData.id}
-                uri={trackData.album.cover_medium}
-                size="small"
-              />
-            </Box>
-
-            <Box width={"75%"} flexDirection={"row"}>
-              <Box justifyContent={"center"} flexDirection={"column"}>
-                <Box mb={"prim"}>
-                  <Typography
-                    fontSize={14}
-                    ellipsizeMode="tail"
-                    numberOfLines={1}
-                    color={sound.id == trackData.id ? "primary" : "textColor1"}
-                  >
-                    {trackData.title}
-                  </Typography>
-                </Box>
-
-                <Typography
-                  color={"textColor2"}
-                  fontSize={12}
-                  ellipsizeMode="tail"
-                  numberOfLines={1}
-                >
-                  {trackData.album.title}
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-        </TouchableOpacity>
-      </Box>
-    );
   };
 
   useEffect(() => {

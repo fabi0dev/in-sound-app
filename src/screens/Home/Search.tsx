@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
 import { PicturePlaylist } from "@components/PicturePlaylist";
 import { PictureTrack } from "@components/PictureTrack";
+import { ItemTrack } from "@components/ItemTrack";
 
 interface IArtists {
   name: string;
@@ -51,51 +52,6 @@ export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
       const data = await deezer.searchArtist(textSearch);
       setDataArtist(data);
     } catch (e) {}
-  };
-
-  const ItemTrack = ({ trackData }) => {
-    const play = async () => {
-      dispatch(changeMusic(trackData));
-      await soundController.load(trackData.preview);
-    };
-
-    return (
-      <TouchableOpacity onPress={() => play()}>
-        <Box flexDirection={"row"} mb={"nano"}>
-          <Box mr={"cake"}>
-            <PictureTrack
-              current={sound.id == trackData.id}
-              uri={trackData.album.cover_medium}
-              size="small"
-            />
-          </Box>
-
-          <Box flexDirection={"row"}>
-            <Box justifyContent={"center"} flexDirection={"column"}>
-              <Box mb={"prim"}>
-                <Typography
-                  fontSize={14}
-                  ellipsizeMode="tail"
-                  numberOfLines={1}
-                  color={sound.id == trackData.id ? "primary" : "textColor1"}
-                >
-                  {trackData.title}
-                </Typography>
-              </Box>
-
-              <Typography
-                color={"textColor2"}
-                fontSize={12}
-                ellipsizeMode="tail"
-                numberOfLines={1}
-              >
-                {trackData.artist.name}
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-      </TouchableOpacity>
-    );
   };
 
   const ItemPlaylist = ({ playlist }) => {

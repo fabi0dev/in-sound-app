@@ -3,7 +3,6 @@ import { Container } from "@components/Container";
 import { useEffect, useState } from "react";
 import { PlayerBottom } from "@components/PlayerBottom";
 import {
-  ActivityIndicator,
   Dimensions,
   FlatList,
   ImageBackground,
@@ -12,23 +11,22 @@ import {
 import { deezer, soundController } from "@services/index";
 import { useNavigation } from "@react-navigation/native";
 import { Typography } from "@components/Typography";
-import { useDispatch, useSelector } from "react-redux";
-import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
+import { useDispatch } from "react-redux";
+import { changeMusic } from "@redux/playerBottomSlice";
 import { TopBar } from "@components/TopBar";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
 import { theme } from "@themes/default";
 import AnimatedLottieView from "lottie-react-native";
-import { PictureTrack } from "@components/PictureTrack";
 import IconMaterial from "react-native-vector-icons/MaterialCommunityIcons";
 import { changePlaylist } from "@redux/playlistSlice";
+import { ItemTrack } from "@components/ItemTrack";
 
 export const ViewAlbum = ({ route }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { album } = route.params;
   const [dataAlbum, setDataAlbum] = useState({});
-  const { sound } = useSelector(selectPlayerBottom);
 
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
@@ -55,48 +53,6 @@ export const ViewAlbum = ({ route }) => {
         })
       );
     }
-  };
-
-  const ItemTrack = ({ trackData }) => {
-    return (
-      <Box flexDirection={"row"} p={"prim"} mb={"cake"}>
-        <Box
-          width={"100%"}
-          flexDirection={"row"}
-          justifyContent={"space-between"}
-        >
-          <Box pb={"nano"} width={(windowWidth * 85) / 100}>
-            <TouchableOpacity onPress={() => play(trackData)}>
-              <Box flexDirection={"row"}>
-                <Box width={"80%"}>
-                  <Box mb={"prim"}>
-                    <Typography
-                      variant="titleMusic"
-                      ellipsizeMode="tail"
-                      numberOfLines={1}
-                      color={
-                        sound?.id == trackData.id ? "primary" : "textColor1"
-                      }
-                    >
-                      {trackData.title}
-                    </Typography>
-                  </Box>
-
-                  <Typography
-                    color={"textColor2"}
-                    fontSize={12}
-                    ellipsizeMode="tail"
-                    numberOfLines={1}
-                  >
-                    {trackData.artist.name}
-                  </Typography>
-                </Box>
-              </Box>
-            </TouchableOpacity>
-          </Box>
-        </Box>
-      </Box>
-    );
   };
 
   useEffect(() => {
@@ -135,7 +91,15 @@ export const ViewAlbum = ({ route }) => {
             >
               <Box justifyContent={"center"} width={"80%"}>
                 <Box mb={"prim"}>
-                  <Typography variant="bold" fontSize={25}>
+                  <Typography
+                    style={{
+                      textShadowColor: "rgba(0, 0, 0, 0.3)",
+                      textShadowOffset: { width: -1, height: 1 },
+                      textShadowRadius: 10,
+                    }}
+                    variant="bold"
+                    fontSize={25}
+                  >
                     {dataAlbum?.title}
                   </Typography>
                 </Box>
@@ -188,7 +152,11 @@ export const ViewAlbum = ({ route }) => {
           {dataAlbum?.tracks.data && (
             <FlatList
               data={dataAlbum?.tracks.data}
-              renderItem={({ item, index }) => <ItemTrack trackData={item} />}
+              renderItem={({ item, index }) => (
+                <Box mb={"cake"}>
+                  <ItemTrack showPicture={false} trackData={item} />
+                </Box>
+              )}
               keyExtractor={(item) => item.id}
             />
           )}
