@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface ITrack {
-  id: string;
+  id: number;
   title: string;
   artist: {
     name: string;

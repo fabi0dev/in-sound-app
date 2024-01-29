@@ -2,19 +2,13 @@ import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
 import { Image, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { deezer, soundController } from "@services/index";
-import Icon from "react-native-vector-icons/Ionicons";
-import { theme } from "@themes/default";
-import { useDispatch, useSelector } from "react-redux";
-import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
+import { useEffect, useState } from "react";
+import { deezer } from "@services/index";
 import { PicturePlaylist } from "@components/PicturePlaylist";
-import { PictureTrack } from "@components/PictureTrack";
 import { ItemTrack } from "@components/ItemTrack";
 
 interface IArtists {
   name: string;
-  tracklist: string;
   picture_big: string;
 }
 
@@ -29,9 +23,6 @@ interface ISearch {
 }
 
 export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
-  const dispatch = useDispatch();
-  const { sound } = useSelector(selectPlayerBottom);
-
   const navigation = useNavigation();
   const [dataPlaylist, setDataPlaylist] = useState({
     data: [],
@@ -118,7 +109,7 @@ export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
     );
   };
 
-  const descViewAll = (title: string, fn: () => void) => {
+  const Title = ({ desc }) => {
     return (
       <Box
         flexDirection={"row"}
@@ -128,7 +119,7 @@ export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
         mb={"xx"}
         mt={"xxxs"}
       >
-        <Typography variant="title1">{title}</Typography>
+        <Typography variant="title1">{desc}</Typography>
       </Box>
     );
   };
@@ -140,9 +131,7 @@ export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
 
   return (
     <ScrollView>
-      {descViewAll("Playlists", () => {
-        console.log("Ver playlist");
-      })}
+      {dataPlaylist && <Title desc={"Playlists"} />}
 
       <ScrollView horizontal={true}>
         {dataPlaylist.data.map((track: IArtists, key) => {
@@ -150,10 +139,7 @@ export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
         })}
       </ScrollView>
 
-      {dataArtist.data.length > 0 &&
-        descViewAll("Artistas", () => {
-          console.log("Ver artistas");
-        })}
+      {dataArtist.data.length > 0 && <Title desc={"Artistas"} />}
 
       <ScrollView horizontal={true}>
         {dataArtist.data.map((artist: IArtists, key) => {
@@ -161,24 +147,11 @@ export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
         })}
       </ScrollView>
 
-      {dataSearch.data.length > 0 &&
-        descViewAll("Musicas", () => {
-          console.log("Ver musicas");
-        })}
+      {dataSearch.data.length > 0 && <Title desc={"Músicas"} />}
 
       {dataSearch.data.map((track: IArtists, key) => {
         return <ItemTrack trackData={track} key={key} />;
       })}
-
-      {/* {dataSearch.data && (
-        <FlatList
-          data={dataSearch.data}
-          renderItem={({ item, index }) => (
-            <ItemSearch itemData={item} index={index} />
-          )}
-          keyExtractor={(item) => item.id}
-        />
-      )} */}
 
       <Box height={100}></Box>
     </ScrollView>

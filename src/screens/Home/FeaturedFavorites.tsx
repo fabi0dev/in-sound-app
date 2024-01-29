@@ -8,7 +8,7 @@ import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
 import { selectFavorites } from "@redux/favoritesSlice";
 
 interface ITracks {
-  id: string;
+  id: number;
   title: string;
   preview: string;
   title_short: string;

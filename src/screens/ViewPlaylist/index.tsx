@@ -22,8 +22,8 @@ import { changeMusic } from "@redux/playerBottomSlice";
 import { changePlaylist } from "@redux/playlistSlice";
 import { ItemTrack } from "@components/ItemTrack";
 
-interface Itrack {
-  id: string;
+interface ITrack {
+  id: number;
   title: string;
   preview: string;
   title_short: string;
@@ -38,7 +38,7 @@ interface Itrack {
   };
 }
 interface IPlaylist {
-  id: string;
+  id: number;
   title: string;
   link: string;
   picture: string;
@@ -51,36 +51,40 @@ interface IPlaylist {
   nb_tracks: number;
   description: string;
   tracks: {
-    data: Array<Itrack>;
+    data: Array<ITrack>;
   };
 }
 
-export const ViewPlaylist = ({ route }) => {
+export const ViewPlaylist = ({
+  route: {
+    params: { playlist },
+  },
+}) => {
   const dispatch = useDispatch();
   const [dataPlaylist, setDataPlaylist] = useState<IPlaylist>();
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
-  const { params } = route;
 
   const getPlaylist = async (id: string) => {
     const data = await deezer.getPlaylist(id);
     setDataPlaylist(data);
   };
 
-  const play = async (track: Itrack) => {
+  const play = async (track: ITrack) => {
     dispatch(changeMusic(track));
     await soundController.load(track.preview);
   };
 
   const playPlaylist = async () => {
-    if (typeof dataPlaylist?.tracks.data[0] !== undefined) {
-      await play(dataPlaylist?.tracks.data[0]);
+    const trackFirst = dataPlaylist?.tracks.data[0];
+    if (typeof trackFirst !== undefined) {
+      await play(trackFirst as never);
       dispatch(changePlaylist(dataPlaylist));
     }
   };
 
   useEffect(() => {
-    getPlaylist(params.playlist.id);
+    getPlaylist(playlist.id);
   }, []);
 
   return (
@@ -169,7 +173,7 @@ export const ViewPlaylist = ({ route }) => {
               renderItem={({ item, index }) => (
                 <ItemTrack trackData={item} index={index} />
               )}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item: any) => item.id}
             />
           )}
         </Box>

@@ -1,6 +1,5 @@
 import { Box } from "@components/Box";
 import { Container } from "@components/Container";
-import { PictureTrack } from "@components/PictureTrack";
 import { TopBar } from "@components/TopBar";
 import { Typography } from "@components/Typography";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,14 +41,14 @@ export const Playlist = () => {
 
       <TopBar title={`Minha playlist `} optionFn={() => setViewActions(true)} />
 
-      <Box mt={"md"}>
+      <Box mt={"xl"}>
         {tracks?.data && (
           <FlatList
             data={tracks?.data}
             renderItem={({ item, index }) => (
               <ItemTrack trackData={item} index={index} />
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item: any) => item.id}
           />
         )}
       </Box>
@@ -77,10 +76,10 @@ export const Playlist = () => {
               <Box alignItems={"center"}>
                 <Ionicons
                   name="trash"
-                  size={22}
+                  size={30}
                   color={theme.colors.textColor1}
                 />
-                <Typography variant="title2">Limpar</Typography>
+                <Typography>Limpar</Typography>
               </Box>
             </TouchableOpacity>
 
@@ -88,10 +87,10 @@ export const Playlist = () => {
               <Box alignItems={"center"}>
                 <Ionicons
                   name="play-circle"
-                  size={22}
+                  size={30}
                   color={theme.colors.textColor1}
                 />
-                <Typography variant="title2">Reproduzir</Typography>
+                <Typography>Reproduzir</Typography>
               </Box>
             </TouchableOpacity>
           </Box>

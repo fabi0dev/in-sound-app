@@ -9,7 +9,7 @@ export const Content = styled(Box)`
   position: absolute;
   left: 0;
   bottom: 0;
-  align-items: "center";
-  align-self: "center";
-  justify-content: "space-between";
+  align-items: center;
+  align-self: center;
+  justify-content: space-between;
 `;

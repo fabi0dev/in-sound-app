@@ -20,13 +20,13 @@ export const theme = {
     primaryOpacity: "rgba(91,218,255, .3)",
     textColor1: "#fff",
     textColor2: "#a4a2ae",
-    textColor3: "#8da6af",
     base: "#0e101b",
     base2: "#0b0c10",
 
     lightOpacity1: "rgba(173,173,173,.1)",
     lightOpacity2: "rgba(173,173,173,.2)",
-    lightOpacity3: "rgba(173,173,173,.3)",
+
+    darkOpacity1: "rgba(0,0,0,.05)",
   },
   fonts: {
     bold: "NunitoSansBold",

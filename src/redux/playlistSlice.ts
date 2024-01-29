@@ -1,22 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface ITrack {
-  id: string;
+  id: number;
   title: string;
+  title_short: string;
   artist: {
     name: string;
+    picture_medium: string;
+    picture_big: string;
   };
   album: {
     title: string;
     cover_medium: string;
+    cover_small: string;
   };
   preview: string;
 }
 interface IPlaylist {
-  id: string;
+  id: number;
   title: string;
   tracks: {
-    data: Array<Itrack>;
+    data: Array<ITrack>;
   };
 }
 
@@ -78,5 +82,5 @@ export const {
   removeTrackPlaylist,
   cleanPlaylist,
 } = slice.actions;
-export const selectPlaylist = (state: { playlist: IPlaylist }) =>
+export const selectPlaylist = (state: { playlist: IPlaylist }): IPlaylist =>
   state.playlist;

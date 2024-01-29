@@ -1,18 +1,13 @@
 import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
-import {
-  Image,
-  ImageBackground,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { ImageBackground, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { storage } from "@services/Storage";
 import { deezer } from "@services/DeezerAPI";
 import { useEffect, useState } from "react";
 
 interface IGenres {
-  id: string;
+  id: number;
   name: string;
   tracklist: string;
   picture_big: string;

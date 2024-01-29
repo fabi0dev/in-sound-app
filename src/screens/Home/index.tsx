@@ -129,7 +129,7 @@ export const Home = () => {
               <TouchableOpacity onPress={() => setViewModalOptions(true)}>
                 <Icon
                   name="menufold"
-                  size={20}
+                  size={25}
                   color={theme.colors.textColor1}
                 />
               </TouchableOpacity>
@@ -162,7 +162,7 @@ export const Home = () => {
       >
         <Box alignItems={"center"}>
           <Box
-            width={200}
+            width={"90%"}
             flexDirection={"row"}
             flexWrap={"wrap"}
             justifyContent={"space-between"}
@@ -183,7 +183,12 @@ export const Home = () => {
               </Box>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate("Playlist")}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Playlist" as never);
+                setViewModalOptions(false);
+              }}
+            >
               <Box alignItems={"center"}>
                 <MaterialCommunityIcons
                   name="playlist-music"
@@ -191,6 +196,22 @@ export const Home = () => {
                   color={theme.colors.textColor1}
                 />
                 <Typography variant="title2">Minha Playlist</Typography>
+              </Box>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Favorites" as never);
+                setViewModalOptions(false);
+              }}
+            >
+              <Box alignItems={"center"}>
+                <MaterialCommunityIcons
+                  name="heart"
+                  size={30}
+                  color={theme.colors.textColor1}
+                />
+                <Typography variant="title2">Favoritas</Typography>
               </Box>
             </TouchableOpacity>
           </Box>

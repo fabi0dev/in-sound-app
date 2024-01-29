@@ -5,3 +5,4 @@ export * from "./ViewPlaylist";
 export * from "./ViewGenre";
 export * from "./ViewAlbum";
 export * from "./Playlist";
+export * from "./Favorites";

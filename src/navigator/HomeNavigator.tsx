@@ -6,6 +6,7 @@ import {
   ViewAlbum,
   Playlist,
   ViewGenre,
+  Favorites,
 } from "../screens";
 
 export default {
@@ -16,4 +17,5 @@ export default {
   ViewAlbum,
   Playlist,
   ViewGenre,
+  Favorites,
 };

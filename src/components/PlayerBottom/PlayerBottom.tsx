@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Image, ImageBackground, TouchableOpacity } from "react-native";
 import { Box } from "../";
 import { Typography } from "../";
@@ -32,33 +32,32 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
   };
 
   const nextMusic = async () => {
-    let setNewMusic = false;
+    const firstTrack = playlist.tracks.data[0];
+    let nextTrack;
 
-    playlist.tracks.data.map(async (track, key) => {
-      try {
-        if (track.id == sound.id) {
-          const newPos = key + 1;
-          const nextTrack = playlist.tracks.data[newPos];
-
-          if (typeof nextTrack !== undefined) {
-            await changeNewMusic(nextTrack);
-          } else {
-            await soundController.pause();
-            dispatch(playPause(false));
-          }
-        }
-      } catch (e) {}
+    playlist.tracks.data.map((track, key) => {
+      if (track.id == sound.id) {
+        nextTrack = playlist.tracks.data[key + 1];
+      }
     });
 
-    if (!setNewMusic) {
-      const firstTrack = playlist.tracks.data[0];
-      if (firstTrack !== undefined) {
-        await changeNewMusic(firstTrack);
-      }
+    if (nextTrack !== undefined) {
+      await changeNewMusic(nextTrack);
+    } else if (firstTrack !== undefined) {
+      await changeNewMusic(firstTrack);
+    } else {
+      await soundController.pause();
+      dispatch(playPause(false));
     }
   };
 
   const playerPause = async () => {
+    if (soundController.uri == "" && sound.preview !== "") {
+      soundController.load(sound.preview);
+      dispatch(playPause(true));
+      return;
+    }
+
     if (!playing) {
       await soundController.play();
       dispatch(playPause(true));
@@ -92,6 +91,10 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
           }
         }
       }
+
+      if (soundController.uri == "") {
+        dispatch(playPause(false));
+      }
     }, 1000);
 
     return () => clearInterval(interval);
@@ -105,8 +108,8 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
         blurRadius={100}
         style={{ width: "100%" }}
       >
-        <Box p={"cake"} justifyContent={"space-between"} flexDirection={"row"}>
-          <Box alignItems={"center"} flexDirection={"row"}>
+        <Box p={"qm"} justifyContent={"space-between"} flexDirection={"row"}>
+          <Box alignItems={"center"} flexDirection={"row"} width={"75%"}>
             <Box mr={"cake"}>
               <TouchableOpacity
                 onPress={() =>
@@ -126,7 +129,7 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
               </TouchableOpacity>
             </Box>
 
-            <Box width={"75%"}>
+            <Box width={"100%"}>
               <TouchableOpacity
                 onPress={() => navigation.navigate("ViewMusic" as never)}
               >
@@ -159,11 +162,11 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
             </Box>
           </Box>
 
-          <Box flexDirection={"row"} width={"15%"}>
+          <Box flexDirection={"row"} width={50}>
             <TouchableOpacity onPress={() => playerPause()}>
               <Icon
                 name={playing ? "pause-circle" : "play-circle"}
-                size={45}
+                size={50}
                 color={theme.colors.textColor1}
               />
             </TouchableOpacity>

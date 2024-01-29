@@ -6,9 +6,16 @@ import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
 import { soundController } from "@services/SoundController";
 import { Typography } from "../Typography";
 import { PictureTrack } from "../PictureTrack";
+import Icon from "react-native-vector-icons/Ionicons";
+import { theme } from "@themes/default";
+import {
+  addTrackInPlaylist,
+  removeTrackPlaylist,
+  selectPlaylist,
+} from "@redux/playlistSlice";
 
 interface Itrack {
-  id: string;
+  id: number;
   title: string;
   preview: string;
   title_short: string;
@@ -26,16 +33,19 @@ interface Itrack {
 interface IItemTrack {
   trackData: Itrack;
   showPicture?: boolean;
+  showAddPlaylist?: boolean;
   index?: number;
 }
 
 export const ItemTrack: React.FC<IItemTrack> = ({
   trackData,
   showPicture = true,
+  showAddPlaylist = true,
   index,
 }) => {
   const dispatch = useDispatch();
   const { sound } = useSelector(selectPlayerBottom);
+  const playlist = useSelector(selectPlaylist);
 
   const windowWidth = Dimensions.get("window").width;
 
@@ -44,12 +54,32 @@ export const ItemTrack: React.FC<IItemTrack> = ({
     await soundController.load(track.preview);
   };
 
+  const checkAddInPlaylist = (id: number) => {
+    if (playlist !== undefined) {
+      const isAdd = playlist.tracks.data.filter((item) => id == item.id);
+
+      if (isAdd.length > 0) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const addInPlaylist = (track: Itrack) => {
+    if (!checkAddInPlaylist(track.id)) {
+      dispatch(addTrackInPlaylist(track));
+    } else {
+      dispatch(removeTrackPlaylist(track));
+    }
+  };
+
   return (
     <Box flexDirection={"row"}>
       <Box
         width={"100%"}
         flexDirection={"row"}
         justifyContent={"space-between"}
+        mb={"nano"}
       >
         {index != undefined && (
           <Box width={15} mr={"cake"} justifyContent={"center"}>
@@ -57,13 +87,13 @@ export const ItemTrack: React.FC<IItemTrack> = ({
           </Box>
         )}
 
-        <Box pb={"nano"} width={(windowWidth * 90) / 100}>
+        <Box width={(windowWidth * 80) / 100}>
           <TouchableOpacity onPress={() => play(trackData)}>
             <Box flexDirection={"row"}>
               {showPicture && (
                 <Box mr={"cake"}>
                   <PictureTrack
-                    current={sound.id == trackData.id}
+                    current={sound?.id == trackData.id}
                     uri={trackData.album.cover_medium}
                     size="small"
                     animationCurrent={true}
@@ -94,6 +124,18 @@ export const ItemTrack: React.FC<IItemTrack> = ({
               </Box>
             </Box>
           </TouchableOpacity>
+        </Box>
+
+        <Box alignItems={"center"} justifyContent={"center"}>
+          {showAddPlaylist && (
+            <TouchableOpacity onPress={() => addInPlaylist(trackData)}>
+              <Icon
+                name={checkAddInPlaylist(trackData.id) ? "checkmark" : "add"}
+                size={30}
+                color={theme.colors.textColor1}
+              />
+            </TouchableOpacity>
+          )}
         </Box>
       </Box>
     </Box>

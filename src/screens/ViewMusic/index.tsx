@@ -41,7 +41,42 @@ export const ViewMusic = () => {
   const windowWidth = Dimensions.get("window").width;
   const sizeImgAlbum = (windowWidth * 55) / 100;
 
+  const isFirstMusic = () => {
+    let isFirst = true;
+
+    playlist.tracks.data.map((track, key) => {
+      if (track.id == sound.id) {
+        isFirst = key - 1 < 0;
+      }
+    });
+    return isFirst;
+  };
+
+  const isLastMusic = () => {
+    let isLast = true;
+    let checkPlaylist = false;
+
+    playlist.tracks.data.map((track, key) => {
+      if (track.id == sound.id) {
+        checkPlaylist = true;
+        isLast = key + 1 >= playlist.tracks.data.length;
+      }
+    });
+
+    if (!checkPlaylist) {
+      return false;
+    }
+
+    return isLast;
+  };
+
   const playerPause = async () => {
+    if (soundController.uri == "" && sound.preview !== "") {
+      soundController.load(sound.preview);
+      dispatch(playPause(true));
+      return;
+    }
+
     if (!playing) {
       await soundController.play();
       dispatch(playPause(true));
@@ -61,7 +96,7 @@ export const ViewMusic = () => {
       try {
         if (item.id == sound.id) {
           const prevObj = playlist.tracks.data[key - 1];
-          if (typeof prevObj !== undefined) {
+          if (prevObj !== undefined) {
             await changeNewMusic(prevObj);
           }
         }
@@ -69,44 +104,24 @@ export const ViewMusic = () => {
     });
   };
 
-  const isLastMusic = () => {
-    let isLast = false;
-
-    playlist.tracks.data.map((track, key) => {
-      if (track.id == sound.id) {
-        isLast = key + 1 >= playlist.tracks.data.length;
-      }
-    });
-
-    return isLast;
-  };
-
   const nextMusic = async (trackRef = "") => {
     if (!isLastMusic()) {
-      let setNewMusic = false;
-      playlist.tracks.data.map(async (track, key) => {
-        try {
-          if (track.id == (trackRef || sound.id)) {
-            const newPos = key + 1;
-            const nextTrack = playlist.tracks.data[newPos];
+      const firstTrack = playlist.tracks.data[0];
+      let nextTrack;
 
-            if (typeof nextTrack !== undefined) {
-              await changeNewMusic(nextTrack);
-            } else {
-              await soundController.pause();
-              dispatch(playPause(false));
-            }
-
-            setNewMusic = true;
-          }
-        } catch (e) {}
+      playlist.tracks.data.map((track, key) => {
+        if (track.id == (trackRef || sound.id)) {
+          nextTrack = playlist.tracks.data[key + 1];
+        }
       });
 
-      if (!setNewMusic) {
-        const firstTrack = playlist.tracks.data[0];
-        if (firstTrack !== undefined) {
-          await changeNewMusic(firstTrack);
-        }
+      if (nextTrack !== undefined) {
+        await changeNewMusic(nextTrack);
+      } else if (firstTrack !== undefined) {
+        await changeNewMusic(firstTrack);
+      } else {
+        await soundController.pause();
+        dispatch(playPause(false));
       }
     }
   };
@@ -210,7 +225,9 @@ export const ViewMusic = () => {
               justifyContent={"space-between"}
               flexDirection={"row"}
             >
-              <TouchableOpacity onPress={() => navigation.navigate("Playlist")}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Playlist" as never)}
+              >
                 <MaterialCommunityIcons
                   name="playlist-music-outline"
                   size={30}
@@ -257,7 +274,11 @@ export const ViewMusic = () => {
                 <Icon
                   name="play-skip-back"
                   size={40}
-                  color={theme.colors.textColor1}
+                  color={
+                    !isFirstMusic()
+                      ? theme.colors.textColor1
+                      : theme.colors.textColor2
+                  }
                 />
               </TouchableOpacity>
 

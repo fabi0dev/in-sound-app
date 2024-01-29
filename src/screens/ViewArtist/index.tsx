@@ -2,7 +2,6 @@ import { Box } from "@components/Box";
 import { Container } from "@components/Container";
 import { theme } from "@themes/default";
 import { useEffect, useState } from "react";
-import Icon from "react-native-vector-icons/Ionicons";
 import { soundController } from "@services/index";
 import { Typography } from "@components/Typography";
 import {
@@ -16,14 +15,9 @@ import { TopBar } from "@components/TopBar";
 import { deezer } from "@services/index";
 import { PlayerBottom } from "@components/PlayerBottom";
 import { LinearGradient } from "expo-linear-gradient";
-import { useDispatch, useSelector } from "react-redux";
-import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
-import {
-  addTrackInPlaylist,
-  changePlaylist,
-  removeTrackPlaylist,
-  selectPlaylist,
-} from "@redux/playlistSlice";
+import { useDispatch } from "react-redux";
+import { changeMusic } from "@redux/playerBottomSlice";
+import { changePlaylist } from "@redux/playlistSlice";
 
 import IconMaterial from "react-native-vector-icons/MaterialCommunityIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -47,10 +41,12 @@ interface ITrackArtist {
   data: [];
 }
 
-export const ViewArtist = ({ route }) => {
+export const ViewArtist = ({
+  route: {
+    params: { artist },
+  },
+}) => {
   const dispatch = useDispatch();
-  const { sound } = useSelector(selectPlayerBottom);
-  const playlist = useSelector(selectPlaylist);
 
   const [dataArtist, setDataArtist] = useState<IDataArtist>();
   const [dataTrackArtist, setDataTrackArtist] = useState<ITrackArtist>({
@@ -60,7 +56,6 @@ export const ViewArtist = ({ route }) => {
   });
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
-  const { params } = route;
 
   const getDataArtist = async (id: string) => {
     const data = await deezer.getArtist(id);
@@ -71,25 +66,6 @@ export const ViewArtist = ({ route }) => {
     const data = await deezer.getArtistTopTrack(id);
     setDataTrackArtist(data);
   };
-
-  /* const checkAddInPlaylist = (id) => {
-    if (playlist !== undefined) {
-      const isAdd = playlist.tracks.data.filter((item) => id == item.id);
-
-      if (isAdd.length > 0) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  const addInPlaylist = (track) => {
-    if (!checkAddInPlaylist(track.id)) {
-      dispatch(addTrackInPlaylist(track));
-    } else {
-      dispatch(removeTrackPlaylist(track));
-    }
-  }; */
 
   const play = async (track) => {
     dispatch(changeMusic(track));
@@ -111,8 +87,8 @@ export const ViewArtist = ({ route }) => {
   };
 
   useEffect(() => {
-    getDataArtist(params.artist.id);
-    getTrackList(params.artist.id);
+    getDataArtist(artist.id);
+    getTrackList(artist.id);
   }, []);
 
   return (
@@ -128,7 +104,6 @@ export const ViewArtist = ({ route }) => {
         }}
       >
         <LinearGradient
-          // Button Linear Gradient
           colors={["transparent", "transparent", theme.colors.primaryOpacity]}
           style={{
             height: "100%",

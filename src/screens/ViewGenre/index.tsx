@@ -5,7 +5,6 @@ import { PlayerBottom } from "@components/PlayerBottom";
 import { ActivityIndicator, Image, ScrollView } from "react-native";
 import { theme } from "@themes/default";
 import { deezer } from "@services/index";
-import { useNavigation } from "@react-navigation/native";
 import { FeaturedArtists } from "../Home/FeaturedArtists";
 import { FeaturedPlaylists } from "../Home/FeaturedPlaylists";
 import { FeaturedTracks } from "../Home/FeaturedTracks";
@@ -13,15 +12,19 @@ import { Typography } from "@components/Typography";
 import { FeaturedAlbums } from "../Home/FeaturedAlbums";
 import { StatusBar } from "expo-status-bar";
 
-export const ViewGenre = ({ route }) => {
-  const navigation = useNavigation();
+export const ViewGenre = ({
+  route: {
+    params: { genre },
+  },
+}) => {
   const [dataFeatured, setDataFeatured] = useState({});
   const [loading, setLoading] = useState(false);
-  const { genre } = route.params;
 
   const getContentHome = async () => {
+    setLoading(true);
     const data = await deezer.getEditorialChart(genre.id);
     setDataFeatured(data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -48,8 +51,8 @@ export const ViewGenre = ({ route }) => {
           <Box>
             <FeaturedArtists data={dataFeatured} />
             <FeaturedPlaylists data={dataFeatured} />
-            <FeaturedAlbums data={dataFeatured} />
             <FeaturedTracks data={dataFeatured} />
+            <FeaturedAlbums data={dataFeatured} />
 
             <Box height={100}></Box>
           </Box>

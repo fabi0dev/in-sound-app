@@ -25,9 +25,7 @@ export const FeaturedTracks = ({ data }: IFeaturedTracks): JSX.Element => {
         >
           {data?.tracks?.data.map((track, key) => {
             return (
-              <Box key={key} mb={"cake"}>
-                <ItemTrack trackData={track} />
-              </Box>
+              <ItemTrack trackData={track} showAddPlaylist={false} key={key} />
             );
           })}
         </Box>

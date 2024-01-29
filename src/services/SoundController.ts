@@ -1,6 +1,8 @@
+import { selectPlaylist } from "@redux/playlistSlice";
 import { Audio } from "expo-av";
 import { Sound } from "expo-av/build/Audio";
 import { Platform } from "react-native";
+import { useSelector } from "react-redux";
 
 const soundController = {
   uri: "",

@@ -17,19 +17,17 @@ export const TopBar = ({ title, goBack, optionFn }: ITopBar) => {
 
   return (
     <Content>
-      <Box>
-        <TouchableOpacity onPress={goBack ? goBack : () => navigation.goBack()}>
+      <TouchableOpacity onPress={goBack ? goBack : () => navigation.goBack()}>
+        <Box p={"prim"}>
           <Ionicons
             name="chevron-back-outline"
-            size={40}
+            size={35}
             color={theme.colors.textColor1}
           />
-        </TouchableOpacity>
-      </Box>
+        </Box>
+      </TouchableOpacity>
 
-      <Box>
-        <Typography>{title || ""}</Typography>
-      </Box>
+      <Typography>{title || ""}</Typography>
 
       <Box>
         {typeof optionFn == "function" && (

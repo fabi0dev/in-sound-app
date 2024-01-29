@@ -24,9 +24,7 @@ const deezer = {
       });
 
       return data;
-    } catch (error) {
-      //error
-    }
+    } catch (error) {}
   },
   searchPlaylist: async (q: string, limit = 10) => {
     const request = axios.create({
@@ -40,7 +38,6 @@ const deezer = {
 
       return data;
     } catch (error) {
-      //error
       console.log("error load search playlist", error);
     }
   },
@@ -56,7 +53,6 @@ const deezer = {
 
       return data;
     } catch (error) {
-      //error
       console.log("error load search album", error);
     }
   },
@@ -72,7 +68,6 @@ const deezer = {
 
       return data;
     } catch (error) {
-      //error
       console.log("error load search album", error);
     }
   },
@@ -84,7 +79,6 @@ const deezer = {
 
       return data;
     } catch (error) {
-      //error
       console.log("error load editorial", error);
     }
   },
@@ -92,7 +86,6 @@ const deezer = {
     try {
       return await deezer.getPlaylist("1111141961", limit);
     } catch (error) {
-      //error
       console.log("error in load getTops", error);
     }
   },
@@ -106,7 +99,6 @@ const deezer = {
 
       return data;
     } catch (error) {
-      //error
       console.log("error load playlist", error);
     }
   },
@@ -116,7 +108,6 @@ const deezer = {
 
       return data;
     } catch (error) {
-      //error
       console.log("error load artist getArtist", error);
     }
   },
@@ -130,7 +121,6 @@ const deezer = {
 
       return data;
     } catch (error) {
-      //error
       console.log("error load track artist", error);
     }
   },
@@ -144,7 +134,6 @@ const deezer = {
 
       return data;
     } catch (error) {
-      //error
       console.log("error load genre", error);
     }
   },
@@ -158,7 +147,6 @@ const deezer = {
 
       return data;
     } catch (error) {
-      //error
       console.log("error load genre", error);
     }
   },

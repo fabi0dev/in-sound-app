@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { deezer, soundController } from "@services/index";
-import { useNavigation } from "@react-navigation/native";
 import { Typography } from "@components/Typography";
 import { useDispatch } from "react-redux";
 import { changeMusic } from "@redux/playerBottomSlice";
@@ -22,9 +21,12 @@ import IconMaterial from "react-native-vector-icons/MaterialCommunityIcons";
 import { changePlaylist } from "@redux/playlistSlice";
 import { ItemTrack } from "@components/ItemTrack";
 
-export const ViewAlbum = ({ route }) => {
+export const ViewAlbum = ({
+  route: {
+    params: { album },
+  },
+}) => {
   const dispatch = useDispatch();
-  const { album } = route.params;
   const [dataAlbum, setDataAlbum] = useState({});
 
   const windowHeight = Dimensions.get("window").height;
@@ -71,7 +73,6 @@ export const ViewAlbum = ({ route }) => {
         }}
       >
         <LinearGradient
-          // Button Linear Gradient
           colors={["transparent", "transparent", theme.colors.primaryOpacity]}
           style={{
             height: "100%",
