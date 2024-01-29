@@ -3,7 +3,6 @@ import { Image, ImageBackground, TouchableOpacity } from "react-native";
 import { Box } from "../";
 import { Typography } from "../";
 import { theme } from "@themes/default";
-import { Dimensions } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { helpers, soundController } from "@services/index";
 import { useNavigation } from "@react-navigation/native";
@@ -15,6 +14,7 @@ import {
   selectPlayerBottom,
 } from "@redux/playerBottomSlice";
 import { selectPlaylist } from "@redux/playlistSlice";
+import { Content } from "./styles";
 
 interface IPlayerBottom {
   autoControlTrack?: boolean;
@@ -32,22 +32,16 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
   };
 
   const nextMusic = async () => {
+    let setNewMusic = false;
+
     playlist.tracks.data.map(async (track, key) => {
       try {
         if (track.id == sound.id) {
           const newPos = key + 1;
-          const firstTrack = playlist.tracks.data[0];
           const nextTrack = playlist.tracks.data[newPos];
-
-          if (newPos >= playlist.tracks.data.length) {
-            dispatch(playPause(false));
-            return;
-          }
 
           if (typeof nextTrack !== undefined) {
             await changeNewMusic(nextTrack);
-          } else if (firstTrack !== undefined) {
-            await changeNewMusic(firstTrack);
           } else {
             await soundController.pause();
             dispatch(playPause(false));
@@ -55,6 +49,13 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
         }
       } catch (e) {}
     });
+
+    if (!setNewMusic) {
+      const firstTrack = playlist.tracks.data[0];
+      if (firstTrack !== undefined) {
+        await changeNewMusic(firstTrack);
+      }
+    }
   };
 
   const playerPause = async () => {
@@ -81,7 +82,7 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
 
         if (status.isLoaded) {
           const percent = helpers.getPercentTimeMusic(
-            status.durationMillis,
+            status.durationMillis as number,
             status.positionMillis
           );
 
@@ -97,18 +98,10 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
   }, [sound]);
 
   return (
-    <Box
-      width={Dimensions.get("window").width}
-      position={"absolute"}
-      bottom={0}
-      alignItems={"center"}
-      alignSelf={"center"}
-      justifyContent={"space-between"}
-    >
+    <Content>
       <ImageBackground
         source={{ uri: sound?.album.cover_medium }}
         resizeMode="cover"
-        opacity={1}
         blurRadius={100}
         style={{ width: "100%" }}
       >
@@ -177,6 +170,6 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
           </Box>
         </Box>
       </ImageBackground>
-    </Box>
+    </Content>
   );
 };

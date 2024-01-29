@@ -4,7 +4,6 @@ import { View } from "react-native";
 import { theme as themeDefault } from "@themes/default";
 
 export type ContainerTypes = "primary" | "clear";
-
 export interface ContainerProps
   extends ColorProps<typeof themeDefault>,
     SpaceProps<typeof themeDefault> {

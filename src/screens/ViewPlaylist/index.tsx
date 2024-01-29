@@ -67,7 +67,7 @@ export const ViewPlaylist = ({ route }) => {
     setDataPlaylist(data);
   };
 
-  const play = async (track) => {
+  const play = async (track: Itrack) => {
     dispatch(changeMusic(track));
     await soundController.load(track.preview);
   };
@@ -88,17 +88,15 @@ export const ViewPlaylist = ({ route }) => {
       <StatusBar style="inverted" />
 
       <ImageBackground
-        source={{ uri: dataPlaylist?.picture_xl }}
-        resizeMode="cover"
+        source={{ uri: dataPlaylist?.picture_big }}
+        resizeMode="center"
         style={{
           width: windowWidth,
           height: (windowHeight * 40) / 100,
         }}
-        opacity={0.4}
       >
         <LinearGradient
-          // Button Linear Gradient
-          colors={["transparent", theme.colors.primaryOpacity]}
+          colors={["transparent", "transparent", theme.colors.primaryOpacity]}
           style={{
             height: "100%",
             justifyContent: "flex-end",

@@ -23,7 +23,6 @@ import { changePlaylist } from "@redux/playlistSlice";
 import { ItemTrack } from "@components/ItemTrack";
 
 export const ViewAlbum = ({ route }) => {
-  const navigation = useNavigation();
   const dispatch = useDispatch();
   const { album } = route.params;
   const [dataAlbum, setDataAlbum] = useState({});
@@ -70,11 +69,10 @@ export const ViewAlbum = ({ route }) => {
           width: windowWidth,
           height: windowHeight / 2.5,
         }}
-        opacity={1}
       >
         <LinearGradient
           // Button Linear Gradient
-          colors={["transparent", theme.colors.primaryOpacity]}
+          colors={["transparent", "transparent", theme.colors.primaryOpacity]}
           style={{
             height: "100%",
             justifyContent: "center",

@@ -13,7 +13,7 @@ interface IModal {
 
 export const ModalBottom = ({
   title,
-  onClose,
+  onClose = () => {},
   visible = true,
   children,
 }: IModal) => {

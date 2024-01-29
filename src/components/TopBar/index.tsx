@@ -2,8 +2,9 @@ import { Box } from "@components/Box";
 import { theme } from "@themes/default";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Typography } from "@components/Typography";
-import { Dimensions, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Content } from "./styles";
 
 interface ITopBar {
   title?: string;
@@ -13,20 +14,9 @@ interface ITopBar {
 
 export const TopBar = ({ title, goBack, optionFn }: ITopBar) => {
   const navigation = useNavigation();
-  const windowWidth = Dimensions.get("window").width;
 
   return (
-    <Box
-      flexDirection={"row"}
-      alignItems={"center"}
-      justifyContent={"space-between"}
-      p={"prim"}
-      mt={"xs"}
-      position={"absolute"}
-      top={0}
-      left={0}
-      width={windowWidth}
-    >
+    <Content>
       <Box>
         <TouchableOpacity onPress={goBack ? goBack : () => navigation.goBack()}>
           <Ionicons
@@ -54,6 +44,6 @@ export const TopBar = ({ title, goBack, optionFn }: ITopBar) => {
           </Box>
         )}
       </Box>
-    </Box>
+    </Content>
   );
 };

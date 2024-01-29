@@ -83,15 +83,12 @@ export const ViewMusic = () => {
 
   const nextMusic = async (trackRef = "") => {
     if (!isLastMusic()) {
+      let setNewMusic = false;
       playlist.tracks.data.map(async (track, key) => {
         try {
           if (track.id == (trackRef || sound.id)) {
             const newPos = key + 1;
             const nextTrack = playlist.tracks.data[newPos];
-
-            if (newPos >= playlist.tracks.data.length) {
-              return;
-            }
 
             if (typeof nextTrack !== undefined) {
               await changeNewMusic(nextTrack);
@@ -99,9 +96,18 @@ export const ViewMusic = () => {
               await soundController.pause();
               dispatch(playPause(false));
             }
+
+            setNewMusic = true;
           }
         } catch (e) {}
       });
+
+      if (!setNewMusic) {
+        const firstTrack = playlist.tracks.data[0];
+        if (firstTrack !== undefined) {
+          await changeNewMusic(firstTrack);
+        }
+      }
     }
   };
 

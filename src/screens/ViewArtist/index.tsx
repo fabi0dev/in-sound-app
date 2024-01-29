@@ -126,11 +126,10 @@ export const ViewArtist = ({ route }) => {
           width: windowWidth,
           height: windowHeight / 2.5,
         }}
-        opacity={1}
       >
         <LinearGradient
           // Button Linear Gradient
-          colors={["transparent", theme.colors.primaryOpacity]}
+          colors={["transparent", "transparent", theme.colors.primaryOpacity]}
           style={{
             height: "100%",
             justifyContent: "center",

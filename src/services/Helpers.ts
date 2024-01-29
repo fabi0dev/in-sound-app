@@ -30,7 +30,7 @@ const helpers = {
   getPercentTimeMusic: (totalMl: number, currentMl: number) => {
     const percent = (currentMl * 100) / totalMl;
     if (percent > 0) {
-      return parseInt(percent);
+      return parseInt(percent.toString());
     }
 
     return 0;

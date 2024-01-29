@@ -33,6 +33,8 @@ export const PictureTrack: React.FC<IPictureTrack> = ({
       sizeImg = 110;
       break;
   }
+  {
+  }
   return (
     <Box>
       <ImageBackground
