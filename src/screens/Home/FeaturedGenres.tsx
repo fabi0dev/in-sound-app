@@ -4,8 +4,8 @@ import { ImageBackground, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { storage } from "@services/Storage";
 import { deezer } from "@services/DeezerAPI";
-import { useEffect, useState } from "react";
-
+import { useCallback, useEffect, useState, useMemo, memo } from "react";
+import React from "react";
 interface IGenres {
   id: number;
   name: string;
@@ -17,23 +17,26 @@ interface IDataGenre {
   data: Array<IGenres>;
 }
 
-export const FeaturedGenres = (): JSX.Element => {
+export const FeaturedGenres = memo((): JSX.Element => {
   const navigation = useNavigation();
 
   const [dataGenre, setDataGenre] = useState<IDataGenre>({
     data: [],
   });
 
-  const getGenreHome = async (reload: boolean = false) => {
-    let data = await storage.getGenre();
+  const getGenreHome = useCallback(
+    async (reload: boolean = false) => {
+      let data = await storage.getGenre();
 
-    if (data == null || reload === true) {
-      data = await deezer.getGenre();
-      await storage.saveGenre(data);
-    }
+      if (data == null || reload === true) {
+        data = await deezer.getGenre();
+        await storage.saveGenre(data);
+      }
 
-    setDataGenre(data);
-  };
+      setDataGenre(data);
+    },
+    [dataGenre]
+  );
 
   useEffect(() => {
     getGenreHome();
@@ -96,4 +99,4 @@ export const FeaturedGenres = (): JSX.Element => {
       </Box>
     </Box>
   );
-};
+});

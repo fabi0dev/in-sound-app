@@ -60,7 +60,6 @@ export const FeaturedFavorites = (): JSX.Element => {
                           current={sound?.id == track.id}
                           uri={track.album.cover_medium}
                           size="medium-small"
-                          animationCurrent={true}
                         />
 
                         <Box width={75}>

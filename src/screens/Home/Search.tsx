@@ -2,14 +2,32 @@ import { Box } from "@components/Box";
 import { Typography } from "@components/Typography";
 import { Image, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { deezer } from "@services/index";
 import { PicturePlaylist } from "@components/PicturePlaylist";
 import { ItemTrack } from "@components/ItemTrack";
+import { selectPlayerBottom } from "@redux/playerBottomSlice";
+import { useSelector } from "react-redux";
 
 interface IArtists {
   name: string;
   picture_big: string;
+}
+
+interface ITrack {
+  id: number;
+  title: string;
+  preview: string;
+  title_short: string;
+  artist: {
+    name: string;
+    picture_medium: string;
+  };
+  album: {
+    title: string;
+    cover_medium: string;
+    cover_small: string;
+  };
 }
 
 interface ISearch {
@@ -24,26 +42,28 @@ interface ISearch {
 
 export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
   const navigation = useNavigation();
+  const { sound } = useSelector(selectPlayerBottom);
   const [dataPlaylist, setDataPlaylist] = useState({
     data: [],
   });
+
   const [dataArtist, setDataArtist] = useState({
     data: [],
   });
 
-  const getPlaylist = async () => {
+  const getPlaylist = useCallback(async () => {
     try {
       const data = await deezer.searchPlaylist(textSearch);
       setDataPlaylist(data);
     } catch (e) {}
-  };
+  }, [dataPlaylist]);
 
-  const getArtist = async () => {
+  const getArtist = useCallback(async () => {
     try {
       const data = await deezer.searchArtist(textSearch);
       setDataArtist(data);
     } catch (e) {}
-  };
+  }, [dataArtist]);
 
   const ItemPlaylist = ({ playlist }) => {
     return (
@@ -149,8 +169,14 @@ export const Search = ({ textSearch, dataSearch }: ISearch): JSX.Element => {
 
       {dataSearch.data.length > 0 && <Title desc={"Músicas"} />}
 
-      {dataSearch.data.map((track: IArtists, key) => {
-        return <ItemTrack trackData={track} key={key} />;
+      {dataSearch.data.map((track: ITrack, key) => {
+        return (
+          <ItemTrack
+            current={sound?.id == track.id}
+            trackData={track}
+            key={key}
+          />
+        );
       })}
 
       <Box height={100}></Box>

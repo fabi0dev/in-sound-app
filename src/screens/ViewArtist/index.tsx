@@ -15,8 +15,8 @@ import { TopBar } from "@components/TopBar";
 import { deezer } from "@services/index";
 import { PlayerBottom } from "@components/PlayerBottom";
 import { LinearGradient } from "expo-linear-gradient";
-import { useDispatch } from "react-redux";
-import { changeMusic } from "@redux/playerBottomSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
 import { changePlaylist } from "@redux/playlistSlice";
 
 import IconMaterial from "react-native-vector-icons/MaterialCommunityIcons";
@@ -47,6 +47,7 @@ export const ViewArtist = ({
   },
 }) => {
   const dispatch = useDispatch();
+  const { sound } = useSelector(selectPlayerBottom);
 
   const [dataArtist, setDataArtist] = useState<IDataArtist>();
   const [dataTrackArtist, setDataTrackArtist] = useState<ITrackArtist>({
@@ -100,7 +101,7 @@ export const ViewArtist = ({
         resizeMode="center"
         style={{
           width: windowWidth,
-          height: windowHeight / 2.5,
+          height: (windowHeight * 30) / 100,
         }}
       >
         <LinearGradient
@@ -168,12 +169,19 @@ export const ViewArtist = ({
       </ImageBackground>
 
       {dataTrackArtist?.data !== undefined && (
-        <Box p={"nano"} pt={"xxxs"}>
+        <Box p={"nano"}>
           {dataTrackArtist?.data && (
             <FlatList
               data={dataTrackArtist?.data}
-              renderItem={({ item }) => <ItemTrack trackData={item} />}
+              renderItem={({ item, index }) => (
+                <ItemTrack
+                  current={sound?.id == item.id}
+                  trackData={item}
+                  index={index}
+                />
+              )}
               keyExtractor={(item) => item.id}
+              style={{ height: (windowHeight * 70) / 100 - 70 }}
             />
           )}
         </Box>

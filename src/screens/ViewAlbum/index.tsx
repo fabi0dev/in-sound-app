@@ -1,6 +1,6 @@
 import { Box } from "@components/Box";
 import { Container } from "@components/Container";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { PlayerBottom } from "@components/PlayerBottom";
 import {
   Dimensions,
@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import { deezer, soundController } from "@services/index";
 import { Typography } from "@components/Typography";
-import { useDispatch } from "react-redux";
-import { changeMusic } from "@redux/playerBottomSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
 import { TopBar } from "@components/TopBar";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
@@ -20,6 +20,7 @@ import AnimatedLottieView from "lottie-react-native";
 import IconMaterial from "react-native-vector-icons/MaterialCommunityIcons";
 import { changePlaylist } from "@redux/playlistSlice";
 import { ItemTrack } from "@components/ItemTrack";
+import { height } from "styled-system";
 
 export const ViewAlbum = ({
   route: {
@@ -28,14 +29,15 @@ export const ViewAlbum = ({
 }) => {
   const dispatch = useDispatch();
   const [dataAlbum, setDataAlbum] = useState({});
+  const { sound } = useSelector(selectPlayerBottom);
 
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
 
-  const getContentHome = async () => {
+  const getContentHome = useCallback(async () => {
     const data = await deezer.getAlbum(album.id);
     setDataAlbum(data);
-  };
+  }, [dataAlbum]);
 
   const play = async (track) => {
     dispatch(changeMusic(track));
@@ -60,6 +62,8 @@ export const ViewAlbum = ({
     getContentHome();
   }, []);
 
+  console.log("renderizou");
+
   return (
     <Container variant="clear">
       <StatusBar style="inverted" />
@@ -69,7 +73,7 @@ export const ViewAlbum = ({
         resizeMode="center"
         style={{
           width: windowWidth,
-          height: windowHeight / 2.5,
+          height: (windowHeight * 30) / 100,
         }}
       >
         <LinearGradient
@@ -110,7 +114,7 @@ export const ViewAlbum = ({
                 </Box>
 
                 <Box mb={"nano"} flexDirection={"row"} alignContent={"center"}>
-                  {dataAlbum.genres && (
+                  {dataAlbum?.genres?.data.length > 0 && (
                     <Typography variant="title2" mr={"prim"}>
                       {dataAlbum.genres.data[0].name} |
                     </Typography>
@@ -153,16 +157,22 @@ export const ViewAlbum = ({
               data={dataAlbum?.tracks.data}
               renderItem={({ item, index }) => (
                 <Box mb={"cake"}>
-                  <ItemTrack showPicture={false} trackData={item} />
+                  <ItemTrack
+                    current={sound?.id == item.id}
+                    showPicture={false}
+                    trackData={item}
+                    index={index}
+                  />
                 </Box>
               )}
               keyExtractor={(item) => item.id}
+              style={{ height: (windowHeight * 70) / 100 - 70 }}
             />
           )}
         </Box>
       )}
 
-      <PlayerBottom autoControlTrack={true} />
+      <PlayerBottom autoControlTrack={false} />
     </Container>
   );
 };

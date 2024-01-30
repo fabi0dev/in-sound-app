@@ -1,7 +1,7 @@
 import { Box } from "@components/Box";
 import { Container } from "@components/Container";
 import { InputText } from "@components/InputText";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Typography } from "@components/Typography";
 import { PlayerBottom } from "@components/PlayerBottom";
 import { FeaturedPlaylists } from "./FeaturedPlaylists";
@@ -30,18 +30,21 @@ export const Home = () => {
   const [loading, setLoading] = useState(false);
   let timeSearch = setTimeout(() => {});
 
-  const getContentHome = async (reload: boolean = false) => {
-    let dataTopMusic = await storage.getTopMusicsHome();
+  const getContentHome = useCallback(
+    async (reload: boolean = false) => {
+      let dataTopMusic = await storage.getTopMusicsHome();
 
-    if (dataTopMusic == null || reload === true) {
-      dataTopMusic = await deezer.getEditorialChart();
-      setLoading(true);
-      await storage.saveTopMusicsHome(dataTopMusic);
-      setLoading(false);
-    }
+      if (dataTopMusic == null || reload === true) {
+        dataTopMusic = await deezer.getEditorialChart();
+        setLoading(true);
+        await storage.saveTopMusicsHome(dataTopMusic);
+        setLoading(false);
+      }
 
-    setDataFeatured(dataTopMusic);
-  };
+      setDataFeatured(dataTopMusic);
+    },
+    [dataFeatured]
+  );
 
   useEffect(() => {
     if (textSearch !== "") {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Image, ImageBackground, TouchableOpacity } from "react-native";
 import { Box } from "../";
 import { Typography } from "../";
@@ -91,11 +91,11 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
           }
         }
       }
-
-      if (soundController.uri == "") {
-        dispatch(playPause(false));
-      }
     }, 1000);
+
+    if (soundController.uri == "") {
+      dispatch(playPause(false));
+    }
 
     return () => clearInterval(interval);
   }, [sound]);
@@ -140,6 +140,11 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
                     ellipsizeMode="tail"
                     numberOfLines={1}
                     color={"primary"}
+                    style={{
+                      textShadowColor: "rgba(0, 0, 0, 0.3)",
+                      textShadowOffset: { width: -1, height: 1 },
+                      textShadowRadius: 10,
+                    }}
                   >
                     {sound?.title_short || ""}
                   </Typography>
@@ -155,7 +160,15 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
                     speed={playing ? 1 : 0}
                   />
                 </Box>
-                <Typography fontSize={12} color={"textColor1"}>
+                <Typography
+                  fontSize={12}
+                  color={"textColor1"}
+                  style={{
+                    textShadowColor: "rgba(0, 0, 0, 0.3)",
+                    textShadowOffset: { width: -1, height: 1 },
+                    textShadowRadius: 10,
+                  }}
+                >
                   {sound?.artist.name || ""}
                 </Typography>
               </TouchableOpacity>

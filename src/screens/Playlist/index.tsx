@@ -3,7 +3,7 @@ import { Container } from "@components/Container";
 import { TopBar } from "@components/TopBar";
 import { Typography } from "@components/Typography";
 import { useDispatch, useSelector } from "react-redux";
-import { changeMusic } from "@redux/playerBottomSlice";
+import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
 import { soundController } from "@services/index";
 import { selectPlaylist, cleanPlaylist } from "@redux/playlistSlice";
 import { FlatList, TouchableOpacity } from "react-native";
@@ -19,6 +19,7 @@ export const Playlist = () => {
   const dispatch = useDispatch();
   const { tracks } = useSelector(selectPlaylist);
   const [viewActions, setViewActions] = useState(false);
+  const { sound } = useSelector(selectPlayerBottom);
 
   const play = async (track) => {
     dispatch(changeMusic(track));
@@ -46,7 +47,11 @@ export const Playlist = () => {
           <FlatList
             data={tracks?.data}
             renderItem={({ item, index }) => (
-              <ItemTrack trackData={item} index={index} />
+              <ItemTrack
+                current={sound?.id == item.id}
+                trackData={item}
+                index={index}
+              />
             )}
             keyExtractor={(item: any) => item.id}
           />

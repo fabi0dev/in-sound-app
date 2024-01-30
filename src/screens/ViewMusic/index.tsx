@@ -54,7 +54,7 @@ export const ViewMusic = () => {
 
   const isLastMusic = () => {
     let isLast = true;
-    let checkPlaylist = false;
+    let checkPlaylist = true;
 
     playlist.tracks.data.map((track, key) => {
       if (track.id == sound.id) {

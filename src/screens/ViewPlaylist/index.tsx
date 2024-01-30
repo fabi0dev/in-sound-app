@@ -17,8 +17,8 @@ import { TopBar } from "@components/TopBar";
 import { PlayerBottom } from "@components/PlayerBottom";
 import AnimatedLottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useDispatch } from "react-redux";
-import { changeMusic } from "@redux/playerBottomSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { changeMusic, selectPlayerBottom } from "@redux/playerBottomSlice";
 import { changePlaylist } from "@redux/playlistSlice";
 import { ItemTrack } from "@components/ItemTrack";
 
@@ -64,6 +64,7 @@ export const ViewPlaylist = ({
   const [dataPlaylist, setDataPlaylist] = useState<IPlaylist>();
   const windowHeight = Dimensions.get("window").height;
   const windowWidth = Dimensions.get("window").width;
+  const { sound } = useSelector(selectPlayerBottom);
 
   const getPlaylist = async (id: string) => {
     const data = await deezer.getPlaylist(id);
@@ -83,6 +84,7 @@ export const ViewPlaylist = ({
     }
   };
 
+  console.log("renderizou");
   useEffect(() => {
     getPlaylist(playlist.id);
   }, []);
@@ -96,7 +98,7 @@ export const ViewPlaylist = ({
         resizeMode="center"
         style={{
           width: windowWidth,
-          height: (windowHeight * 40) / 100,
+          height: (windowHeight * 30) / 100,
         }}
       >
         <LinearGradient
@@ -115,7 +117,7 @@ export const ViewPlaylist = ({
             pr={"nano"}
           >
             <Box width={"80%"}>
-              <Typography variant="bold" fontSize={32}>
+              <Typography variant="bold" fontSize={30}>
                 {dataPlaylist?.title}
               </Typography>
 
@@ -171,9 +173,14 @@ export const ViewPlaylist = ({
             <FlatList
               data={dataPlaylist?.tracks.data}
               renderItem={({ item, index }) => (
-                <ItemTrack trackData={item} index={index} />
+                <ItemTrack
+                  trackData={item}
+                  current={sound?.id == item.id}
+                  index={index}
+                />
               )}
               keyExtractor={(item: any) => item.id}
+              style={{ height: (windowHeight * 70) / 100 - 70 }}
             />
           )}
         </Box>

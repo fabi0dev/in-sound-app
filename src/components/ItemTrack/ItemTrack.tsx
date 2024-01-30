@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { Box } from "../Box/Box";
 import { Dimensions, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,110 +34,114 @@ interface IItemTrack {
   trackData: Itrack;
   showPicture?: boolean;
   showAddPlaylist?: boolean;
+  current?: boolean;
   index?: number;
 }
 
-export const ItemTrack: React.FC<IItemTrack> = ({
-  trackData,
-  showPicture = true,
-  showAddPlaylist = true,
-  index,
-}) => {
-  const dispatch = useDispatch();
-  const { sound } = useSelector(selectPlayerBottom);
-  const playlist = useSelector(selectPlaylist);
+export const ItemTrack: React.FC<IItemTrack> = memo(
+  ({
+    trackData,
+    showPicture = true,
+    showAddPlaylist = true,
+    current = false,
+    index,
+  }) => {
+    const dispatch = useDispatch();
+    const playlist = useSelector(selectPlaylist);
 
-  const windowWidth = Dimensions.get("window").width;
+    const windowWidth = Dimensions.get("window").width;
 
-  const play = async (track: Itrack) => {
-    dispatch(changeMusic(track));
-    await soundController.load(track.preview);
-  };
+    console.log("renderizou track");
 
-  const checkAddInPlaylist = (id: number) => {
-    if (playlist !== undefined) {
-      const isAdd = playlist.tracks.data.filter((item) => id == item.id);
+    const play = async (track: Itrack) => {
+      dispatch(changeMusic(track));
+      await soundController.load(track.preview);
+    };
 
-      if (isAdd.length > 0) {
-        return true;
+    const checkAddInPlaylist = (id: number) => {
+      if (playlist !== undefined) {
+        const isAdd = playlist.tracks.data.filter((item) => id == item.id);
+
+        if (isAdd.length > 0) {
+          return true;
+        }
       }
-    }
-    return false;
-  };
+      return false;
+    };
 
-  const addInPlaylist = (track: Itrack) => {
-    if (!checkAddInPlaylist(track.id)) {
-      dispatch(addTrackInPlaylist(track));
-    } else {
-      dispatch(removeTrackPlaylist(track));
-    }
-  };
+    const addInPlaylist = (track: Itrack) => {
+      if (!checkAddInPlaylist(track.id)) {
+        dispatch(addTrackInPlaylist(track));
+      } else {
+        dispatch(removeTrackPlaylist(track));
+      }
+    };
 
-  return (
-    <Box flexDirection={"row"}>
-      <Box
-        width={"100%"}
-        flexDirection={"row"}
-        justifyContent={"space-between"}
-        mb={"nano"}
-      >
-        {index != undefined && (
-          <Box width={15} mr={"cake"} justifyContent={"center"}>
-            <Typography fontSize={10}>{index + 1}.</Typography>
-          </Box>
-        )}
+    return (
+      <Box flexDirection={"row"}>
+        <Box
+          width={"100%"}
+          flexDirection={"row"}
+          justifyContent={"space-between"}
+          mb={"nano"}
+        >
+          {index != undefined && (
+            <Box width={15} mr={"cake"} justifyContent={"center"}>
+              {!current && <Typography fontSize={10}>{index + 1}.</Typography>}
+            </Box>
+          )}
 
-        <Box width={(windowWidth * 80) / 100}>
-          <TouchableOpacity onPress={() => play(trackData)}>
-            <Box flexDirection={"row"}>
-              {showPicture && (
-                <Box mr={"cake"}>
-                  <PictureTrack
-                    current={sound?.id == trackData.id}
-                    uri={trackData.album.cover_medium}
-                    size="small"
-                    animationCurrent={true}
-                  />
-                </Box>
-              )}
+          <Box width={(windowWidth * 80) / 100}>
+            <TouchableOpacity onPress={() => play(trackData)}>
+              <Box flexDirection={"row"}>
+                {showPicture && (
+                  <Box mr={"cake"}>
+                    <PictureTrack
+                      current={current}
+                      uri={trackData.album.cover_medium}
+                      size="small"
+                    />
+                  </Box>
+                )}
 
-              <Box width={"80%"}>
-                <Box mb={"prim"}>
+                <Box width={"80%"}>
+                  <Box mb={"prim"}>
+                    <Typography
+                      variant="titleMusic"
+                      ellipsizeMode="tail"
+                      numberOfLines={1}
+                      color={current ? "primary" : "textColor1"}
+                    >
+                      {trackData.title}
+                    </Typography>
+                  </Box>
+
                   <Typography
-                    variant="titleMusic"
+                    color={"textColor2"}
+                    fontSize={12}
                     ellipsizeMode="tail"
                     numberOfLines={1}
-                    color={sound?.id == trackData.id ? "primary" : "textColor1"}
                   >
-                    {trackData.title}
+                    {trackData.artist.name}
                   </Typography>
                 </Box>
-
-                <Typography
-                  color={"textColor2"}
-                  fontSize={12}
-                  ellipsizeMode="tail"
-                  numberOfLines={1}
-                >
-                  {trackData.artist.name}
-                </Typography>
               </Box>
-            </Box>
-          </TouchableOpacity>
-        </Box>
-
-        <Box alignItems={"center"} justifyContent={"center"}>
-          {showAddPlaylist && (
-            <TouchableOpacity onPress={() => addInPlaylist(trackData)}>
-              <Icon
-                name={checkAddInPlaylist(trackData.id) ? "checkmark" : "add"}
-                size={30}
-                color={theme.colors.textColor1}
-              />
             </TouchableOpacity>
-          )}
+          </Box>
+
+          <Box alignItems={"center"} justifyContent={"center"}>
+            {showAddPlaylist && (
+              <TouchableOpacity onPress={() => addInPlaylist(trackData)}>
+                <Icon
+                  name={checkAddInPlaylist(trackData.id) ? "checkmark" : "add"}
+                  size={30}
+                  color={theme.colors.textColor1}
+                />
+              </TouchableOpacity>
+            )}
+          </Box>
         </Box>
       </Box>
-    </Box>
-  );
-};
+    );
+  }
+);
