@@ -29,8 +29,8 @@ export const theme = {
     darkOpacity1: "rgba(0,0,0,.05)",
   },
   fonts: {
-    bold: "NunitoSansBold",
-    regular: "NunitoSansRegular",
+    bold: "GothamMedium",
+    regular: "GothamBook",
   },
   fontWeights: {
     normal: 400,

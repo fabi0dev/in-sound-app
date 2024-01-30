@@ -51,6 +51,7 @@ export const ViewArtist = ({
 
   const [dataArtist, setDataArtist] = useState<IDataArtist>();
   const [dataTrackArtist, setDataTrackArtist] = useState<ITrackArtist>({
+    id: "",
     title: "",
     preview: "",
     data: [],

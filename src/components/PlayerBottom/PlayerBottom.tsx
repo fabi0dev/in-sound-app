@@ -15,6 +15,7 @@ import {
 } from "@redux/playerBottomSlice";
 import { selectPlaylist } from "@redux/playlistSlice";
 import { Content } from "./styles";
+import MarqueeText from "react-native-marquee";
 
 interface IPlayerBottom {
   autoControlTrack?: boolean;
@@ -133,8 +134,8 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("ViewMusic" as never)}
               >
-                <Box alignItems={"center"} flexDirection={"row"}>
-                  <Typography
+                <Box width={"90%"} alignItems={"center"} flexDirection={"row"}>
+                  {/* <Typography
                     variant="bold"
                     fontSize={14}
                     ellipsizeMode="tail"
@@ -147,13 +148,32 @@ export const PlayerBottom = ({ autoControlTrack = false }: IPlayerBottom) => {
                     }}
                   >
                     {sound?.title_short || ""}
-                  </Typography>
+                  </Typography> */}
+                  <MarqueeText
+                    speed={0.5}
+                    marqueeOnStart={true}
+                    loop={true}
+                    delay={5000}
+                  >
+                    <Typography
+                      variant="bold"
+                      fontSize={14}
+                      color={"primary"}
+                      style={{
+                        textShadowColor: "rgba(0, 0, 0, 0.3)",
+                        textShadowOffset: { width: -1, height: 1 },
+                        textShadowRadius: 10,
+                      }}
+                    >
+                      {sound?.title_short || ""}
+                    </Typography>
+                  </MarqueeText>
 
                   <AnimatedLottieView
                     style={{
                       width: 15,
                       height: 15,
-                      marginTop: -3,
+                      marginTop: -2,
                     }}
                     source={require("@assets/animations/sound-equalizer.json")}
                     autoPlay

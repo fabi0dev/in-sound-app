@@ -62,8 +62,6 @@ export const ViewAlbum = ({
     getContentHome();
   }, []);
 
-  console.log("renderizou");
-
   return (
     <Container variant="clear">
       <StatusBar style="inverted" />

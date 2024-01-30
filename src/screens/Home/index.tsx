@@ -77,6 +77,7 @@ export const Home = () => {
       <ScrollView>
         <Box mb={"nano"}>
           <InputText
+            style={{ fontFamily: "OxygenRegular" }}
             rightIcon={
               textSearch != "" ? (
                 <TouchableOpacity onPress={() => setTextSearch("")}>

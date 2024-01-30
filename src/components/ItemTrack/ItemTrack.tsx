@@ -51,8 +51,6 @@ export const ItemTrack: React.FC<IItemTrack> = memo(
 
     const windowWidth = Dimensions.get("window").width;
 
-    console.log("renderizou track");
-
     const play = async (track: Itrack) => {
       dispatch(changeMusic(track));
       await soundController.load(track.preview);
@@ -107,7 +105,6 @@ export const ItemTrack: React.FC<IItemTrack> = memo(
                 <Box width={"80%"}>
                   <Box mb={"prim"}>
                     <Typography
-                      variant="titleMusic"
                       ellipsizeMode="tail"
                       numberOfLines={1}
                       color={current ? "primary" : "textColor1"}

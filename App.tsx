@@ -10,8 +10,8 @@ import { PersistGate } from "redux-persist/integration/react";
 
 export default function App() {
   const [loadedFonts] = useFonts({
-    NunitoSansRegular: require("./src/assets/fonts/NunitoSans_7pt-Regular.ttf"),
-    NunitoSansBold: require("./src/assets/fonts/NunitoSans_7pt-SemiBold.ttf"),
+    OxygenRegular: require("./src/assets/fonts/Oxygen-Regular.ttf"),
+    OxygenBold: require("./src/assets/fonts/Oxygen-Bold.ttf"),
   });
 
   if (!loadedFonts) {

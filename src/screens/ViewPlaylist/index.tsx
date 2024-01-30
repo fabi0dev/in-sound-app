@@ -84,7 +84,6 @@ export const ViewPlaylist = ({
     }
   };
 
-  console.log("renderizou");
   useEffect(() => {
     getPlaylist(playlist.id);
   }, []);
@@ -117,7 +116,7 @@ export const ViewPlaylist = ({
             pr={"nano"}
           >
             <Box width={"80%"}>
-              <Typography variant="bold" fontSize={30}>
+              <Typography variant="bold" fontSize={25}>
                 {dataPlaylist?.title}
               </Typography>
 
