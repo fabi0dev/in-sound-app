@@ -23,7 +23,7 @@ export default function App() {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <StatusBar backgroundColor={theme.colors.base} style="inverted" />
-          <Navigator defaultNavigator={"Home"} />
+          <Navigator />
         </PersistGate>
       </Provider>
     </ThemeProvider>

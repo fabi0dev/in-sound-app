@@ -35,11 +35,11 @@ export const FeaturedPlaylists = memo(
               return (
                 <Box key={key} pr={"xxxs"} pt={"none"}>
                   <TouchableOpacity
-                    onPress={() =>
+                    onPress={() => {
                       navigation.navigate("ViewPlaylist", {
                         playlist,
-                      })
-                    }
+                      });
+                    }}
                   >
                     <PicturePlaylist uri={playlist.picture_big} size="medium" />
 

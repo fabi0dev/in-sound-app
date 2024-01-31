@@ -23,9 +23,13 @@ export const FeaturedTracks = ({ data }: IFeaturedTracks): JSX.Element => {
           flexWrap={"wrap"}
           justifyContent={"space-between"}
         >
-          {data?.tracks?.data.map((track, key) => {
+          {data?.tracks?.data.map((track, index) => {
             return (
-              <ItemTrack trackData={track} showAddPlaylist={false} key={key} />
+              <ItemTrack
+                trackData={track}
+                showAddPlaylist={false}
+                key={index}
+              />
             );
           })}
         </Box>

@@ -15,10 +15,10 @@ export const PicturePlaylist: React.FC<IPicturePlaylist> = ({
 
   switch (size) {
     case "small":
-      sizeImg = 100;
+      sizeImg = 110;
       break;
     case "medium":
-      sizeImg = 110;
+      sizeImg = 120;
       break;
   }
   return (

@@ -3,13 +3,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { default as HomeNavigator } from "./HomeNavigator";
 
+import { LogBox } from "react-native";
+
 const Stack = createStackNavigator();
 
-interface NavigatorProp {
-  defaultNavigator: string;
-}
+const Navigator = () => {
+  LogBox.ignoreLogs(["Sending*"]);
 
-const Navigator = ({ defaultNavigator }: NavigatorProp) => {
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -19,16 +19,16 @@ const Navigator = ({ defaultNavigator }: NavigatorProp) => {
         }}
         initialRouteName="Home"
       >
-        {defaultNavigator == "Home" &&
-          Object.entries(HomeNavigator).map(([nameScreen, Component]) => {
-            return (
-              <Stack.Screen
-                key={nameScreen}
-                name={nameScreen}
-                component={Component}
-              />
-            );
-          })}
+        {Object.entries(HomeNavigator).map(([nameScreen, Component]) => {
+          return (
+            <Stack.Screen
+              key={nameScreen}
+              name={nameScreen}
+              component={Component as never}
+              options={{ title: nameScreen }}
+            />
+          );
+        })}
       </Stack.Navigator>
     </NavigationContainer>
   );

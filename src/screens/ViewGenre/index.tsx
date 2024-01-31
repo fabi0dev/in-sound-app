@@ -43,7 +43,7 @@ export const ViewGenre = ({
               style={{ width: 30, height: 30, borderRadius: 5 }}
             />
           </Box>
-          <Typography variant="bold" fontSize={30}>
+          <Typography variant="bold" fontSize={25}>
             {genre.name}
           </Typography>
         </Box>

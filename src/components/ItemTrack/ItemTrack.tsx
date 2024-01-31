@@ -108,6 +108,7 @@ export const ItemTrack: React.FC<IItemTrack> = memo(
                       ellipsizeMode="tail"
                       numberOfLines={1}
                       color={current ? "primary" : "textColor1"}
+                      fontSize={15}
                     >
                       {trackData.title}
                     </Typography>

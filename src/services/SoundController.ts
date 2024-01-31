@@ -14,7 +14,7 @@ const soundController = {
     soundController.uri = uri;
 
     if (soundController.fnController?.unloadAsync != undefined) {
-      await soundController.fnController?.pauseAsync();
+      await soundController.fnController?.stopAsync();
       await soundController.fnController?.unloadAsync();
     }
 
