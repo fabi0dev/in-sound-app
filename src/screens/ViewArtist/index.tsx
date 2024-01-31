@@ -123,7 +123,15 @@ export const ViewArtist = ({
             >
               <Box justifyContent={"center"} width={"80%"}>
                 <Box mb={"prim"}>
-                  <Typography variant="bold" fontSize={25}>
+                  <Typography
+                    style={{
+                      textShadowColor: "rgba(0, 0, 0, 0.4)",
+                      textShadowOffset: { width: -1, height: 1 },
+                      textShadowRadius: 10,
+                    }}
+                    variant="bold"
+                    fontSize={25}
+                  >
                     {dataArtist?.name}
                   </Typography>
                 </Box>

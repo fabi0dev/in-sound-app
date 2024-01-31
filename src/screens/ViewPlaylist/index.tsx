@@ -116,12 +116,27 @@ export const ViewPlaylist = ({
             pr={"nano"}
           >
             <Box width={"80%"}>
-              <Typography variant="bold" fontSize={25}>
+              <Typography
+                style={{
+                  textShadowColor: "rgba(0, 0, 0, 0.4)",
+                  textShadowOffset: { width: -1, height: 1 },
+                  textShadowRadius: 10,
+                }}
+                variant="bold"
+                fontSize={25}
+              >
                 {dataPlaylist?.title}
               </Typography>
 
               <Box mb={"nano"}>
-                <Typography variant="title2">
+                <Typography
+                  style={{
+                    textShadowColor: "rgba(0, 0, 0, 0.4)",
+                    textShadowOffset: { width: -1, height: 1 },
+                    textShadowRadius: 10,
+                  }}
+                  variant="title2"
+                >
                   {dataPlaylist?.description}
                 </Typography>
               </Box>
