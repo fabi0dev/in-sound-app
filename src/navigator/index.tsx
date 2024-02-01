@@ -8,7 +8,9 @@ import { LogBox } from "react-native";
 const Stack = createStackNavigator();
 
 const Navigator = () => {
-  LogBox.ignoreLogs(["Sending*"]);
+  LogBox.ignoreLogs([
+    "Sending `onAnimatedValueUpdate` with no listeners registered.",
+  ]);
 
   return (
     <NavigationContainer>
