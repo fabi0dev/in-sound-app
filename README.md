@@ -9,7 +9,7 @@ O App foi desenvolvido com [React Native](https://reactnative.dev/), [Redux](htt
   <img alt="img-2" src="https://i.imgur.com/PM4KaVk.jpeg" width="250em" />
 </div>
 
-###Principais Funcionalidades
+### Principais Funcionalidades
 
 - <b>Exploração Aberta:</b> Os usuários podem explorar o vasto catálogo de músicas, artistas e álbuns diretamente através da integração com a API do Deezer. Isso permite que eles descubram novas músicas de seus gêneros favoritos ou explorem estilos totalmente novos.
   <br />
