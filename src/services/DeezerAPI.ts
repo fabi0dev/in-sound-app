@@ -8,7 +8,7 @@ const api = axios.create({
     return status == 200;
   },
   headers: {
-    "X-RapidAPI-Key": "d1b2632103mshc34e455e9b41b92p1b514bjsn43903e88ed59",
+    "X-RapidAPI-Key": RAPID_API_KEY,
     "X-RapidAPI-Host": "deezerdevs-deezer.p.rapidapi.com",
   },
 });
