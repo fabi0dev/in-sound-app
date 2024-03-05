@@ -44,3 +44,7 @@ Testar um aplicativo RN que utiliza o Expo é um processo simples. O Expo oferec
    <br />
 3. Use o Expo Go, emuladores ou [Expo Snack](https://snack.expo.dev/) para testar seu aplicativo.
    Lembre-se de que o Expo facilita o teste em dispositivos reais usando o Expo Go. Para testar em emuladores, você pode precisar configurar as ferramentas de desenvolvimento específicas para iOS (Xcode) ou Android (Android Studio).
+
+#Versão Web
+
+https://github.com/fabi0dev/in-sound-web
